@@ -1,5 +1,9 @@
 package Orders;
 
+/**
+ * This class is used to implement the data and logic of how to execute orders given by a player.
+ *
+ */
 public class Orders {
     private int d_numOfArmies;
 
@@ -20,14 +24,21 @@ public class Orders {
     public void setCountryID(int newCountry) {
         this.d_countryID = newCountry;
     }
-
+    /**
+     * This is a fully parametrized constructor for the Orders class.
+     *
+     * @param numOfArmies Number of Armies to deploy in this order.
+     * @param countryID ID of the country on which to deploy the specified number of armies.
+     */
     public Orders(int numOfArmies, int countryID){
         this.d_countryID = countryID;
         this.d_numOfArmies = numOfArmies;
     }
 
+    /**
+     * Definition of the logic of deploying the armies to the specified Country.
+     */
     public void execute(){
 
     }
-
 }
