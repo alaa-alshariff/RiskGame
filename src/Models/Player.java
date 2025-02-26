@@ -1,9 +1,8 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+package Models;
+
 import java.util.ArrayList;
 import java.util.List;
-import Orders.Orders;
+
 
 /**
  * This class describes information about each player.
@@ -12,10 +11,6 @@ public class Player {
 
     private String playerName;
 
-    /**
-     * color of territories owned by the player
-     */
-    private String playerColor;
     List<Country> playerCountries;
     List<Continent> playerContinents;
 
@@ -27,10 +22,10 @@ public class Player {
     /**
      * List of player's orders for execution.
      */
-    List<Orders> playerOrders;
-
+    List<Orders> playerOrders; //private List<String> playerOrders; //playerOrders should have (SourceCountry, DestinationCountry, NoOfArmies)
+                               //Change <Models.Orders> ---> <String>
     /**
-     * This is the constructor method of the Player class
+     * This is the constructor method of the Models.Player class
      *
      * @param v_playerName is player's name.
      */
@@ -46,17 +41,6 @@ public class Player {
 
     public void set_playerName(String p_name) {
         this.playerName = p_name;
-    }
-
-    public String get_playerColor() {
-        return playerColor;
-    }
-
-    /**
-     * @param p_color is ANSI color code.
-     */
-    public void set_playerColor(String p_color) {
-        playerColor = p_color;
     }
 
     public List<Country> get_playerCountries() {
