@@ -1,71 +1,93 @@
 package View;
 import java.util.Scanner;
 import Resources.Commands;
+
+
+/**
+ * The GameEngine class represents the startup phase of the game. It serves as the central
+ * component responsible for redirecting user requests to relevant functionality of the game.
+ * This class acts as the core of the game's execution and coordinates the various components
+ * to provide an interactive gaming experience.
+ */
 public class GameEngine {
     public void start_game()
     {
         try {
-            System.out.print("Welcome to the WarZone Game!");
+            System.out.print("Welcome to the WarZone Game!\n");
             Scanner scanner = new Scanner(System.in);
             while (true)
             {
-                System.out.print("Enter a Command to proceed: ");
+                System.out.print("Enter a command to proceed: \n");
+                System.out.print("Possible commands are: \n");
+                System.out.print("editmap [filename]\n");
+                System.out.print("loadmap [filename]\n");
+                System.out.print("showmapp all\n");
+
                 String userInput = scanner.nextLine();
+                String[] words = userInput.split("\\s+");
 
                 if (userInput.toLowerCase().startsWith(Commands.LOAD_MAP_COMMAND))
                 {
-                    System.out.print("You're in: LOAD_MAP_COMMAND");
-                    break;
+                    if (words.length == 2 && words[0].equalsIgnoreCase(Commands.LOAD_MAP_COMMAND) && words[1].matches("(?i).+\\\\.map"))
+                    {
+                        System.out.print("Map loaded successfully! Possible commands are: \n");
+                        System.out.print("editmap [filename]\n");
+                        System.out.print("loadmap [filename]\n");
+                        System.out.print("showmapp\n");
+                        // Write code here
 
-                } else if (userInput.toLowerCase().startsWith(Commands.SHOW_MAP_COMMAND)) {
+                        System.out.print("Write command to add/remove players: ");
+                        while (true)
+                        {
+                            userInput = scanner.nextLine();
+                            words = userInput.split("\\s+");
+                            if (userInput.toLowerCase().startsWith(Commands.PLAYER_ADD_REMOVE_COMMAND)) {
+                                System.out.print("You're in: PLAYER_ADD_REMOVE_COMMAND");
+
+                                // Write code here
+
+                                break;
+                            }
+                        }
+
+                        System.out.print("Write command to assign countries to each player: ");
+                        while (true)
+                        {
+                            userInput = scanner.nextLine();
+                            if (userInput.equalsIgnoreCase(Commands.ASSIGN_COUNTRIES_COMMAND)) {
+                                System.out.print("You're in: ASSIGN_COUNTRIES_COMMAND");
+
+                                // Write code here
+
+                                break;
+                            }
+                            else
+                                System.out.print("Invalid Command! Correct syntax: assigncountries");
+
+                        }
+                        break;
+
+                    }
+                    else
+                        System.out.print("Invalid Command! Correct syntax: editmap [filename]");
+                }
+
+                else if (words[0].equalsIgnoreCase(Commands.SHOW_MAP_COMMAND)) {
                     System.out.print("You're in: SHOW_MAP_COMMAND");
                     break;
 
-                } else if (userInput.toLowerCase().startsWith(Commands.VALIDATE_MAP_COMMAND)) {
-                    System.out.print("You're in: VALIDATE_MAP_COMMAND");
-                    break;
-
-                } else if (userInput.toLowerCase().startsWith(Commands.SAVE_MAP_COMMAND)) {
-                    System.out.print("You're in: SAVE_MAP_COMMAND");
-                    break;
-
-                } else if (userInput.toLowerCase().startsWith(Commands.EDIT_MAP_COMMAND)) {
+                } else if (words.length == 2 && words[0].equalsIgnoreCase(Commands.EDIT_MAP_COMMAND) && words[1].matches("(?i).+\\\\.map")) {
                     System.out.print("You're in: EDIT_MAP_COMMAND");
                     break;
 
-                } else if (userInput.toLowerCase().startsWith(Commands.ASSIGN_COUNTRIES_COMMAND)) {
-                    System.out.print("You're in: ASSIGN_COUNTRIES_COMMAND");
-                    break;
-
-                } else if (userInput.toLowerCase().startsWith(Commands.PLAYER_ADD_REMOVE_COMMAND)) {
-                    System.out.print("You're in: PLAYER_ADD_REMOVE_COMMAND");
-                    break;
-
-                } else if (userInput.toLowerCase().startsWith(Commands.EDIT_CONTINENT_COMMAND)) {
-                    System.out.print("You're in: EDIT_CONTINENT_COMMAND");
-                    break;
-
-                } else if (userInput.toLowerCase().startsWith(Commands.EDIT_COUNTRY_COMMAND)) {
-                    System.out.print("You're in: EDIT_COUNTRY_COMMAND");
-                    break;
-
-                } else if (userInput.toLowerCase().startsWith(Commands.EDIT_NEIGHBOR_COMMAND)) {
-                    System.out.print("You're in: EDIT_NEIGHBOR_COMMAND");
-                    break;
-
-                } else if (userInput.toLowerCase().startsWith(Commands.DEPLOY_COMMAND)) {
-                    System.out.print("You're in: DEPLOY_COMMAND");
-                    break;
-
                 } else  {
-                    System.out.print("Invalid Command!");
+                    System.out.print("Sorry I could!");
 
                 }
             }
 
         } catch (Exception e) {
-            // Handle the exception if the user enters something that's not an integer
-            System.out.println("Invalid input. ERRORRRRR!!!!!!!!!!!!");
+            System.out.println("Something went wrong!");
         }
     }
 }
