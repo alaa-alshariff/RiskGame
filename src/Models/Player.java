@@ -25,8 +25,7 @@ public class Player {
     /**
      * List of player's orders for execution.
      */
-    List<Orders> d_playerOrders; //private List<String> playerOrders; //playerOrders should have (SourceCountry, DestinationCountry, NoOfArmies)
-    //Change <Models.Orders> ---> <String>
+    List<Orders> d_playerOrders;
     /**
      * This is the constructor method of the Models.Player class
      *
@@ -94,7 +93,7 @@ public class Player {
             String command = SCANNER.nextLine();
             String[] commandTokens = command.split(" ");
             if (commandTokens.length != 3 || !commandTokens[0].equals(Commands.DEPLOY_COMMAND)){
-                System.out.println("Please give the command in format: " + Commands.DEPLOY_COMMAND);
+                System.out.println("Please give the command in format: " + Commands.DEPLOY_COMMAND_SYNTAX);
                 continue;
             }
             try {
@@ -119,6 +118,7 @@ public class Player {
             Orders order = new Orders(numOfArmies, countryID);
             d_playerOrders.add(order);
             d_numOfReinforcements = d_numOfReinforcements - numOfArmies;
+            System.out.println("Order Issued Successfully.");
         }
     }
 
