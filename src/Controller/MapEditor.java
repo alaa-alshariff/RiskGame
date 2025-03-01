@@ -1,7 +1,11 @@
+package Controller;
+
 import Models.Continent;
 import Models.Country;
 import Models.WarMap;
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
@@ -9,6 +13,9 @@ import java.util.List;
 
 public class MapEditor {
 
+    public void editMapEntry(){
+
+    }
     boolean readmap(String p_filename, WarMap p_map) throws IOException {
         BufferedReader l_bufferReader = new BufferedReader(new FileReader(p_filename));
         String l_line = l_bufferReader.readLine();
@@ -54,7 +61,13 @@ public class MapEditor {
         return false;
     }
 
-    boolean editmap(String p_filename) {
+    boolean editMap(String p_filename, WarMap p_map) throws IOException {
+        File l_f = new File(p_filename);
+        if (l_f.exists()) {
+            readmap(p_filename, p_map);
+        } else {
+            l_f.createNewFile(); //fix this to to match where savemap links
+        }
         return false;
     }
 }

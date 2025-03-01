@@ -4,9 +4,8 @@ import Resources.Commands;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
-
+import static Controller.GameEngine.SCANNER;
 
 /**
  * This class describes information about each player.
@@ -85,13 +84,12 @@ public class Player {
      *player when the game engine calls it during the issue orders phase.
      */
     public void issue_order(){
-        Scanner scanner = new Scanner(System.in);
-        while (d_numOfReinforcements.intValue() != 0){
+        while (d_numOfReinforcements != 0){
             int countryID;
             int numOfArmies;
             System.out.println("Please issue deploy order command for Player " + d_playerName);
             System.out.println("Remaining reinforcements: " + d_numOfReinforcements);
-            String command = scanner.nextLine();
+            String command = SCANNER.nextLine();
             String[] commandTokens = command.split(" ");
             if (commandTokens.length != 3 || !commandTokens[0].equals(Commands.DEPLOY_COMMAND)){
                 System.out.println("Please give the command in format: " + Commands.DEPLOY_COMMAND_SYNTAX);
@@ -104,7 +102,7 @@ public class Player {
                 System.out.println("Invalid CountryID or Number of Reinforcements");
                 continue;
             }
-            if (numOfArmies > d_numOfReinforcements.intValue()){
+            if (numOfArmies > d_numOfReinforcements){
                 System.out.println("Specified number of reinforcements exceed the available.");
                 continue;
             }
@@ -118,7 +116,7 @@ public class Player {
             }
             Orders order = new Orders(numOfArmies, countryID);
             d_playerOrders.add(order);
-            d_numOfReinforcements = d_numOfReinforcements.intValue() - numOfArmies;
+            d_numOfReinforcements = d_numOfReinforcements - numOfArmies;
             System.out.println("Order Issued Successfully.");
         }
     }

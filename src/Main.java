@@ -1,7 +1,6 @@
-import View.GameEngine;
+import Controller.GameEngine;
 
 import java.io.IOException;
-
 import java.util.Scanner;
 
 public class Main {
