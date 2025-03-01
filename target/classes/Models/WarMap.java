@@ -11,7 +11,15 @@ import java.util.Set;
 
 public class WarMap {
     String d_mapName;
-    String d_base_path = String.valueOf(System.getProperty("user.dir")) + "\\maps";
+    String d_base_path = String.valueOf(System.getProperty("user.dir")) + "\\Src\\Resources\\Maps";
+
+    public String get_mapName() {
+        return d_mapName;
+    }
+
+    public void set_mapName(String p_mapName) {
+        d_mapName = p_mapName;
+    }
 
     public HashMap<Integer, Country> get_countries() {
         return d_countries;
@@ -71,6 +79,14 @@ public class WarMap {
         d_adjencyList.putIfAbsent(p_countryID, new ArrayList<Integer>());
         if (!d_adjencyList.get(p_countryID).contains(p_neighbourID)) {
             d_adjencyList.get(p_countryID).add(p_neighbourID);
+            d_countries.get(p_countryID).addNeighbouringCountry(d_countries.get(p_neighbourID));
+        }
+    }
+
+    public void removeNeighbour(int p_countryID, int p_neighbourID) {
+        if (d_adjencyList.get(p_countryID).contains(p_neighbourID)) {
+            d_adjencyList.get(p_countryID).remove(p_neighbourID);
+            d_countries.get(p_countryID).removeNeighbouringCountry(d_countries.get(p_neighbourID));
         }
     }
 
@@ -142,7 +158,7 @@ public class WarMap {
                 	l_adjencylistcontinent.put(l_countryid, new ArrayList<Integer>());
 
                     for (Country l_neighborcountry : l_countryset.getValue().getneighbouringCountries()) {
-                        if (l_neighborcountry.getContinentID() == l_continent_Id)
+                        if (l_neighborcountry != null && l_neighborcountry.getContinentID() == l_continent_Id)
                         	l_adjencylistcontinent.get(l_countryid).add(l_neighborcountry.get_countryID());
                     }
                 }
@@ -218,6 +234,15 @@ public class WarMap {
     public void showMap() { //Show map for only map (no player ownership or army count. - need to make seperate one that incorporates that for gamestate)
         for (Map.Entry<Integer, Country> entry : d_countries.entrySet()) {
             System.out.println(entry.getKey() + ": " + entry.getValue());
+            System.out.println("The neighboring countries are:");
+            for (Country c : entry.getValue().getneighbouringCountries()) {
+                if (c != null) {
+                    System.out.println(c.get_countryName());
+                }
+                if (c == null) {
+                    System.out.println("A null country was found");
+                }
+            }
         }
         for (Map.Entry<Integer, Continent> entry : d_continents.entrySet()) {
             System.out.println(entry.getKey() + ": " + entry.getValue());
@@ -228,4 +253,3 @@ public class WarMap {
     }
 
 }
-
