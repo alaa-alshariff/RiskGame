@@ -7,16 +7,13 @@ import Models.Country;
 import Models.Player;
 import Models.WarMap;
 import Resources.Commands;
-import com.sun.tools.javac.Main;
-
-import java.util.regex.*;
 
 /**
  * The GameEngine class represents the startup phase of the game. It serves as the central
  * component responsible for redirecting user requests to relevant functionality of the game.
  * This class acts as the core of the game's execution and coordinates the various components
  * to provide an interactive gaming experience.
- */
+*/
 public class GameEngine {
     /**
      * Static scanner instance to be used all over the project.
@@ -153,6 +150,6 @@ public class GameEngine {
         }
         System.out.println("Assigned " + l_NumOfCountries + " Countries to players.");
         MainGameLoop l_gameLoop = new MainGameLoop(d_currentMap, d_playersList);
-        l_gameLoop.begin_game();
+        l_gameLoop.run_game_loop();
     }
 }
