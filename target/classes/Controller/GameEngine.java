@@ -13,7 +13,7 @@ import Resources.Commands;
  * component responsible for redirecting user requests to relevant functionality of the game.
  * This class acts as the core of the game's execution and coordinates the various components
  * to provide an interactive gaming experience.
-*/
+ */
 public class GameEngine {
     /**
      * Static scanner instance to be used all over the project.
@@ -65,18 +65,16 @@ public class GameEngine {
                             {
                                 if (userInput.toLowerCase().startsWith(Commands.PLAYER_ADD_COMMAND) && words.length == 3)
                                 {
-                                    System.out.print("You're in: PLAYER_ADD_COMMAND");
-
-                                    // Write code here
-
+                                    System.out.print("You're in: PLAYER_ADD_COMMAND \n");
+                                    
+                                    addPlayer(words[2]);
                                     break;
                                 }
                                 else if (userInput.toLowerCase().startsWith(Commands.PLAYER_REMOVE_COMMAND) && words.length == 3)
                                 {
-                                    System.out.print("You're in: PLAYER_REMOVE_COMMAND");
+                                    System.out.print("You're in: PLAYER_REMOVE_COMMAND \n");
 
-                                    // Write code here
-
+                                    removePlayer(words[2]);
                                     break;
                                 }
                                 else
@@ -151,5 +149,44 @@ public class GameEngine {
         System.out.println("Assigned " + l_NumOfCountries + " Countries to players.");
         MainGameLoop l_gameLoop = new MainGameLoop(d_currentMap, d_playersList);
         l_gameLoop.run_game_loop();
+    }
+
+    /**
+     * This function is called after the command 'addPlayer' is given. If a player already exist it displays 'Player Already Exist',
+     * otherwise it adds the new player to the d_playersList and updates the d_playersList
+     */
+    private void addPlayer(String l_InputPlayerName){
+        for(int i=0; i < d_playersList.size(); i++){
+            String l_ExistingPlayerName = d_playersList.get(i).get_playerName();
+
+            if(l_ExistingPlayerName.equals((l_InputPlayerName))){
+                System.out.println("Player " + l_InputPlayerName + " already exists.");
+                return;
+            }   
+        }
+
+        Player l_newPlayer = new Player(l_InputPlayerName);
+        l_newPlayer.set_playerName(l_InputPlayerName);
+        d_playersList.add(l_newPlayer);
+        System.out.println("Player " + l_InputPlayerName + " added successfully.");
+    }
+
+
+    /**
+     * This function is called after the command 'reomvePlayer' is given. If a player already exist it removes the player from list and 
+     * displays 'Player Removed Successfully', otherwise displays 'Player doesn't exist'.
+     */
+
+    private void removePlayer(String l_InputPlayerName){
+        for(int i=0; i < d_playersList.size(); i++){
+            Player l_player = d_playersList.get(i);
+
+            if(l_player.get_playerName().equals(l_InputPlayerName)){
+                l_player.set_playerName(null);
+                System.out.println("Player " + l_InputPlayerName + " removed succesfully");
+                return;
+            }
+        }
+        System.out.println("Player " + l_InputPlayerName + " not found");
     }
 }
