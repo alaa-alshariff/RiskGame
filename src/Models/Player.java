@@ -80,11 +80,11 @@ public class Player {
         this.d_playerOrders = p_playerOrder;
     }
 
-    public Integer get_armiesNumber() {
+    public Integer get_numOfReinforcements() {
         return d_numOfReinforcements;
     }
 
-    public void set_armiesNumber(Integer p_armiesNumber) {
+    public void set_numOfReinforcements(Integer p_armiesNumber) {
         this.d_numOfReinforcements = p_armiesNumber;
     }
 
@@ -93,13 +93,14 @@ public class Player {
      *to add an order to the list of orders held by the
      *player when the game engine calls it during the issue orders phase.
      */
-    public void issue_order(){
+    public void issue_order(String[] commands){
+        int iterations = 0;
         while (d_numOfReinforcements != 0){
             int countryID;
             int numOfArmies;
             System.out.println("Please issue deploy order command for Player " + d_playerName);
             System.out.println("Remaining reinforcements: " + d_numOfReinforcements);
-            String command = SCANNER.nextLine();
+            String command = SCANNER == null ? commands[iterations++] : SCANNER.nextLine();
             String[] commandTokens = command.split(" ");
             if (commandTokens.length != 3 || !commandTokens[0].equals(Commands.DEPLOY_COMMAND)){
                 System.out.println("Please give the command in format: " + Commands.DEPLOY_COMMAND_SYNTAX);
@@ -146,4 +147,3 @@ public class Player {
         return firstOrder;
     }
 }
-
