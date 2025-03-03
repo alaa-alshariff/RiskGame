@@ -7,6 +7,8 @@ import java.util.List;
 
 /**
  * This class is the MainGameLoop class. Once the game is set up with the map and all the users, the control is handed over to this class for actual gameplay.
+ *
+ * 
  */
 public class MainGameLoop {
 
@@ -22,12 +24,12 @@ public class MainGameLoop {
     /**
      * A fully parametrized constructor built to initialize the class with all the essential values.
      *
-     * @param l_map
-     * @param l_playerList
+     * @param p_map
+     * @param p_playerList
      */
-    public MainGameLoop(WarMap l_map, List<Player> l_playerList){
-        this.d_map = l_map;
-        this.d_playerList = l_playerList;
+    public MainGameLoop(WarMap p_map, List<Player> p_playerList){
+        this.d_map = p_map;
+        this.d_playerList = p_playerList;
     }
 
     /**
@@ -35,5 +37,15 @@ public class MainGameLoop {
      */
     public void run_game_loop(){
         System.out.println("Begin Main Game Loop...");
+    }
+
+    void assign_reinforcements(){
+
+    }
+
+    int getNumOfReinforcements(Player p_player){
+        int l_baseReinforcements = 5;
+        //TODO: Find if player controls whole continent and use it to return total reinforcements.
+        return l_baseReinforcements;
     }
 }
