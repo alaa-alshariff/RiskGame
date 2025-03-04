@@ -1,5 +1,6 @@
 package Models;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ public class Orders {
     }
 
     public int getCountryID() {
-        return d_numOfArmies;
+        return d_destCountryID;
     }
 
     public void setCountryID(int p_newCountry) {
@@ -50,7 +51,7 @@ public class Orders {
      * @param p_warmap Details of values inside List Country
      */
     public void execute(WarMap p_warmap){
-        List<Country> l_countryInfo = (List<Country>) p_warmap.get_countries().values();
+        Collection<Country> l_countryInfo = p_warmap.get_countries().values();
         for (Country country : l_countryInfo) {
             if (country.d_countryID == d_destCountryID){
                 country.d_numOfArmies += d_numOfArmies;
