@@ -138,7 +138,7 @@ public class GameEngine {
      * This function is called after the command 'assigncountries' is given. It uses the players list and the countries present in the Map class
      * to assign the countries equally to all the players. After assigning the countries this function sends the control over to the MainGameLoop class.
      */
-    private void assignCountries() {
+    public void assignCountries() {
         //TODO: Check if there are at least 2 players, and less than the total number of countries
         System.out.println("Assigning Countries To Players.");
         int l_NumOfCountries = d_currentMap.get_countries().size();
@@ -165,7 +165,7 @@ public class GameEngine {
      * This function is called after the command 'addPlayer' is given. If a player already exist it displays 'Player Already Exist',
      * otherwise it adds the new player to the d_playersList and updates the d_playersList
      */
-    private void addPlayer(String l_InputPlayerName){
+    public void addPlayer(String l_InputPlayerName){
         for(int i=0; i < d_playersList.size(); i++){
             String l_ExistingPlayerName = d_playersList.get(i).get_playerName();
 
@@ -187,7 +187,7 @@ public class GameEngine {
      * displays 'Player Removed Successfully', otherwise displays 'Player doesn't exist'.
      */
 
-    private void removePlayer(String l_InputPlayerName){
+    public void removePlayer(String l_InputPlayerName){
         for(int i=0; i < d_playersList.size(); i++){
             Player l_player = d_playersList.get(i);
 
