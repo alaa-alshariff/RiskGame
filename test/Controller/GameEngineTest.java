@@ -1,8 +1,8 @@
 package Controller;
 
+
 import java.util.List;
 
-import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,9 +21,7 @@ class GameEngineTest {
         gameEngine = new GameEngine();
     }
 
-    @AfterEach
-    void tearDown() {
-    }
+
 
     @Test
     void assignCountries() {
