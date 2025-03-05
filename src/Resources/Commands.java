@@ -2,8 +2,8 @@ package Resources;
 
 /**
  * This class is used to store all the possible commands and some syntax.
+ *
  */
-
 public class Commands {
     public static final String LOAD_MAP_COMMAND = "loadmap";
     public static final String SHOW_MAP_COMMAND = "showmap";
@@ -19,4 +19,5 @@ public class Commands {
     public static final String EDIT_NEIGHBOR_COMMAND = "editneighbor";
     public static final String DEPLOY_COMMAND = "deploy";
     public static final String DEPLOY_COMMAND_SYNTAX = "deploy <countryID> <num>";
+    public static final String MAPS_DIRECTORY_PATH = "src/Resources/Maps";
 }
