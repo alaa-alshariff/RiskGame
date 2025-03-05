@@ -106,9 +106,7 @@ public class GameEngine {
                             }
                             else if (userInput.equalsIgnoreCase(Commands.SHOW_MAP_COMMAND))
                             {
-                                System.out.print("You're in: SHOW_MAP_COMMAND");
-
-                                // Write code here
+                                d_currentMap.showMap();
                             }
                             else if (userInput.equalsIgnoreCase("go back"))
                             {
@@ -123,6 +121,8 @@ public class GameEngine {
                 }
                 else if (userInput.equalsIgnoreCase(Commands.SHOW_ALL_MAPS_COMMAND))
                 {
+                    System.out.print("\nHere is the list of all the available maps:");
+
                     MapEditor.showAllMaps();
                 }
                 else if (words.length == 1 && words[0].equalsIgnoreCase(Commands.EDIT_MAP_COMMAND))
