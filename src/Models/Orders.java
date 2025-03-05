@@ -36,7 +36,7 @@ public class Orders {
     }
     /**
      * This is a fully parametrized constructor for the Models.Orders class.
-     *
+     * 
      * @param p_numOfArmies Number of Armies to deploy in this order.
      * @param p_countryID ID of the country on which to deploy the specified number of armies.
      */
@@ -45,18 +45,21 @@ public class Orders {
         this.d_numOfArmies = p_numOfArmies;
     }
 
-    /**
+    /** 
      * Execution of the logic of deploying the armies to the specified Models.Country.
-     *
+     * 
      * @param p_warmap Details of values inside List Country
      */
     public void execute(WarMap p_warmap){
+        System.out.println("\n_");
         Collection<Country> l_countryInfo = p_warmap.get_countries().values();
         for (Country country : l_countryInfo) {
             if (country.d_countryID == d_destCountryID){
                 country.d_numOfArmies += d_numOfArmies;
+                System.out.println(d_numOfArmies + " armies are deployed to country " + country.get_countryName());
             }
         }
+        System.out.println("\n_");
         System.out.println("Execution Done Successfully");
     }
 }
