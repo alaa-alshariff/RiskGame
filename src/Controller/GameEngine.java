@@ -106,7 +106,8 @@ public class GameEngine {
                             }
                             else if (userInput.equalsIgnoreCase(Commands.SHOW_MAP_COMMAND))
                             {
-                                d_currentMap.showMap();
+                                if(d_playersList!=null) d_currentMap.showMap(d_playersList);
+                                else d_currentMap.showMap();
                             }
                             else if (userInput.equalsIgnoreCase("go back"))
                             {
