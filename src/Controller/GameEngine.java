@@ -2,7 +2,7 @@ package Controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
+import java.io.File;
 import Models.Country;
 import Models.Player;
 import Models.WarMap;
@@ -32,9 +32,6 @@ public class GameEngine {
         SCANNER = new Scanner(System.in);
         try {
 
-
-
-
             while (true)
             {
                 System.out.println("\n╔════════════════════════════════════════╗");
@@ -56,11 +53,28 @@ public class GameEngine {
                 {
                     if (words.length == 2 && words[0].equalsIgnoreCase(Commands.LOAD_MAP_COMMAND) && words[1].matches("(?i).+\\.map"))
                     {
-                        //TODO: check if the given file exists
-                        MapEditor.readmap(words[1], d_currentMap);
-                        d_currentMap.validateMap();
-                        //TODO: print an error if validate map or readmap returns false
-                        System.out.print( words[1] + " loaded successfully!\n");
+                        ArrayList<String> l_listOfMaps = getAllMapsList();
+                        if (l_listOfMaps.contains(words[1]))
+                        {
+                            boolean l_isValidMap = d_currentMap.validateMap();
+                            if (!l_isValidMap)
+                            {
+                                System.out.print("\n" + words[1] + " is not a valid map! Try fixing it manually or select some other map!\n");
+                                continue;
+                            }
+                            boolean l_isAbleToReadMap = MapEditor.readmap(words[1], d_currentMap);
+                            if (!l_isAbleToReadMap)
+                            {
+                                System.out.print("\n Unable to read " + words[1] + "!\n");
+                                continue;
+                            }
+                            System.out.print( words[1] + " loaded successfully!\n");
+                        }
+                        else
+                        {
+                            System.out.print("\nUnable to find " + words[1] + " in our maps directory. Enter the correct spelling or select some other map!\n");
+                            continue;
+                        }
 
                         while (true)
                         {
@@ -205,5 +219,34 @@ public class GameEngine {
             }
         }
         System.out.println("Player " + p_InputPlayerName + " not found");
+    }
+
+
+    private ArrayList<String> getAllMapsList()
+    {
+        // Create a File object for the directory
+        File l_directory = new File(Commands.MAPS_DIRECTORY_PATH);
+
+        ArrayList<String> l_maplist = new ArrayList<String>();
+
+        // Check if the directory exists
+        if (l_directory.exists() && l_directory.isDirectory()) {
+            // List all files in the directory
+            File[] files = l_directory.listFiles();
+
+            if (files != null) {
+                // Iterate through the list of files and print their names
+                for (File file : files) {
+                    if (file.isFile()) {
+                        l_maplist.add(file.getName());
+                    }
+                }
+            }
+        }
+        else {
+            System.out.println("The specified directory does not exist or is not a directory.");
+        }
+
+        return l_maplist;
     }
 }
