@@ -38,52 +38,92 @@ public class Player {
     /**
      * This is the constructor method of the Models.Player class
      *
-     * @param v_playerName is player's name.
+     * @param p_playerName is player's name.
      */
-    public Player(String v_playerName) {
-        this.d_playerName = v_playerName;
+    public Player(String p_playerName) {
+        this.d_playerName = p_playerName;
         this.d_numOfReinforcements = Integer.valueOf(0);
         this.d_playerOrders = new ArrayList<Orders>();
         this.d_playerCountries = new ArrayList<Country>();
         this.d_playerContinents = new ArrayList<Continent>();
     }
 
+    /**
+     *
+     * @return the player name
+     */
     public String get_playerName() {
         return d_playerName;
     }
 
+    /**
+     *
+     * @param p_name the player name
+     */
     public void set_playerName(String p_name) {
         this.d_playerName = p_name;
     }
 
+    /**
+     *
+     * @return a list of the player's countries
+     */
     public List<Country> get_playerCountries() {
         return d_playerCountries;
     }
 
+    /**
+     *
+     * @param p_playerCountries a list of the player's countries
+     */
     public void set_playerCountries(List<Country> p_playerCountries) {
         this.d_playerCountries = p_playerCountries;
     }
 
+    /**
+     *
+     * @return a list of the player's continents
+     */
     public List<Continent> get_playerContinents() {
         return d_playerContinents;
     }
 
+    /**
+     *
+     * @param p_playerContinents a list of the player's continents
+     */
     public void set_playerContinents(List<Continent> p_playerContinents) {
         this.d_playerContinents = p_playerContinents;
     }
 
+    /**
+     *
+     * @return a list of the player's orders
+     */
     public List<Orders> get_playerOrder() {
         return d_playerOrders;
     }
 
+    /**
+     *
+     * @param p_playerOrder a list of the player's orders
+     */
     public void set_playerOrder(List<Orders> p_playerOrder) {
         this.d_playerOrders = p_playerOrder;
     }
 
+    /**
+     *
+     * @return the number of reinforcements the player should get
+     */
     public Integer get_numOfReinforcements() {
         return d_numOfReinforcements;
     }
 
+    /**
+     *
+     * @param p_armiesNumber the number of reinforcements the player should get
+     */
     public void set_numOfReinforcements(Integer p_armiesNumber) {
         this.d_numOfReinforcements = p_armiesNumber;
     }
@@ -92,13 +132,15 @@ public class Player {
      *“issue_order()” (no parameters, no return value) whose function is
      *to add an order to the list of orders held by the
      *player when the game engine calls it during the issue orders phase.
+     *
+     * @param commands The following param is for the testing class only. Set to null under normal conditions.
      */
     public void issue_order(String[] commands){
         int iterations = 0;
         while (d_numOfReinforcements != 0){
             int countryID;
             int numOfArmies;
-            System.out.println("Please issue deploy order command for Player " + d_playerName);
+            System.out.println("Please issue deploy order command for Player " + d_playerName + "\nSyntax: deploy <countryID> <num>");
             System.out.println("Remaining reinforcements: " + d_numOfReinforcements);
             String command = SCANNER == null ? commands[iterations++] : SCANNER.nextLine();
             String[] commandTokens = command.split(" ");
@@ -119,7 +161,7 @@ public class Player {
             }
             boolean countryExists = false;
             for (Country country : d_playerCountries)
-                if (country.d_countryID == countryID)
+                if (country.get_countryID() == countryID)
                     countryExists = true;
             if (!countryExists){
                 System.out.println("The given CountryID is not under your control.");
