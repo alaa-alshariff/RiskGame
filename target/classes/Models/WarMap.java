@@ -29,7 +29,7 @@ public class WarMap {
     /**
      * A hashmap of the adjency list of the WarMap, this will take the form of HashMap(CountryID, List of Neighboring Country IDs)
      */
-    private HashMap<Integer, ArrayList<Integer>> d_adjencyList;
+    private HashMap<Integer, HashMap<Integer, Integer>> d_adjencyList;
     /**
      * Stores the location of saved WarMaps in the file directory.
      */
@@ -38,7 +38,7 @@ public class WarMap {
      * This is a default constructor method of the Models.WarMap class
      */
     public WarMap() {
-        this("Default Name", new HashMap<Integer, Country>(), new HashMap<Integer, Continent>(), new HashMap<Integer, ArrayList<Integer>>());
+        this("Default Name", new HashMap<Integer, Country>(), new HashMap<Integer, Continent>(), new HashMap<Integer, HashMap<Integer, Integer>>());
 
     }
     /**
@@ -47,7 +47,7 @@ public class WarMap {
      * @param p_mapName is the map's name (generally the file name).
      */
     public WarMap(String p_mapName) {
-        this(p_mapName, new HashMap<Integer, Country>(), new HashMap<Integer, Continent>(), new HashMap<Integer, ArrayList<Integer>>());
+        this(p_mapName, new HashMap<Integer, Country>(), new HashMap<Integer, Continent>(), new HashMap<Integer, HashMap<Integer, Integer>>());
 
     }
     /**
@@ -58,7 +58,7 @@ public class WarMap {
      * @param p_continents is a hashmap of the continents in the map where the hashmap contains keys with the continent Id's and the values are the corresponding continents.
      * @param p_adjencyList is a hashmap of the neighbouring countries in the map where the hashmap contains keys with the country IDs and the values are a list of the country Id's of neighbouring countries.
      */
-    public WarMap(String p_mapName, HashMap<Integer, Country> p_countries, HashMap<Integer, Continent> p_continents, HashMap<Integer, ArrayList<Integer>> p_adjencyList) {
+    public WarMap(String p_mapName, HashMap<Integer, Country> p_countries, HashMap<Integer, Continent> p_continents, HashMap<Integer, HashMap<Integer, Integer>> p_adjencyList) {
         d_mapName = p_mapName;
         d_countries = p_countries;
         d_continents = p_continents;
@@ -104,13 +104,13 @@ public class WarMap {
     /**
      * @return the adjency list of the WarMap.
      */
-    public HashMap<Integer, ArrayList<Integer>> get_adjencyList() {
+    public HashMap<Integer, HashMap<Integer, Integer>> get_adjencyList() {
         return d_adjencyList;
     }
     /**
      * @param p_adjencyList the adjency list to give the WarMap.
      */
-    public void setD_adjencyList(HashMap<Integer, ArrayList<Integer>> p_adjencyList) {
+    public void setD_adjencyList(HashMap<Integer, HashMap<Integer, Integer>> p_adjencyList) {
         d_adjencyList = p_adjencyList;
     }
 
@@ -140,9 +140,9 @@ public class WarMap {
      * @param p_neighbourID the neighbouring country to be added.
      */
     public void addNeighbour(int p_countryID, int p_neighbourID) {
-        d_adjencyList.putIfAbsent(p_countryID, new ArrayList<Integer>());
-        if (!d_adjencyList.get(p_countryID).contains(p_neighbourID)) {
-            d_adjencyList.get(p_countryID).add(p_neighbourID);
+        d_adjencyList.putIfAbsent(p_countryID, new HashMap<Integer, Integer>());
+        if (!d_adjencyList.get(p_countryID).containsKey(p_neighbourID)) {
+            d_adjencyList.get(p_countryID).put(p_neighbourID, p_neighbourID);
             d_countries.get(p_countryID).addNeighbouringCountry(d_countries.get(p_neighbourID));
         }
     }
@@ -153,7 +153,7 @@ public class WarMap {
      * @param p_neighbourID the neighbouring country to be added.
      */
     public void removeNeighbour(int p_countryID, int p_neighbourID) {
-        if (d_adjencyList.get(p_countryID).contains(p_neighbourID)) {
+        if (d_adjencyList.get(p_countryID).containsKey(p_neighbourID)) {
             d_adjencyList.get(p_countryID).remove(p_neighbourID);
         }
             d_countries.get(p_countryID).removeNeighbouringCountry(d_countries.get(p_neighbourID));
@@ -168,7 +168,7 @@ public class WarMap {
     // DFS recursive function for map
     private void dfsHelper(Integer p_country, HashMap<Integer, Boolean> p_isvisited) {
     	p_isvisited.put(p_country, true);
-        for (int l_neighbour : d_adjencyList.get(p_country))
+        for (int l_neighbour : d_adjencyList.get(p_country).keySet())
             if (!p_isvisited.get(l_neighbour))
                 dfsHelper(l_neighbour, p_isvisited);
     }
@@ -295,7 +295,7 @@ public class WarMap {
                 l_info.write("[countries]");
                 l_info.newLine();
                 for (Entry<Integer, Country> l_country : d_countries.entrySet()) {
-                    l_info.write(l_country.getKey() + " " + l_country.getValue().get_countryName() + " " + l_country.getValue().get_countryID());
+                    l_info.write(l_country.getKey() + " " + l_country.getValue().get_countryName() + " " + l_country.getValue().getContinentID());
                     l_info.newLine();
                 }
                 l_info.newLine();
@@ -303,10 +303,11 @@ public class WarMap {
 				// creating border section in File
                 l_info.write("[borders]");
                 l_info.newLine();
-                for (Entry<Integer, ArrayList<Integer>> l_neighbourlist : d_adjencyList.entrySet()) {
+                for (Entry<Integer, HashMap<Integer, Integer>> l_neighbourlist : d_adjencyList.entrySet()) {
                     StringBuilder l_border = new StringBuilder();
                     l_border.append(l_neighbourlist.getKey());
-                    for (Integer nghbr_cuntry : l_neighbourlist.getValue()) l_border.append(" " + nghbr_cuntry);
+                    for (Integer nghbr_cuntry : l_neighbourlist.getValue().keySet())
+                        l_border.append(" " + nghbr_cuntry);
                     l_info.write(String.valueOf(l_border));
                     l_info.newLine();
                 }
@@ -373,11 +374,19 @@ public class WarMap {
 	}
 	
 	public void removeContinent(Integer p_continentId) {
+        ArrayList<Integer> l_countries_to_remove = new ArrayList<>();
 		for (Integer l_countryId : d_countries.keySet()) {
-			if(d_countries.get(l_countryId).getContinentID()==p_continentId) {
-				removeCountry(l_countryId);
-			}
-		}
+            if (d_countries.containsKey(l_countryId)) {
+                if (d_countries.get(l_countryId).getContinentID() == p_continentId) {
+
+                    l_countries_to_remove.add(l_countryId);
+
+                }
+            }
+        }
+        for (int l_i : l_countries_to_remove) {
+            removeCountry(l_i);
+        }
 		d_continents.remove(p_continentId);
 	}
 	
@@ -392,6 +401,7 @@ public class WarMap {
 		}
 		d_countries.remove(p_countryId);
 		d_adjencyList.remove(p_countryId);
+        System.out.println("Removed Country with ID " + p_countryId);
 	}
 	
 	public void addNeighbourCountry(Integer l_input_country_ID, Integer l_input_country_neighbor_ID) {
