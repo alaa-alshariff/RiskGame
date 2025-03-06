@@ -1,13 +1,13 @@
 package Controller;
 
-import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import Models.Continent;
 import Models.Country;
 import Models.Player;
 import Models.WarMap;
+
+import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MainGameLoopTest {
     @org.junit.jupiter.api.Test

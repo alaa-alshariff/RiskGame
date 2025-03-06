@@ -1,6 +1,5 @@
 package Models;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -22,11 +21,12 @@ public class Country {
     /**
      * Stores the neighbouring countries of a country.
      */
-    private HashMap<Integer, Country> d_neighbouringCountries;
+    private final HashMap<Integer, Country> d_neighbouringCountries;
     /**
      * Stores the continentID of the continent that the country belongs to.
      */
     private int d_continentID;
+
     /**
      * This is the default constructor method of the Models.Country class
      */
@@ -37,32 +37,34 @@ public class Country {
     /**
      * This is a parameterized constructor method of the Models.Country class
      *
-     * @param p_countryID is the country's ID.
+     * @param p_countryID   is the country's ID.
      * @param p_countryName is the country's name.
      * @param p_continentID is the country's continent's ID.
      */
     public Country(int p_countryID, String p_countryName, int p_continentID) {
         this(p_countryID, p_countryName, p_continentID, new HashMap<Integer, Country>());
     }
+
     /**
      * This is a parameterized constructor method of the Models.Country class
      *
-     * @param p_countryID is the country's ID.
-     * @param p_countryName is the country's name.
-     * @param p_continentID is the country's continent's ID.
+     * @param p_countryID             is the country's ID.
+     * @param p_countryName           is the country's name.
+     * @param p_continentID           is the country's continent's ID.
      * @param p_neighbouringCountries is the list of the country's neighbouring countries.
      */
     public Country(int p_countryID, String p_countryName, int p_continentID, HashMap<Integer, Country> p_neighbouringCountries) {
         this(p_countryID, p_countryName, p_continentID, p_neighbouringCountries, 0);
     }
+
     /**
      * This is a parameterized constructor method of the Models.Country class
      *
-     * @param p_countryID is the country's ID.
-     * @param p_countryName is the country's name.
-     * @param p_continentID is the country's continent's ID.
+     * @param p_countryID             is the country's ID.
+     * @param p_countryName           is the country's name.
+     * @param p_continentID           is the country's continent's ID.
      * @param p_neighbouringCountries is the list of the country's neighbouring countries.
-     * @param p_numOfArmies is the number of armies placed on the country.
+     * @param p_numOfArmies           is the number of armies placed on the country.
      */
     public Country(int p_countryID, String p_countryName, int p_continentID, HashMap<Integer, Country> p_neighbouringCountries, int p_numOfArmies) {
         d_countryID = p_countryID;
@@ -73,7 +75,6 @@ public class Country {
     }
 
     /**
-     *
      * @return The country's ID
      */
     public int get_countryID() {
@@ -81,7 +82,6 @@ public class Country {
     }
 
     /**
-     *
      * @param p_countryID The country's ID
      */
     public void set_countryID(int p_countryID) {
@@ -89,7 +89,6 @@ public class Country {
     }
 
     /**
-     *
      * @return the number of armies placed on the country
      */
     public int get_numOfArmies() {
@@ -97,7 +96,6 @@ public class Country {
     }
 
     /**
-     *
      * @param p_numOfArmies the number of armies placed on the country
      */
     public void set_numOfArmies(int p_numOfArmies) {
@@ -105,7 +103,6 @@ public class Country {
     }
 
     /**
-     *
      * @return the country's name
      */
     public String get_countryName() {
@@ -113,7 +110,6 @@ public class Country {
     }
 
     /**
-     *
      * @param p_countryName the country's name
      */
     public void set_countryName(String p_countryName) {
@@ -121,7 +117,6 @@ public class Country {
     }
 
     /**
-     *
      * @return A list of the neighbouring countries.
      */
     public HashMap<Integer, Country> getNeighbouringCountries() {
@@ -129,7 +124,6 @@ public class Country {
     }
 
     /**
-     *
      * @return the continent ID of the country
      */
     public int getContinentID() {
@@ -137,15 +131,13 @@ public class Country {
     }
 
     /**
-     *
      * @param p_continentID the continent ID of the country
      */
-    public void setContinentID(int p_continentID){
+    public void setContinentID(int p_continentID) {
         d_continentID = p_continentID;
     }
 
     /**
-     *
      * @param p_country the neighbouring country to be added.
      */
     public void addNeighbouringCountry(Country p_country) {
@@ -153,7 +145,6 @@ public class Country {
     }
 
     /**
-     *
      * @param p_country the neighbouring country to be removed.
      */
     void removeNeighbouringCountry(Country p_country) {
