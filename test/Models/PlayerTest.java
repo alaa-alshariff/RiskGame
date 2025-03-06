@@ -16,17 +16,22 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class PlayerTest {
 
+    /**
+     * The player instance required to run the test case.
+     */
     private Player player;
-    private List<Country> countries;
-    private List<Continent> continents;
 
+    /**
+     * Initializing the player instance before each test.
+     */
     @BeforeEach
     public void setUp() {
         player = new Player("John Doe");
-        countries = new ArrayList<>();
-        continents = new ArrayList<>();
     }
 
+    /**
+     * Testing if the next order returns null when no orders are issued.
+     */
     @Test
     public void testNextOrderEmptyList() {
         Orders nextOrder = player.next_order();
@@ -34,6 +39,9 @@ public class PlayerTest {
         assertNull(nextOrder);
     }
 
+    /**
+     * Testing the next orders and the size of the order list upon adding.
+     */
     @Test
     public void testNextOrder() {
         Orders order1 = new Orders(3, 1);
@@ -51,6 +59,9 @@ public class PlayerTest {
         assertFalse(player.get_playerOrder().contains(order1));
     }
 
+    /**
+     * Test if the country deployed to is invalid.
+     */
     @Test
     public void testInvalidCountry() {
         player.set_numOfReinforcements(5);
@@ -82,6 +93,9 @@ public class PlayerTest {
     }
 
 
+    /**
+     * Deploying more number of armies then there are reinforcements available.
+     */
     @Test
     public void testCannotDeployMoreArmiesThanReinforcements() {
         // Set the player's initial reinforcement pool to 5
@@ -106,9 +120,5 @@ public class PlayerTest {
 
         // Ensure that the player's available reinforcements remain unchanged
         assertEquals(Integer.valueOf(0), player.get_numOfReinforcements());
-
     }
-
-
 }
-
