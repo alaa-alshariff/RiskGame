@@ -116,27 +116,6 @@ public class GameEngine {
                             continue;
                         }
 
-                        if (l_listOfMaps.contains(words[1]))
-                        {
-                            Boolean l_isAbleToReadMap = MapEditor.readmap(words[1], d_currentMap);
-                            Boolean l_isValidMap = d_currentMap.validateMap();
-                            if (l_isAbleToReadMap && l_isValidMap)
-                            {
-
-                            }
-                            else
-                            {
-
-                            }
-                        }
-                        else
-                        {
-
-                        }
-
-                        //TODO: print an error if validate map or readmap returns false
-                        System.out.print( words[1] + " loaded successfully!\n");
-
                         while (true)
                         {
                             System.out.print("\nEnter a command to proceed:\nPossible commands are:\n");
@@ -152,19 +131,19 @@ public class GameEngine {
                             {
                                 if (l_userInput.toLowerCase().startsWith(Commands.PLAYER_EDIT_COMMAND) && l_words.length >= 3)
                                 {
-                                    for (int i = 1; i < l_words.length; i++) {
-                                        if (l_words[i].equals("-add")) {
-                                            i++;
-                                            if (i < l_words.length) {
-                                                addPlayer(l_words[i]);
+                                    for (int l_i = 1; l_i < l_words.length; l_i++) {
+                                        if (l_words[l_i].equals("-add")) {
+                                            l_i++;
+                                            if (l_i < l_words.length) {
+                                                addPlayer(l_words[l_i]);
                                             } else {
                                                 System.out.println("Reached end of command while parsing");
                                             }
                                         }
-                                        if (l_words[i].equals("-remove")) {
-                                            i++;
-                                            if (i < l_words.length) {
-                                                removePlayer(l_words[i]);
+                                        if (l_words[l_i].equals("-remove")) {
+                                            l_i++;
+                                            if (l_i < l_words.length) {
+                                                removePlayer(l_words[l_i]);
                                             } else {
                                                 System.out.println("Reached end of command while parsing");
 

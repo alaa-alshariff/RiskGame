@@ -119,6 +119,8 @@ public class MapEditor {
 
                         l_current_map.saveMap(l_input_string_array[1]);
                         System.out.println("Map saved");
+                        l_current_map = new WarMap();
+                        this.editMap(l_input_string_array[1], l_current_map);
                     } else {
 	                    System.out.println("Map not saved due to being invalid");
                     }
@@ -146,6 +148,7 @@ public class MapEditor {
 				case 7:
 					return;
                 case 8:
+                    System.out.println("You have entered an invalid command");
                     break;
             }
             
@@ -166,6 +169,7 @@ public class MapEditor {
      * @throws IOException
      */
     public static boolean readMap(String p_filename, WarMap p_map) throws IOException {
+
         BufferedReader l_bufferReader = new BufferedReader(new FileReader(d_base_path + "\\" + p_filename));
         String l_line = l_bufferReader.readLine();
         String l_readState = "";
