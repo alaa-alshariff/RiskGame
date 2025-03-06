@@ -30,8 +30,10 @@ public class MainGameLoop {
     /**
      * A fully parametrized constructor built to initialize the class with all the essential values.
      *
+
      * @param p_map The current game map of play
      * @param p_playerList The list of players
+
      */
     public MainGameLoop(WarMap p_map, List<Player> p_playerList){
         this.d_map = p_map;
@@ -47,16 +49,19 @@ public class MainGameLoop {
         System.out.println("╚════════════════════════════════════════╝");
 
         while (true) {
+
             System.out.println("Please enter desired command (Applicable commands: `showmap`, `play` & `exit`):");
             String input = SCANNER.nextLine();
             if (input.equalsIgnoreCase(SHOW_MAP_COMMAND)) {
                 d_map.showMap(d_playerList);
+
             } else if (input.equalsIgnoreCase("play")){
                 play();
             }
             else if (input.equalsIgnoreCase("exit")){
-                System.out.println("Exiting to Main Menu.....");
-                break;
+                System.out.println("Exiting Game.....");
+                System.exit(0);
+
             }
             else {
                 System.out.println("Incorrect command....");
@@ -66,6 +71,7 @@ public class MainGameLoop {
 
     void play(){
         System.out.println("Assigning Reinforcements....");
+
         System.out.println("_________________________________________");
         assign_reinforcements();
 
@@ -80,6 +86,7 @@ public class MainGameLoop {
         System.out.println("\nStarting the execution of the issued Commands.... ");
         System.out.println("_________________________________________");
 
+
         for (Player player : d_playerList) {
             while (true) {
                 Orders order = player.next_order();
@@ -88,9 +95,11 @@ public class MainGameLoop {
                 order.execute(d_map);
             }
         }
+
         System.out.println("\n_________________________________________");
         System.out.println("All commands executed successfully..... ");
         System.out.println("_________________________________________");
+
     }
 
     /**
@@ -99,7 +108,9 @@ public class MainGameLoop {
     void assign_reinforcements() {
         for (Player player : d_playerList){
             player.set_numOfReinforcements(getNumOfReinforcements(player));
+
             System.out.println("Assigned `" + player.get_numOfReinforcements() + "` reinforcements to player: " + player.get_playerName());
+
         }
     }
 

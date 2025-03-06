@@ -93,6 +93,7 @@ public class GameEngine {
                     if (l_words.length == 2 && l_words[0].equalsIgnoreCase(Commands.LOAD_MAP_COMMAND) && l_words[1].matches("(?i).+\\.map"))
                     {
                         ArrayList<String> l_listOfMaps = getAllMapsList();
+
                         if (l_listOfMaps.contains(l_words[1]))
                         {
                         	boolean l_isAbleToReadMap = MapEditor.readMap(l_words[1], d_currentMap);
@@ -114,6 +115,27 @@ public class GameEngine {
                             System.out.print("\nUnable to find " + l_words[1] + " in our maps directory. Enter the correct spelling or select some other map!\n");
                             continue;
                         }
+
+                        if (l_listOfMaps.contains(words[1]))
+                        {
+                            Boolean l_isAbleToReadMap = MapEditor.readmap(words[1], d_currentMap);
+                            Boolean l_isValidMap = d_currentMap.validateMap();
+                            if (l_isAbleToReadMap && l_isValidMap)
+                            {
+
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                        else
+                        {
+
+                        }
+
+                        //TODO: print an error if validate map or readmap returns false
+                        System.out.print( words[1] + " loaded successfully!\n");
 
                         while (true)
                         {
