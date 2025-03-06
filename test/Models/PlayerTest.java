@@ -1,16 +1,14 @@
 package Models;
 
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class PlayerTest {
@@ -32,6 +30,7 @@ public class PlayerTest {
 
         assertNull(nextOrder);
     }
+
     @Test
     public void testNextOrder() {
         Orders order1 = new Orders(3, 1);
@@ -50,7 +49,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testInvalidCountry(){
+    public void testInvalidCountry() {
         player.set_numOfReinforcements(5);
 
         List<Country> playerCountries = new ArrayList<>();
@@ -78,9 +77,6 @@ public class PlayerTest {
         assertEquals(2, order2.getNumOfArmies());
         assertEquals(3, order2.getCountryID());
     }
-
-
-
 
 
     @Test
@@ -112,3 +108,4 @@ public class PlayerTest {
 
 
 }
+
