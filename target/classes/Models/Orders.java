@@ -18,6 +18,17 @@ public class Orders {
     private int d_destCountryID;
 
     /**
+     * This is a fully parametrized constructor for the Models.Orders class.
+     *
+     * @param p_numOfArmies Number of Armies to deploy in this order.
+     * @param p_countryID   ID of the country on which to deploy the specified number of armies.
+     */
+    public Orders(int p_numOfArmies, int p_countryID) {
+        this.d_destCountryID = p_countryID;
+        this.d_numOfArmies = p_numOfArmies;
+    }
+
+    /**
      * @return the number of armies to be used in the order
      */
     public int getNumOfArmies() {
@@ -46,23 +57,12 @@ public class Orders {
     }
 
     /**
-     * This is a fully parametrized constructor for the Models.Orders class.
-     *
-     * @param p_numOfArmies Number of Armies to deploy in this order.
-     * @param p_countryID   ID of the country on which to deploy the specified number of armies.
-     */
-    public Orders(int p_numOfArmies, int p_countryID) {
-        this.d_destCountryID = p_countryID;
-        this.d_numOfArmies = p_numOfArmies;
-    }
-
-    /**
      * Execution of the logic of deploying the armies to the specified Models.Country.
      *
      * @param p_warmap Details of values inside List Country
      */
     public void execute(WarMap p_warmap) {
-        System.out.println("\n_________________________________________");
+        System.out.println("\n_");
         Collection<Country> l_countryInfo = p_warmap.get_countries().values();
         for (Country country : l_countryInfo) {
             if (country.get_countryID() == d_destCountryID) {
@@ -70,7 +70,7 @@ public class Orders {
                 System.out.println(d_numOfArmies + " armies are deployed to country " + country.get_countryName());
             }
         }
-        System.out.println("\n_________________________________________");
+        System.out.println("\n_");
         System.out.println("Execution Done Successfully");
     }
 }

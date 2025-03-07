@@ -1,9 +1,8 @@
 package Models;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.TestInstance;
 
 /**
@@ -33,8 +32,8 @@ public class OrdersTest {
     }
 
     /**
-     *  Tests the execution of orders by the Orders class.
-     *   It creates an Orders object, executes it, and then asserts that the expected result is achieved
+     * Tests the execution of orders by the Orders class.
+     * It creates an Orders object, executes it, and then asserts that the expected result is achieved
      */
     @Test
     void testExecute() {

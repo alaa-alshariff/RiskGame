@@ -14,10 +14,6 @@ import static Controller.GameEngine.SCANNER;
 public class Player {
 
     /**
-     * The name of the player taken by the user.
-     */
-    private String d_playerName;
-    /**
      * List of Countries that the player controls.
      */
     List<Country> d_playerCountries;
@@ -25,16 +21,18 @@ public class Player {
      * List of Continents that the player controls.
      */
     List<Continent> d_playerContinents;
-
     /**
      * number of reinforcements given to the player at the start of every round.
      */
     Integer d_numOfReinforcements;
-
     /**
      * List of player's orders for execution.
      */
     List<Orders> d_playerOrders;
+    /**
+     * The name of the player taken by the user.
+     */
+    private String d_playerName;
 
     /**
      * This is the constructor method of the Models.Player class
@@ -182,4 +180,3 @@ public class Player {
         return firstOrder;
     }
 }
-
