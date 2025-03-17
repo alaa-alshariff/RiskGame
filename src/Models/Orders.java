@@ -6,6 +6,7 @@ import java.util.Collection;
 
 /**
  * This class is used to implement the data and logic of how to execute orders given by a player.
+ *
  */
 
 public class Orders {
@@ -40,6 +41,11 @@ public class Orders {
         this.d_sourceCountryID = p_sourcecountryID;
         this.d_numOfArmies = p_numOfArmies;
         this.d_orderCard = p_card;
+    }
+
+    public Orders(Cards p_card, int p_destcountryID) {
+        this.d_orderCard = p_card;
+        this.d_destCountryID = p_destcountryID;
     }
 
     /**
@@ -103,7 +109,7 @@ public class Orders {
      * @param p_warmap Details of values inside List Country
      */
     public void execute(WarMap p_warmap) {
-        System.out.println("\n_________________________________________");
+        System.out.println("\n_");
         switch (d_orderCard){
             case Bomb:
                 //TODO:  Bomb order execution function;
@@ -113,14 +119,24 @@ public class Orders {
                 break;
             case Blockade:
                 //TODO:  Blockade order execution function;
-                break;
+                Collection<Country> l_countryInfo = p_warmap.get_countries().values();
+                for (Country country : l_countryInfo) {
+                    if (country.get_countryID() == d_destCountryID) {
+                        country.set_numOfArmies(country.get_numOfArmies() * 3);
+                    }
+
+                    // Now make the territory Neutral,
+                    // How long it should be neutral??
+                    // After that remove BLOCKADE card from player-card list
+                }
+                //break;
             case Diplomacy:
                 //TODO:  Diplomacy order execution function;
                 break;
             default:
                 deployOrderExecution(p_warmap);     // TODO: Advance order if source and destination both country given;
         }
-        System.out.println("\n_________________________________________");
+        System.out.println("\n_");
         System.out.println("Execution Done Successfully");
     }
 
