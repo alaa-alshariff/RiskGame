@@ -15,6 +15,7 @@ import static Resources.Commands.SHOW_MAP_COMMAND;
 
 /**
  * This class is the MainGameLoop class. Once the game is set up with the map and all the users, the control is handed over to this class for actual gameplay.
+ *
  */
 public class MainGameLoop {
 
@@ -71,7 +72,7 @@ public class MainGameLoop {
         System.out.println("Taking orders from each player....");
         System.out.println("_________________________________________");
         for (Player player : d_playerList) {
-            player.issue_order(null);
+            player.issue_order(null, d_map);
             System.out.println("_________________________________________");
         }
 

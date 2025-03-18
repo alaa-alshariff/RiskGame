@@ -142,11 +142,12 @@ public class Player {
      * player when the game engine calls it during the issue orders phase.
      *
      * @param commands The following param is for the testing class only. Set to null under normal conditions.
+     * @param d_map
      */
-    public void issue_order(String[] commands) {
+    public void issue_order(String[] commands, WarMap d_map) {
         deployOrder(commands);
         while (true){
-            System.out.println("_");
+            System.out.println("_____________________________________________");
             System.out.println("Please provide a command to execute or type execute to execute the given commands:");
             String command = SCANNER.nextLine();
             String[] commandTokens = command.split(" ");
@@ -155,7 +156,7 @@ public class Player {
                     //TODO: Advance order handling
                     break;
                 case Commands.BOMB_ORDER:
-                    //TODO: Bomb order handling after checking if player does holds bomb card
+                    bomb_issue_order(commandTokens, d_map);
                     break;
                 case Commands.BLOCKADE_ORDER:
                     //TODO: Blockade order handling after checking if player does holds blockade card
@@ -202,6 +203,38 @@ public class Player {
                     System.out.println("Invalid command given... Please try again...");
             }
         }
+    }
+
+    private void bomb_issue_order(String[] commandTokens, WarMap d_map) {
+        boolean hasBombCard = d_playerCards.contains(Cards.Bomb);
+        if (!hasBombCard){
+            System.out.println("Player does not have Bomb card");
+            return;
+        }
+        int destCountryID;
+        destCountryID = Integer.parseInt(commandTokens[1]);
+
+
+        boolean countryValid = false;
+        for (Country country : d_map.get_countries().values()){
+            if (country.get_countryID() == destCountryID) {
+                countryValid = true;
+                break;
+            }
+        }
+        if (!countryValid) {
+            System.out.println("Please provide a valid country.");
+            return;
+        }
+        for (Country country : d_playerCountries)
+            if (country.get_countryID() == destCountryID) {
+                System.out.println("You cannot bomb your own country.");
+                return;
+            }
+
+        Orders order = new Orders(Cards.Bomb, destCountryID);
+        d_playerOrders.add(order);
+        System.out.println("Bomb order issued successfully.");
     }
 
     private void deployOrder(String[] commands) {
