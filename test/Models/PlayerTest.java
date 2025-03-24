@@ -1,6 +1,8 @@
 package Models;
 
 
+import Models.Orders.DeployOrder;
+import Models.Orders.Order;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -34,7 +36,7 @@ public class PlayerTest {
      */
     @Test
     public void testNextOrderEmptyList() {
-        Orders nextOrder = player.next_order();
+        DeployOrder nextOrder = (DeployOrder) player.next_order();
 
         assertNull(nextOrder);
     }
@@ -44,15 +46,15 @@ public class PlayerTest {
      */
     @Test
     public void testNextOrder() {
-        Orders order1 = new Orders(3, 1, -1, null);
-        Orders order2 = new Orders(2, 2, -1, null);
-        Orders order3 = new Orders(4, 3, -1, null);
+        DeployOrder order1 = new DeployOrder(3, 1);
+        DeployOrder order2 = new DeployOrder(2, 2);
+        DeployOrder order3 = new DeployOrder(4, 3);
 
         player.get_playerOrder().add(order1);
         player.get_playerOrder().add(order2);
         player.get_playerOrder().add(order3);
 
-        Orders nextOrder = player.next_order();
+        DeployOrder nextOrder = (DeployOrder) player.next_order();
 
         assertEquals(order1, nextOrder);
         assertEquals(2, player.get_playerOrder().size());
@@ -78,16 +80,16 @@ public class PlayerTest {
                 "deploy 4 2",
                 "deploy 3 2"
         };
-        player.issue_order(commands, null);
+        player.issue_order(commands, null, null);
 
-        List<Orders> playerOrders = player.get_playerOrder();
+        List<Order> playerOrders = player.get_playerOrder();
         assertEquals(2, playerOrders.size());
 
-        Orders order1 = playerOrders.get(0);
+        DeployOrder order1 = (DeployOrder) playerOrders.get(0);
         assertEquals(3, order1.getNumOfArmies());
         assertEquals(1, order1.getDestCountryID());
 
-        Orders order2 = playerOrders.get(1);
+        DeployOrder order2 = (DeployOrder) playerOrders.get(1);
         assertEquals(2, order2.getNumOfArmies());
         assertEquals(3, order2.getDestCountryID());
     }
@@ -113,7 +115,7 @@ public class PlayerTest {
                 "deploy 2 3",
                 "deploy 3 2"
         }; // Deploying 10 armies with only 5 available
-        player.issue_order(invalidDeployCommand, null);
+        player.issue_order(invalidDeployCommand, null, null);
 
         // Ensure that only valid orders were added to the player's order list
         assertEquals(2, player.get_playerOrder().size());
@@ -122,3 +124,4 @@ public class PlayerTest {
         assertEquals(Integer.valueOf(0), player.get_numOfReinforcements());
     }
 }
+
