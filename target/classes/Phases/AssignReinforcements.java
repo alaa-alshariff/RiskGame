@@ -1,64 +1,90 @@
-package Phases;
+// package Phases;
 
-import Controller.GameEngine;
-import Models.Orders.Order;
-import Models.Player;
+// import Controller.GameEngine;
+// import Models.Country;
+// import Models.Orders.DeployOrder;
+// import Models.Orders.Order;
+// import Models.Player;
 
-public class AssignReinforcements extends OrderPhase {
-    public AssignReinforcements(GameEngine p_ge) {
-        super(p_ge);
-    }
+// public class AssignReinforcements extends OrderPhase {
+//     public AssignReinforcements(GameEngine p_ge) {
+//         super(p_ge);
+//     }
 
-    @Override
-    public void displayOptions() {
-        System.out.println("Assigning Reinforcements....");
-        System.out.println("_________________________________________");
-        for (Player player : d_ge.get_PlayersList()) {
-            player.set_numOfReinforcements(d_ge.getNumOfReinforcements(player));
-            System.out.println("Assigned `" + player.get_numOfReinforcements() + "` reinforcements to player: " + player.get_playerName());
-        }
-        System.out.println("\n_________________________________________");
-        System.out.println("Taking orders from each player....");
-        System.out.println("_________________________________________");
-        for (Player player : d_ge.get_PlayersList()) {
-            player.issue_order(null, d_ge.get_currentMap());
-            System.out.println("_________________________________________");
-        }
-        for (Player player : d_ge.get_PlayersList()) {
-            while (true) {
-                Order order = player.next_order();
-                if (order == null)
-                    break;
-                order.execute(d_ge.get_currentMap());
-            }
-        }
-        System.out.println("\n_________________________________________");
-        System.out.println("All commands executed successfully..... ");
-        System.out.println("_________________________________________");
-    }
+//     @Override
+//     public void displayOptions() {
+
+//         System.out.println("Please issue deploy orders for Player " + d_ge.getCurrentPlayer().get_playerName());
+//         System.out.println("Remaining reinforcements: " + d_ge.getCurrentPlayer().get_numOfReinforcements());
 
 
-    public void attack() {
-        printInvalidCommandMessage();
-    }
+//     }
 
-    @Override
-    public void reinforce() {
-        printInvalidCommandMessage();
-    }
+//     public void deploy() {
+//         String[] l_commandTokens = d_ge.getCurrentInput().split(" ");
+//         if (l_commandTokens.length != 3) {
+//             System.out.println("Invalid deploy order format. Syntax: deploy <countryID> <num>");
+//             return;
+//         }
+//         int numOfArmies;
+//         int countryID;
+//         try {
+//             countryID = Integer.parseInt(l_commandTokens[1]);
+//             numOfArmies = Integer.parseInt(l_commandTokens[2]);
+//         } catch (NumberFormatException e) {
+//             System.out.println("Invalid CountryID or Number of Reinforcements");
+//             return;
+//         }
 
-    @Override
-    public void fortify() {
-        printInvalidCommandMessage();
-    }
+//         if (numOfArmies > d_ge.getCurrentPlayer().get_numOfReinforcements()) {
+//             System.out.println("Specified number of reinforcements exceed the available.");
+//             return;
+//         }
 
-    @Override
-    public void endGame() {
-        printInvalidCommandMessage();
-    }
+//         boolean countryExists = false;
+//         for (Country country : d_ge.getCurrentPlayer().get_playerCountries()) {
+//             if (country.get_countryID() == countryID) {
+//                 countryExists = true;
+//                 break;
+//             }
+//         }
 
-    @Override
-    public void next() {
-        d_ge.setPhase(new IssueOrders(d_ge));
-    }
-}
+//         if (!countryExists) {
+//             System.out.println("The given CountryID is not under your control.");
+//             return;
+//         }
+
+//         Order deployOrder = new DeployOrder(numOfArmies, countryID);
+//         d_ge.getCurrentPlayer().get_playerOrder().add(deployOrder);
+//         d_ge.getCurrentPlayer().set_numOfReinforcements(d_ge.getCurrentPlayer().get_numOfReinforcements() - numOfArmies);
+//         System.out.println("Deploy order issued successfully.");
+//         if (d_ge.getCurrentPlayer().get_numOfReinforcements() == 0) {
+//             System.out.println("_____________________________________________");
+//             next();
+//         }
+//     }
+
+//     public void attack() {
+//         printInvalidCommandMessage();
+//     }
+
+//     @Override
+//     public void reinforce() {
+//         printInvalidCommandMessage();
+//     }
+
+//     @Override
+//     public void fortify() {
+//         printInvalidCommandMessage();
+//     }
+
+//     @Override
+//     public void endGame() {
+//         printInvalidCommandMessage();
+//     }
+
+//     @Override
+//     public void next() {
+//         d_ge.setPhase(new IssueOrders(d_ge));
+//     }
+// }

@@ -28,14 +28,55 @@ import java.util.*;
  */
 public class GameEngine {
     public GameEngine() {
-        gamePhase = new MainMenu(this);
+        d_gamePhase = new MainMenu(this);
     }
 
-    private Phase gamePhase;
+    private Set<Player> d_finishedPlayers = new HashSet<>();
+
+
+    public Set<Player> get_FinishedPlayers() {
+        return d_finishedPlayers;
+    }
+
+
+    private Phase d_gamePhase;
     private String d_currentInput = "";
+    private Player d_currentPlayer = new Player("Default");
+    private int d_currentPlayerIndex = 0;
+
+    public Player getCurrentPlayer() {
+        return d_currentPlayer;
+    }
+
+    public void setCurrentPlayer(Player p_player) {
+        d_currentPlayer = p_player;
+        d_currentPlayerIndex = d_playersList.indexOf(p_player);
+    }
+
+    public void nextPlayer() {
+        if (d_finishedPlayers.size() == d_playersList.size()) {
+            System.out.println("Cannot go to next player as all players are finished");
+        } else {
+            while (true) {
+        if (d_currentPlayerIndex == d_playersList.size() - 1) {
+            d_currentPlayerIndex = 0;
+            d_currentPlayer = d_playersList.get(d_currentPlayerIndex);
+            if (!d_finishedPlayers.contains(d_currentPlayer)) {
+                break;
+            }
+        } else {
+            d_currentPlayerIndex++;
+            d_currentPlayer = d_playersList.get(d_currentPlayerIndex);
+            if (!d_finishedPlayers.contains(d_currentPlayer)) {
+                break;
+            }
+        }
+            }
+        }
+    }
 
     public void setPhase(Phase p_phase) {
-        gamePhase = p_phase;
+        d_gamePhase = p_phase;
     }
 
     public String getCurrentInput() {
@@ -93,41 +134,48 @@ public class GameEngine {
         try {
 
             while (true) {
-                gamePhase.displayOptions();
+                d_gamePhase.displayOptions();
 
                 d_currentInput = SCANNER.nextLine();
                 String[] l_words = d_currentInput.split("\\s+");
 
                 if (d_currentInput.toLowerCase().contains(Commands.LOAD_MAP_COMMAND)) {
-                    gamePhase.loadMap();
+                    d_gamePhase.loadMap();
                 } else if (d_currentInput.toLowerCase().contains("gameplayer")) {
-                    gamePhase.setPlayers();
+                    d_gamePhase.setPlayers();
                 } else if (d_currentInput.equalsIgnoreCase(Commands.ASSIGN_COUNTRIES_COMMAND)) {
-                    gamePhase.assignCountries();
+                    d_gamePhase.assignCountries();
+                    if (d_playersList.size() != 0) {
+                        d_currentPlayer = d_playersList.get(0);
+                    }
 
                 } else if (d_currentInput.equalsIgnoreCase(Commands.SHOW_MAP_COMMAND)) {
-                    gamePhase.showMap();
+                    d_gamePhase.showMap();
                 } else if (d_currentInput.equalsIgnoreCase("go back")) {
-                    gamePhase.next();
+                    d_gamePhase.next();
                 } else if (d_currentInput.equalsIgnoreCase(Commands.SHOW_ALL_MAPS_COMMAND)) {
-                    gamePhase.showAllMaps();
+                    d_gamePhase.showAllMaps();
 
                 } else if (d_currentInput.equalsIgnoreCase(Commands.EDIT_MAP_COMMAND)) {
-                    gamePhase.next();
+                    d_gamePhase.next();
                 } else if (d_currentInput.toLowerCase().contains(Commands.EDIT_MAP_COMMAND)) {
-                    gamePhase.loadMap();
+                    d_gamePhase.loadMap();
+                } else if (d_currentInput.toLowerCase().contains(Commands.DEPLOY_COMMAND)) {
+                    d_gamePhase.deploy();
+                } else if (d_currentInput.toLowerCase().contains(Commands.EXECUTE)) {
+                    d_gamePhase.next();
                 } else if (d_currentInput.toLowerCase().contains("editcontinent")) {
-                    gamePhase.editContinent();
+                    d_gamePhase.editContinent();
                 } else if (d_currentInput.toLowerCase().contains("editcountry")) {
-                    gamePhase.editCountry();
+                    d_gamePhase.editCountry();
                 } else if (d_currentInput.toLowerCase().contains("editneighbor")) {
-                    gamePhase.editNeighbours();
+                    d_gamePhase.editNeighbours();
                 } else if (d_currentInput.toLowerCase().contains("validatemap")) {
-                    gamePhase.validateMap();
+                    d_gamePhase.validateMap();
                 } else if (d_currentInput.toLowerCase().contains("savemap")) {
-                    gamePhase.saveMap();
+                    d_gamePhase.saveMap();
                 } else if (d_currentInput.equalsIgnoreCase("quit")) {
-                    gamePhase.next();
+                    d_gamePhase.next();
                 } else {
                     System.out.print("Sorry, I couldn't understand the command you entered.\nTry again with the correct syntax!\n");
                 }
@@ -167,7 +215,6 @@ public class GameEngine {
                     l_CountryIndex = l_RandomIndexCountry.nextInt(l_NumOfCountries) + 1;
                     if (!l_CountryAssigned.get(l_CountryIndex)) {
                         player.get_playerCountries().add(d_currentMap.get_countries().get(l_CountryIndex));
-                        d_currentMap.get_countries().get(l_CountryIndex).setD_ownerPlayer(player);
                         l_CountryAssigned.put(l_CountryIndex, true);
                         break;
                     }

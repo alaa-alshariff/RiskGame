@@ -9,14 +9,13 @@ import Resources.Commands;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static Controller.GameEngine.SCANNER;
 
 /**
- * This class describes information about each player and the order that were
- * issued using the logic
+ * This class describes information about each player and the order that were issued using the logic
  * present in the same class.
- *
  */
 public class Player {
 
@@ -44,9 +43,6 @@ public class Player {
      * The name of the player taken by the user.
      */
     private String d_playerName;
-    /**
-     * List of players to be negotiated with.
-     */
     private List<String> d_diplomacy_list;
 
     /**
@@ -97,21 +93,15 @@ public class Player {
         return d_playerContinents;
     }
 
-    /**
-     * @return a list of the players to be negotiated with.
-     */
     public List<String> get_diplomacy_list() {
         return d_diplomacy_list;
     }
 
-    /**
-     * @param d_diplomacy_list a list of the players to be negotiated with.
-     */
     public void set_diplomacy_list(List<String> d_diplomacy_list) {
         this.d_diplomacy_list = d_diplomacy_list;
     }
 
-    /**
+/**
      * @param p_playerCards a list of the player's cards
      */
     public void set_playerCards(List<Cards> p_playerCards) {
@@ -165,23 +155,22 @@ public class Player {
      * to add an order to the list of orders held by the
      * player when the game engine calls it during the issue orders phase.
      *
-     * @param commands The following param is for the testing class only. Set to
-     *                 null under normal conditions.
+     * @param commands The following param is for the testing class only. Set to null under normal conditions.
      * @param d_map
      */
-    public void issue_order(String[] commands, WarMap d_map) {
+    public void issue_order(String[] commands, WarMap d_map, List<Player> p_list) {
         deployOrder(commands);
-        while (true) {
+        d_diplomacy_list.clear();
+        while (true){
             System.out.println("_____________________________________________");
             System.out.println("Please provide a command to execute or type execute to execute the given commands:");
             String command = SCANNER.nextLine();
             String[] commandTokens = command.split(" ");
-            switch (commandTokens[0]) {
-                // TODO: Advance Order handling
+            switch (commandTokens[0]){
+                //TODO: Advance Order handling
                 case Commands.ADVANCE_ORDER:
                     if (commandTokens.length < 4) {
-                        System.out.println(
-                                "Invalid ADVANCE order. Correct syntax: advance countryfrom countryto numarmies");
+                        System.out.println("Invalid ADVANCE order. Correct syntax: advance countryfrom countryto numarmies");
                         break;
                     }
 
@@ -205,11 +194,10 @@ public class Player {
                     bomb_issue_order(commandTokens, d_map);
                     break;
                 case Commands.BLOCKADE_ORDER:
-                    // TODO: Blockade order handling after checking if player does holds blockade
-                    // card
+                    //TODO: Blockade order handling after checking if player does holds blockade card
                     boolean hasBlockadeCard = false;
-                    for (Cards card : d_playerCards) {
-                        if (card.toString().equals("Blockade")) {
+                    for (Cards card : d_playerCards){
+                        if (card.toString().equals("Blockade")){
                             hasBlockadeCard = true;
                             break;
                         }
@@ -229,22 +217,55 @@ public class Player {
                             continue;
                         }
 
-                        BlockadeOrder order = new BlockadeOrder(destCountryID);
+                        BlockadeOrder order = new BlockadeOrder(destCountryID, this);
                         d_playerOrders.add(order);
-
+                        d_playerCards.remove(Cards.Blockade);
                         System.out.println("Blockade order executed successfully.");
 
                     } else {
                         System.out.println("Player do not have Blockade card");
                     }
-                    // break;
+                    break;
                 case Commands.AIRLIFT_ORDER:
-                    // TODO: Airlift order handling after checking if player does holds airlift card
+                    //TODO: Airlift order handling after checking if player does holds airlift card
                     break;
                 case Commands.DIPLOMACY_ORDER:
-                    // TODO: Diplomacy order handling after checking if player does holds diplomacy
-                    // card
+                    //TODO: Diplomacy order handling after checking if player does holds diplomacy card
+                    boolean hasDiplomacyCard = false;
+                    for (Cards card : d_playerCards){
+                        if (card.toString().equals("Diplomacy")){
+                            hasDiplomacyCard = true;
+                            break;
+                        }
+                    }
+                    if(hasDiplomacyCard){
+                        //check if playerID exists in playerList
+                        //Do diplomacy logic
+                        String targetPlayerName;
+                        targetPlayerName = commandTokens[1];
+
+                        boolean targetPlayerNameExists = false;
+
+                        for (Player player : p_list)
+                            if (Objects.equals(player.get_playerName(), targetPlayerName)) {
+                                targetPlayerNameExists = true;
+                                break;
+                            }
+                        if (!targetPlayerNameExists) {
+                            System.out.println("The given Player name doesn't exists.");
+                            continue;
+                        }
+
+                        d_diplomacy_list.add(targetPlayerName);
+
+                        System.out.println("Diplomacy order executed successfully.");
+
+                    } else {
+                        System.out.println("Player do not have Diplomacy card");
+
+                    }
                     break;
+
                 case Commands.EXECUTE:
                     return;
                 default:
@@ -254,16 +275,17 @@ public class Player {
     }
 
     private void bomb_issue_order(String[] commandTokens, WarMap d_map) {
-        boolean hasBombCard = d_playerCards.contains(Cards.Bomb);
-        if (!hasBombCard) {
+        boolean hasBombCard = d_playerCards.remove(Cards.Bomb);
+        if (!hasBombCard){
             System.out.println("Player does not have Bomb card");
             return;
         }
         int destCountryID;
         destCountryID = Integer.parseInt(commandTokens[1]);
 
+
         boolean countryValid = false;
-        for (Country country : d_map.get_countries().values()) {
+        for (Country country : d_map.get_countries().values()){
             if (country.get_countryID() == destCountryID) {
                 countryValid = true;
                 break;
@@ -279,8 +301,9 @@ public class Player {
                 return;
             }
 
-        BombOrder order = new BombOrder(destCountryID);
+        BombOrder order = new BombOrder(destCountryID, this);
         d_playerOrders.add(order);
+        d_playerCards.remove(Cards.Bomb);
         System.out.println("Bomb order issued successfully.");
     }
 
@@ -289,19 +312,10 @@ public class Player {
         while (d_numOfReinforcements != 0) {
             int countryID;
             int numOfArmies;
-            System.out.println("Please issue an order for Player " + d_playerName); // + "\nSyntax: deploy <countryID>
-                                                                                    // <num>");
+            System.out.println("Please issue a deploy order for Player " + d_playerName); // + "\nSyntax: deploy <countryID> <num>");
             System.out.println("Remaining reinforcements: " + d_numOfReinforcements);
             String command = SCANNER == null ? commands[iterations++] : SCANNER.nextLine();
             String[] commandTokens = command.split(" ");
-
-            // // Check the command type and create the relevant order
-            // if (commandTokens.length != 3 ||
-            // !commandTokens[0].equals(Commands.DEPLOY_COMMAND)) {
-            // System.out.println("Please give the command in format: " +
-            // Commands.DEPLOY_COMMAND_SYNTAX);
-            // continue;
-            // }
 
             String commandType = commandTokens[0].toLowerCase();
 
@@ -342,8 +356,6 @@ public class Player {
                     d_numOfReinforcements -= numOfArmies;
                     System.out.println("Deploy order issued successfully.");
                     break;
-                // Add cases for other order types (e.g., advance, bomb, etc.) here.
-
                 default:
                     System.out.println("Unsupported command type: " + commandType);
                     continue;
@@ -351,14 +363,14 @@ public class Player {
             DeployOrder order = new DeployOrder(numOfArmies, countryID);
             d_playerOrders.add(order);
             d_numOfReinforcements = d_numOfReinforcements - numOfArmies;
-            System.out.println("Deployed All Reinforcements Successfully.");
         }
+        System.out.println("Deployed All Reinforcements Successfully.");
     }
+
 
     /**
      * This method is called by the GameEngine during executing order phase and
-     * returns the first order in the player’s list of orders, then removes it from
-     * the list.
+     * returns the first order in the player’s list of orders, then removes it from the list.
      */
     public Order next_order() {
         if (d_playerOrders.isEmpty()) {
