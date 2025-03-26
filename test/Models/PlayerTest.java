@@ -158,4 +158,3 @@ public class PlayerTest {
         assertEquals(Integer.valueOf(0), player.get_numOfReinforcements());
     }
 }
-
