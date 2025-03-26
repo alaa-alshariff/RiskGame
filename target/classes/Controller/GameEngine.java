@@ -31,14 +31,6 @@ public class GameEngine {
         d_gamePhase = new MainMenu(this);
     }
 
-    private Set<Player> d_finishedPlayers = new HashSet<>();
-
-
-    public Set<Player> get_FinishedPlayers() {
-        return d_finishedPlayers;
-    }
-
-
     private Phase d_gamePhase;
     private String d_currentInput = "";
     private Player d_currentPlayer = new Player("Default");
@@ -48,30 +40,13 @@ public class GameEngine {
         return d_currentPlayer;
     }
 
-    public void setCurrentPlayer(Player p_player) {
-        d_currentPlayer = p_player;
-        d_currentPlayerIndex = d_playersList.indexOf(p_player);
-    }
-
     public void nextPlayer() {
-        if (d_finishedPlayers.size() == d_playersList.size()) {
-            System.out.println("Cannot go to next player as all players are finished");
-        } else {
-            while (true) {
         if (d_currentPlayerIndex == d_playersList.size() - 1) {
             d_currentPlayerIndex = 0;
             d_currentPlayer = d_playersList.get(d_currentPlayerIndex);
-            if (!d_finishedPlayers.contains(d_currentPlayer)) {
-                break;
-            }
         } else {
             d_currentPlayerIndex++;
             d_currentPlayer = d_playersList.get(d_currentPlayerIndex);
-            if (!d_finishedPlayers.contains(d_currentPlayer)) {
-                break;
-            }
-        }
-            }
         }
     }
 
@@ -79,6 +54,13 @@ public class GameEngine {
         d_gamePhase = p_phase;
     }
 
+    public Phase getPhase() {
+        return d_gamePhase;
+    }
+
+    public void setCurrentInput(String p_input) {
+        d_currentInput = p_input;
+    }
     public String getCurrentInput() {
         return d_currentInput;
     }
