@@ -14,7 +14,6 @@ import static Controller.GameEngine.SCANNER;
 /**
  * This class describes information about each player and the order that were issued using the logic
  * present in the same class.
- *
  */
 public class Player {
 
@@ -164,7 +163,6 @@ public class Player {
      * player when the game engine calls it during the issue orders phase.
      */
     public void issue_order() {
-//        d_diplomacy_list.clear();
         GameEngine p_ge = GameEngine.getInstance();
         WarMap d_map = p_ge.get_currentMap();
         String command = p_ge.getCurrentInput();
@@ -266,6 +264,12 @@ public class Player {
 
     }
 
+    /**
+     * The method which creates a bomb order command.
+     *
+     * @param commandTokens input command.
+     * @param d_map current map.
+     */
     private void bomb_issue_order(String[] commandTokens, WarMap d_map) {
         boolean hasBombCard = d_playerCards.remove(Cards.Bomb);
         if (!hasBombCard){
@@ -425,5 +429,3 @@ public class Player {
         return firstOrder;
     }
 }
-
-
