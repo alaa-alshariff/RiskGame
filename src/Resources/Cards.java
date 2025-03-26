@@ -14,7 +14,6 @@ public enum Cards {
     Bomb,
     Blockade,
     Airlift,
-    Advance,
     Diplomacy;
 
     /**
