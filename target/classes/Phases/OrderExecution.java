@@ -3,6 +3,7 @@ package Phases;
 import Controller.GameEngine;
 import Models.Orders.Order;
 import Models.Player;
+import Resources.Cards;
 
 public class OrderExecution extends Play {
     public OrderExecution(GameEngine p_ge) {
@@ -19,9 +20,9 @@ public class OrderExecution extends Play {
                 order.execute(d_ge.get_currentMap());
             }
         }
-        System.out.println("\n_");
+        System.out.println("\n_________________________________________");
         System.out.println("All commands executed successfully..... ");
-        System.out.println("_");
+        System.out.println("_________________________________________");
         this.next();
     }
 
@@ -47,7 +48,7 @@ public class OrderExecution extends Play {
 
     @Override
     public void deploy() {
-
+        printInvalidCommandMessage();
     }
 
     @Override
@@ -57,15 +58,16 @@ public class OrderExecution extends Play {
 
     @Override
     public void next() {
+        Cards.assignRandomCardsToPlayers();
         System.out.println("Assigning Reinforcements....");
-        System.out.println("_");
+        System.out.println("_________________________________________");
         for (Player player : d_ge.get_PlayersList()) {
             player.set_numOfReinforcements(d_ge.getNumOfReinforcements(player));
-            System.out.println("Assigned " + player.get_numOfReinforcements() + " reinforcements to player: " + player.get_playerName());
+            System.out.println("Assigned `" + player.get_numOfReinforcements() + "` reinforcements to player: " + player.get_playerName());
         }
-        System.out.println("\n_");
+        System.out.println("\n_________________________________________");
         System.out.println("Taking orders from each player....");
-        System.out.println("_");
+        System.out.println("_________________________________________");
         System.out.println("Please issue commands for Player " + d_ge.getCurrentPlayer().get_playerName());
         System.out.println("Remaining reinforcements: " + d_ge.getCurrentPlayer().get_numOfReinforcements());
         d_ge.get_FinishedPlayers().clear();

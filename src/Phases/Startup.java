@@ -89,14 +89,14 @@ public class Startup extends Play {
                 System.out.println("╚════════════════════════════════════════╝");
                 d_ge.setPhase(new AssignReinforcements(d_ge));
                 System.out.println("Assigning Reinforcements....");
-                System.out.println("_");
+                System.out.println("_________________________________________");
                 for (Player player : d_ge.get_PlayersList()) {
                     player.set_numOfReinforcements(d_ge.getNumOfReinforcements(player));
-                    System.out.println("Assigned " + player.get_numOfReinforcements() + " reinforcements to player: " + player.get_playerName());
+                    System.out.println("Assigned `" + player.get_numOfReinforcements() + "` reinforcements to player: " + player.get_playerName());
                 }
-                System.out.println("\n_");
+                System.out.println("\n_________________________________________");
                 System.out.println("Taking orders from each player....");
-                System.out.println("_");
+                System.out.println("_________________________________________");
             }
         }
     }

@@ -61,7 +61,7 @@ public class AssignReinforcements extends OrderPhase {
         System.out.println("Deploy order issued successfully.");
         d_logentrybuffer.writeLog("Deployed country with ID "+countryID+" with "+numOfArmies+" armies");
         if (d_ge.getCurrentPlayer().get_numOfReinforcements() == 0) {
-            System.out.println("_");
+            System.out.println("_____________________________________________");
             next();
         }
     }
