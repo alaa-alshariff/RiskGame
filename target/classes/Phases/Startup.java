@@ -32,6 +32,7 @@ public class Startup extends Play {
     @Override
     public void showMap() {
         d_ge.get_currentMap().showMap();
+        d_logentrybuffer.writeLog("showmap command runned successfully.");
     }
 
     @Override
@@ -66,7 +67,7 @@ public class Startup extends Play {
     @Override
     public void assignCountries() {
         if (d_ge.assignCountries(false)) ;
-
+        d_logentrybuffer.writeLog("assigncountries command runned successfully.");
         this.next();
     }
 
@@ -100,15 +101,18 @@ public class Startup extends Play {
                 System.out.println("║      Game Starts... Get Ready...       ║");
                 System.out.println("╚════════════════════════════════════════╝");
                 d_ge.setPhase(new AssignReinforcements(d_ge));
+                d_logentrybuffer.writeLog("ASSIGNREINFORCEMENTS PHASE");
                 System.out.println("Assigning Reinforcements....");
                 System.out.println("_");
                 for (Player player : d_ge.get_PlayersList()) {
                     player.set_numOfReinforcements(d_ge.getNumOfReinforcements(player));
                     System.out.println("Assigned " + player.get_numOfReinforcements() + " reinforcements to player: " + player.get_playerName());
+                    d_logentrybuffer.writeLog("assigned "+player.get_playerName()+" "+player.get_numOfReinforcements()+" no of reinforcement armies.");
                 }
                 System.out.println("\n_");
                 System.out.println("Taking orders from each player....");
                 System.out.println("_");
+                d_logentrybuffer.writeLog("ISSUEORDERS PHASE");
             }
         }
     }

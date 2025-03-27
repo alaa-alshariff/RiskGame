@@ -1,13 +1,15 @@
 package Models.Orders;
 
+import java.util.Collection;
+
 import Models.Country;
 import Models.Player;
 import Models.WarMap;
-
-import java.util.Collection;
+import logging.LogEntryBuffer;
 
 /**
  * This class is used to implement the data and logic of how to execute bomb order given by a player.
+ *
  */
 public class BombOrder implements Order{
 
@@ -46,12 +48,12 @@ public class BombOrder implements Order{
      */
     @Override
     public void execute(WarMap p_warmap) {
-        System.out.println("\n_________________________________________");
+        System.out.println("\n_");
         Collection<Country> l_countryInfo = p_warmap.get_countries().values();
         for (Country country : l_countryInfo) {
             if (country.get_countryID() == d_destCountryID) {
                 if(country.getD_ownerPlayer().get_diplomacy_list().contains(d_player.get_playerName())){
-                    System.out.println("\n_________________________________________");
+                    System.out.println("\n_");
                     System.out.println("Can't Bomb, since Negotiate found");
                     return;
                 }
@@ -61,7 +63,8 @@ public class BombOrder implements Order{
                 System.out.println(newNumOfArmies + " armies are left in country " + country.get_countryName());
             }
         }
-        System.out.println("\n_________________________________________");
+        System.out.println("\n_");
         System.out.println("Country Bombed Successfully");
+        LogEntryBuffer.getInstance().writeLog(this.d_player+" Bomb order "+this.toString()+" executed successfully.");
     }
 }

@@ -227,6 +227,7 @@ public class Player {
                 d_diplomacy_list.add(targetPlayerName);
 
                 System.out.println("Diplomacy order executed successfully.");
+                d_logentrybuffer.writeLog(d_playerName+" issued negotiate order on "+targetPlayerName);
             }
         } else {
             System.out.println("Player do not have Diplomacy card");
@@ -264,6 +265,7 @@ public class Player {
                 d_playerOrders.add(order);
                 d_playerCards.remove(Cards.Blockade);
                 System.out.println("Blockade order executed successfully.");
+                d_logentrybuffer.writeLog(d_playerName+" issued blockade order with countryId " + destCountryID);
             }
         } else {
             System.out.println("Player do not have Blockade card");
@@ -308,7 +310,16 @@ public class Player {
         d_playerOrders.add(order);
         d_playerCards.remove(Cards.Bomb);
         System.out.println("Bomb order issued successfully.");
+        d_logentrybuffer.writeLog(d_playerName+" issued bomb order on countryId " + destCountryID);
     }
+    /**
+     * This method is called to issue an Advance order. It checks the validity of the command format,
+     * source and target countries, and the number of armies to advance. If all conditions are met,
+     * it creates an AdvanceOrder and adds it to the player's list of orders.
+     *
+     * @param commandTokens An array of command tokens representing the Advance order.
+     *                      Syntax: advance countryIDfrom countryIDto numarmies
+     */
     private void advance_issue_order(String[] commandTokens, WarMap d_map) {
 
         // Check if the command contains the correct number of tokens.
@@ -360,9 +371,18 @@ public class Player {
         // Create an AdvanceOrder and add it to the player's list of orders.
         AdvanceOrder advanceOrder = new AdvanceOrder(this, sourceCountry, targetCountry, numArmies);
         d_playerOrders.add(advanceOrder);
+        d_logentrybuffer.writeLog(d_playerName+" issued advance country order from " + sourceCountry + " to "+targetCountry
+        		+" with " + numArmies + " armies");
     }
 
-
+    /**
+     * This method is called to issue an Airlift order. It checks if the player has the Airlift card,
+     * validates the command format, source and target countries, and the number of armies to airlift.
+     * If all conditions are met, it creates an AirliftOrder and adds it to the player's list of orders.
+     *
+     * @param commandTokens An array of command tokens representing the Airlift order.
+     *                      Syntax: airlift sourcecountryID targetcountryID numarmies
+     */
     private void airlift_issue_order(String[] commandTokens) {
         // Check if the player has the Airlift card.
         boolean hasAirliftCard = d_playerCards.contains(Cards.Airlift);
@@ -419,6 +439,8 @@ public class Player {
         AirliftOrder airliftOrder = new AirliftOrder(this, sourceCountry, targetCountry, numArmies);
         d_playerOrders.add(airliftOrder);
         d_playerCards.remove(Cards.Airlift);
+        d_logentrybuffer.writeLog(d_playerName+" issued Airlift order with sourcecountryID " + sourceCountryID + ", targetcountryID, "+
+        		targetCountry+ " with " + numArmies + " armies");
     }
 
     private void deploy_issue_order(String[] p_commandTokens) {
@@ -460,7 +482,7 @@ public class Player {
         d_playerOrders.add(deployOrder);
         this.set_numOfReinforcements(GameEngine.getInstance().getCurrentPlayer().get_numOfReinforcements() - numOfArmies);
         System.out.println("Deploy order issued successfully.");
-        d_logentrybuffer.writeLog("Deployed country with ID " + countryID + " with " + numOfArmies + " armies");
+        d_logentrybuffer.writeLog(d_playerName+" issued Deploy order country with ID " + countryID + " with " + numOfArmies + " armies");
     }
 
 

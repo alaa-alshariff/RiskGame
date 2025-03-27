@@ -4,6 +4,7 @@ import java.util.Collection;
 import Models.Country;
 import Models.Player;
 import Models.WarMap;
+import logging.LogEntryBuffer;
 
 public class BlockadeOrder implements Order{
     /**
@@ -45,6 +46,6 @@ public class BlockadeOrder implements Order{
                 break;
             }
         }
-
+        LogEntryBuffer.getInstance().writeLog(this.d_player+" Bloackade order "+this.toString()+" executed successfully.");
     }
 }
