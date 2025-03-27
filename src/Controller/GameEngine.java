@@ -6,6 +6,7 @@ import Models.WarMap;
 import Phases.MainMenu;
 import Phases.Phase;
 import Resources.Commands;
+import logging.LogEntryBuffer;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,85 +28,140 @@ import java.util.*;
  *
  */
 public class GameEngine {
-    private GameEngine() {
-        d_gamePhase = new MainMenu(this);
-    }
-    private static GameEngine Instance;
-    public static GameEngine getInstance() {
-        if (Instance == null)
-            Instance = new GameEngine();
-        return Instance;
-    }
-    private Set<Player> d_finishedPlayers = new HashSet<>();
-
-
-    public Set<Player> get_FinishedPlayers() {
-        return d_finishedPlayers;
-    }
-
-
-    private Phase d_gamePhase;
-    private String d_currentInput = "";
-    private Player d_currentPlayer = new Player("Default");
-    private int d_currentPlayerIndex = 0;
-
-    public Player getCurrentPlayer() {
-        return d_currentPlayer;
-    }
-
-    public void setCurrentPlayer(Player p_player) {
-        d_currentPlayer = p_player;
-        d_currentPlayerIndex = d_playersList.indexOf(p_player);
-    }
-
-    public void nextPlayer() {
-        if (d_finishedPlayers.size() == d_playersList.size()) {
-            System.out.println("Cannot go to next player as all players are finished");
-        } else {
-            while (true) {
-        if (d_currentPlayerIndex == d_playersList.size() - 1) {
-            d_currentPlayerIndex = 0;
-            d_currentPlayer = d_playersList.get(d_currentPlayerIndex);
-            if (!d_finishedPlayers.contains(d_currentPlayer)) {
-                break;
-            }
-        } else {
-            d_currentPlayerIndex++;
-            d_currentPlayer = d_playersList.get(d_currentPlayerIndex);
-            if (!d_finishedPlayers.contains(d_currentPlayer)) {
-                break;
-            }
-        }
-            }
-        }
-    }
-
-    public void setPhase(Phase p_phase) {
-        d_gamePhase = p_phase;
-    }
-
-    public Phase getPhase() {
-        return d_gamePhase;
-    }
-
-    public void setCurrentInput(String p_input) {
-        d_currentInput = p_input;
-    }
-    public String getCurrentInput() {
-        return d_currentInput;
-    }
     /**
      * Static scanner instance to be used all over the project.
      */
     public static Scanner SCANNER;
     /**
+     * Instance of the GameEngine
+     */
+    private static GameEngine Instance;
+    /**
      * The list of players populated by the user.
      */
     private final List<Player> d_playersList = new ArrayList<>();
     /**
+     * Players who have finished their turns
+     */
+    private final Set<Player> d_finishedPlayers = new HashSet<>();
+    /**
+     * The current phase of the GameEngine
+     */
+    private Phase d_gamePhase;
+    /**
+     * The current input of the user
+     */
+    private String d_currentInput = "";
+    /**
+     * The current player taking their turn
+     */
+    private Player d_currentPlayer = new Player("Default");
+    /**
+     * The index of the current player in the list of players
+     */
+    private int d_currentPlayerIndex = 0;
+    /**
      * Current map that is loaded after the loadmap command.
      */
     private WarMap d_currentMap = new WarMap();
+    /**
+     * Instance of the log entry buffer
+     */
+    LogEntryBuffer d_logentrybuffer = LogEntryBuffer.getInstance();
+    /**
+     * GameEngine Constructor
+     */
+    private GameEngine() {
+        d_gamePhase = new MainMenu(this);
+    }
+
+    /**
+     * Function for accessing the GameEngine instance
+     *
+     * @return the instance of the GameEngine
+     */
+    public static GameEngine getInstance() {
+        if (Instance == null)
+            Instance = new GameEngine();
+        return Instance;
+    }
+
+    /**
+     * @return The list of players who have finished their turns
+     */
+    public Set<Player> get_FinishedPlayers() {
+        return d_finishedPlayers;
+    }
+
+    /**
+     * @return The current player
+     */
+    public Player getCurrentPlayer() {
+        return d_currentPlayer;
+    }
+
+    /**
+     * Sets a new current player
+     *
+     * @param p_player The player to be set as the current player
+     */
+    public void setCurrentPlayer(Player p_player) {
+        d_currentPlayer = p_player;
+        d_currentPlayerIndex = d_playersList.indexOf(p_player);
+    }
+
+    /**
+     * A function to set the current player to the next player
+     */
+    public void nextPlayer() {
+        if (d_finishedPlayers.size() == d_playersList.size()) {
+            System.out.println("Cannot go to next player as all players are finished");
+        } else {
+            while (true) {
+                if (d_currentPlayerIndex == d_playersList.size() - 1) {
+                    d_currentPlayerIndex = 0;
+                    d_currentPlayer = d_playersList.get(d_currentPlayerIndex);
+                    if (!d_finishedPlayers.contains(d_currentPlayer)) {
+                        break;
+                    }
+                } else {
+                    d_currentPlayerIndex++;
+                    d_currentPlayer = d_playersList.get(d_currentPlayerIndex);
+                    if (!d_finishedPlayers.contains(d_currentPlayer)) {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @return The current phase of the GameEngine
+     */
+    public Phase getPhase() {
+        return d_gamePhase;
+    }
+
+    /**
+     * @param p_phase The phase to set the GameEngine too
+     */
+    public void setPhase(Phase p_phase) {
+        d_gamePhase = p_phase;
+    }
+
+    /**
+     * @return The current input of the GameEngine
+     */
+    public String getCurrentInput() {
+        return d_currentInput;
+    }
+
+    /**
+     * @param p_input The input to set as the game engines current input
+     */
+    public void setCurrentInput(String p_input) {
+        d_currentInput = p_input;
+    }
 
     /**
      * @return the current loaded map
@@ -166,7 +222,9 @@ public class GameEngine {
                     case Commands.SHOW_MAP_COMMAND:
                         d_gamePhase.showMap();
                         break;
-                    case "go back":
+                    case "goback":
+                        d_gamePhase.next();
+                        break;
                     case Commands.EXECUTE:
                     case "quit":
                         d_gamePhase.next();
@@ -221,6 +279,7 @@ public class GameEngine {
      * to assign the countries equally to all the players. After assigning the countries this function sends the control over to the MainGameLoop class.
      *
      * @param p_test This boolean is for test only. Keep false otherwise.
+     * @return True if countries could be assigned
      */
     public boolean assignCountries(boolean p_test) {
         if (d_playersList.size() < 2) {
@@ -245,6 +304,8 @@ public class GameEngine {
                     l_CountryIndex = l_RandomIndexCountry.nextInt(l_NumOfCountries) + 1;
                     if (!l_CountryAssigned.get(l_CountryIndex)) {
                         player.get_playerCountries().add(d_currentMap.get_countries().get(l_CountryIndex));
+                        System.out.println(d_currentMap.get_countries().get(l_CountryIndex) + " has been assigned to " + player.get_playerName());
+                        d_logentrybuffer.writeLog(d_currentMap.get_countries().get(l_CountryIndex) + " has been assigned to " + player.get_playerName());
                         d_currentMap.get_countries().get(l_CountryIndex).setD_ownerPlayer(player);
                         l_CountryAssigned.put(l_CountryIndex, true);
                         break;
@@ -253,10 +314,7 @@ public class GameEngine {
             }
         }
         System.out.println("Assigned " + l_NumOfCountries + " Countries to players.");
-        if (p_test)
-            return false;
-
-        return true;
+        return !p_test;
     }
 
     /**

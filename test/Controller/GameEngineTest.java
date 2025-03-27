@@ -1,16 +1,16 @@
 package Controller;
 
 
+import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import Models.Country;
 import Models.Player;
 import Models.WarMap;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Unit tests for the GameEngine class.
@@ -24,7 +24,7 @@ public class GameEngineTest {
     /**
      * Sets up a new GameEngine instance before each test.
      */
-    @BeforeEach
+    @Before
     public void setUp() {
         gameEngine = GameEngine.getInstance();
         gameEngine.get_PlayersList().clear();
@@ -36,7 +36,7 @@ public class GameEngineTest {
      * are correctly assigned to the players.
      */
     @Test
-    public void assignCountries() {
+    public void testAssignCountries() {
         WarMap warMap = new WarMap();
         Country country1 = new Country(1, "Country1", 1);
         Country country2 = new Country(2, "Country2", 2);
@@ -60,7 +60,7 @@ public class GameEngineTest {
      * It checks if a player is correctly added to the player's list.
      */
     @Test
-    public void addPlayer() {
+    public void testAddPlayer() {
 
         gameEngine.addPlayer("Player1");
 
@@ -76,7 +76,7 @@ public class GameEngineTest {
      * It checks if a player is correctly removed from the player's list.
      */
     @Test
-    public void removePlayer() {
+    public void testRemovePlayer() {
         gameEngine.addPlayer("Player1");
         gameEngine.addPlayer("Player2");
         gameEngine.addPlayer("Player3");
