@@ -10,7 +10,9 @@ import java.util.List;
  * 
  */
 public class Observable {
-	
+	/**
+	 * The List of observers
+	 */
 	private List<Observer> observers = new ArrayList<Observer>();
 
 	/**
@@ -39,8 +41,8 @@ public class Observable {
 	 * @param p_logString: string that contains the information to be observed.
 	 */
 	public void notifyObservers(String p_logString) {
-		for (Observer observer : observers) {
-			observer.update(p_logString);
+		for (Observer l_observer : observers) {
+			l_observer.update(p_logString);
 		}
 	}
 	

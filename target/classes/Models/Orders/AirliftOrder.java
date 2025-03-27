@@ -3,16 +3,27 @@ package Models.Orders;
 import Models.Country;
 import Models.Player;
 import Models.WarMap;
-import logging.LogEntryBuffer;
 
 /**
  * This class represents an Airlift Order in the game.
  * An Airlift Order allows a player to move armies from one country to another using the airlift card.
  */
 public class AirliftOrder implements Order {
+    /**
+     * The player of the order
+     */
     private final Player d_player;
+    /**
+     * The source country of the order
+     */
     private final Country d_sourceCountry;
+    /**
+     * The target country of the order
+     */
     private final Country d_targetCountry;
+    /**
+     * The number of armies in the order
+     */
     private final int d_numArmies;
 
     /**
@@ -43,7 +54,6 @@ public class AirliftOrder implements Order {
             // Move armies from the source country to the target country.
             d_sourceCountry.set_numOfArmies(d_sourceCountry.get_numOfArmies() - d_numArmies);
             d_targetCountry.set_numOfArmies(d_targetCountry.get_numOfArmies() + d_numArmies);
-            LogEntryBuffer.getInstance().writeLog(this.d_player+" AirLiftOrder order "+this.toString()+" executed successfully.");
         }
         else {
             System.out.println("Execution failed as you have lost control of one of the territories..");

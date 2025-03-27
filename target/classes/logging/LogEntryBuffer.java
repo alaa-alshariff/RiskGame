@@ -5,7 +5,9 @@ package logging;
  *
  */
 public class LogEntryBuffer extends Observable{
-	
+	/**
+	 * The instance of the LogEntryBuffer
+	 */
 	private static LogEntryBuffer instance = new LogEntryBuffer();
 	
 	/**

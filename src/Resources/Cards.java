@@ -30,6 +30,9 @@ public enum Cards {
             playersAcquiringTerritories.add(p_player);
     }
 
+    /**
+     * A function to reset the list of players who have acquired territories.
+     */
     public static void clearPlayerAcquiredTerritory() {
         playersAcquiringTerritories.clear();
     }

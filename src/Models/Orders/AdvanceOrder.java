@@ -4,16 +4,27 @@ import Models.Country;
 import Models.Player;
 import Models.WarMap;
 import Resources.Cards;
-import logging.LogEntryBuffer;
 
 /**
  * This class represents an Advance Order in the game.
  * An Advance Order allows a player to move armies from one country to another.
  */
 public class AdvanceOrder implements Order {
+    /**
+     * The player of the order
+     */
     private final Player d_player;
+    /**
+     * The source country of the order
+     */
     private final Country d_sourceCountry;
+    /**
+     * The target country of the order
+     */
     private final Country d_targetCountry;
+    /**
+     * The number of armies in the order
+     */
     private final int d_numArmies;
 
     /**
@@ -55,13 +66,13 @@ public class AdvanceOrder implements Order {
                     return;
                 }
                 // The target territory belongs to another player; simulate an attack.
-                int defenderArmies = d_targetCountry.get_numOfArmies();
+                int l_defenderArmies = d_targetCountry.get_numOfArmies();
                 // Implement your attack logic here. You can use dice rolls, a calculation based on armies, etc.
                 // For this example, we'll assume the attacker always wins and takes over the target territory.
-                int attackerArmies = d_numArmies;
-                if (attackerArmies > defenderArmies) {
+                int l_attackerArmies = d_numArmies;
+                if (l_attackerArmies > l_defenderArmies) {
                     d_sourceCountry.set_numOfArmies(d_sourceCountry.get_numOfArmies() - d_numArmies);
-                    d_targetCountry.set_numOfArmies(attackerArmies - defenderArmies);
+                    d_targetCountry.set_numOfArmies(l_attackerArmies - l_defenderArmies);
                     d_targetCountry.getD_ownerPlayer().get_playerCountries().remove(d_targetCountry);
                     d_targetCountry.setD_ownerPlayer(d_player);
                     d_player.get_playerCountries().add(d_targetCountry);
@@ -72,7 +83,6 @@ public class AdvanceOrder implements Order {
                     d_targetCountry.set_numOfArmies(d_targetCountry.get_numOfArmies() - d_numArmies);
                 }
             }
-            LogEntryBuffer.getInstance().writeLog(this.d_player+" Advance order "+this.toString()+" executed successfully.");
         }
     }
 
