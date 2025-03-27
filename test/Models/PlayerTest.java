@@ -1,8 +1,10 @@
 package Models;
 
 
+import Controller.GameEngine;
 import Models.Orders.DeployOrder;
 import Models.Orders.Order;
+import Phases.AssignReinforcements;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -22,12 +24,13 @@ public class PlayerTest {
      * The player instance required to run the test case.
      */
     private Player player;
-
+    private GameEngine gameEngine;
     /**
      * Initializing the player instance before each test.
      */
     @BeforeEach
     public void setUp() {
+        gameEngine = GameEngine.getInstance();
         player = new Player("John Doe");
     }
 
@@ -67,20 +70,36 @@ public class PlayerTest {
     @Test
     public void testInvalidCountry() {
         player.set_numOfReinforcements(5);
-
+        Country count1 = new Country(1, "Country1", 1);
+        Country count2 = new Country(2, "Country2", 1);
+        Country count3 = new Country(3, "Country3", 2);
         List<Country> playerCountries = new ArrayList<>();
-        playerCountries.add(new Country(1, "Country1", 1));
-        playerCountries.add(new Country(2, "Country2", 1));
-        playerCountries.add(new Country(3, "Country3", 2));
+        playerCountries.add(count1);
+        playerCountries.add(count2);
+        playerCountries.add(count3);
         player.set_playerCountries(playerCountries);
+        WarMap warMap = new WarMap();
+        Continent cont1 = new Continent(1, "Cont1", 0);
+        Continent cont2 = new Continent(2, "Cont2", 0);
+        warMap.addContinent(cont1);
+        warMap.addContinent(cont2);
+        warMap.addCountry(count1);
+        warMap.addCountry(count2);
+        warMap.addCountry(count3);
+        gameEngine.set_currentMap(warMap);
+        gameEngine.setCurrentPlayer(player);
+        ArrayList<Player> listOfPlayers = new ArrayList<>();
+        listOfPlayers.add(player);
+        gameEngine.set_PlayersList(listOfPlayers);
+        gameEngine.setPhase(new AssignReinforcements(gameEngine));
 
-        // Set up the input for issue_order() method
-        String[] commands = {
-                "deploy 1 3",
-                "deploy 4 2",
-                "deploy 3 2"
-        };
-        player.issue_order(commands, null);
+
+        gameEngine.setCurrentInput("deploy 1 3");
+        gameEngine.getPhase().deploy();
+        gameEngine.setCurrentInput("deploy 4 2");
+        gameEngine.getPhase().deploy();
+        gameEngine.setCurrentInput("deploy 3 2");
+        gameEngine.getPhase().deploy();
 
         List<Order> playerOrders = player.get_playerOrder();
         assertEquals(2, playerOrders.size());
@@ -102,21 +121,36 @@ public class PlayerTest {
     public void testCannotDeployMoreArmiesThanReinforcements() {
         // Set the player's initial reinforcement pool to 5
         player.set_numOfReinforcements(5);
-
+        Country count1 = new Country(1, "Country1", 1);
+        Country count2 = new Country(2, "Country2", 1);
+        Country count3 = new Country(3, "Country3", 2);
         List<Country> playerCountries = new ArrayList<>();
-        playerCountries.add(new Country(1, "Country1", 1));
-        playerCountries.add(new Country(2, "Country2", 1));
-        playerCountries.add(new Country(3, "Country3", 2));
+        playerCountries.add(count1);
+        playerCountries.add(count2);
+        playerCountries.add(count3);
         player.set_playerCountries(playerCountries);
-
+        WarMap warMap = new WarMap();
+        Continent cont1 = new Continent(1, "Cont1", 0);
+        Continent cont2 = new Continent(2, "Cont2", 0);
+        warMap.addContinent(cont1);
+        warMap.addContinent(cont2);
+        warMap.addCountry(count1);
+        warMap.addCountry(count2);
+        warMap.addCountry(count3);
+        gameEngine.set_currentMap(warMap);
+        gameEngine.setCurrentPlayer(player);
+        ArrayList<Player> listOfPlayers = new ArrayList<>();
+        listOfPlayers.add(player);
+        gameEngine.set_PlayersList(listOfPlayers);
         // Attempt to issue a deploy order with more armies than available reinforcements
-        String[] invalidDeployCommand = {
-                "deploy 1 10",
-                "deploy 2 3",
-                "deploy 3 2"
-        }; // Deploying 10 armies with only 5 available
-        player.issue_order(invalidDeployCommand, null);
-
+        // Deploying 10 armies with only 5 available
+        gameEngine.setPhase(new AssignReinforcements(gameEngine));
+        gameEngine.setCurrentInput("deploy 1 10");
+        gameEngine.getPhase().deploy();
+        gameEngine.setCurrentInput("deploy 2 3");
+        gameEngine.getPhase().deploy();
+        gameEngine.setCurrentInput("deploy 3 2");
+        gameEngine.getPhase().deploy();
         // Ensure that only valid orders were added to the player's order list
         assertEquals(2, player.get_playerOrder().size());
 
@@ -124,4 +158,3 @@ public class PlayerTest {
         assertEquals(Integer.valueOf(0), player.get_numOfReinforcements());
     }
 }
-

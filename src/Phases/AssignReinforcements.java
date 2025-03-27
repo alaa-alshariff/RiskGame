@@ -1,54 +1,39 @@
 package Phases;
 
 import Controller.GameEngine;
+import Models.Country;
+import Models.Orders.DeployOrder;
 import Models.Orders.Order;
 import Models.Player;
+
+import static java.lang.System.exit;
 
 public class AssignReinforcements extends OrderPhase {
     public AssignReinforcements(GameEngine p_ge) {
         super(p_ge);
+        d_logentrybuffer.writeLog("ASSIGNREINFORCEMENTS PHASE");
     }
 
     @Override
     public void displayOptions() {
-        System.out.println("Assigning Reinforcements....");
-        System.out.println("_________________________________________");
-        for (Player player : d_ge.get_PlayersList()) {
-            player.set_numOfReinforcements(d_ge.getNumOfReinforcements(player));
-            System.out.println("Assigned `" + player.get_numOfReinforcements() + "` reinforcements to player: " + player.get_playerName());
-        }
-        System.out.println("\n_________________________________________");
-        System.out.println("Taking orders from each player....");
-        System.out.println("_________________________________________");
-        for (Player player : d_ge.get_PlayersList()) {
-            player.issue_order(null, d_ge.get_currentMap());
-            System.out.println("_________________________________________");
-        }
-        for (Player player : d_ge.get_PlayersList()) {
-            while (true) {
-                Order order = player.next_order();
-                if (order == null)
-                    break;
-                order.execute(d_ge.get_currentMap());
-            }
-        }
-        System.out.println("\n_________________________________________");
-        System.out.println("All commands executed successfully..... ");
-        System.out.println("_________________________________________");
+
+        System.out.println("Please issue deploy orders for Player " + d_ge.getCurrentPlayer().get_playerName());
+        System.out.println("Remaining reinforcements: " + d_ge.getCurrentPlayer().get_numOfReinforcements());
+
+
     }
 
+    public void deploy() {
+        d_ge.getCurrentPlayer().issue_order();
 
-    public void attack() {
-        printInvalidCommandMessage();
+        if (d_ge.getCurrentPlayer().get_numOfReinforcements() == 0) {
+            System.out.println("_____________________________________________");
+            next();
+        }
     }
 
     @Override
-    public void reinforce() {
-        printInvalidCommandMessage();
-    }
-
-    @Override
-    public void fortify() {
+    public void issueOrder() {
         printInvalidCommandMessage();
     }
 
@@ -59,6 +44,16 @@ public class AssignReinforcements extends OrderPhase {
 
     @Override
     public void next() {
-        d_ge.setPhase(new IssueOrders(d_ge));
+        if (d_ge.getCurrentInput().toLowerCase().contains("quit")) {
+            System.out.println("Exiting program");
+            exit(0);
+        }
+        if (d_ge.getCurrentPlayer().equals(d_ge.get_PlayersList().get(d_ge.get_PlayersList().size() - 1))) {
+            d_ge.nextPlayer();
+            d_ge.setPhase(new IssueOrders(d_ge));
+        } else {
+            d_ge.nextPlayer();
+
+        }
     }
 }

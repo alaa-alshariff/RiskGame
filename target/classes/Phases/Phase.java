@@ -1,6 +1,7 @@
 package Phases;
 
 import Controller.GameEngine;
+import logging.LogEntryBuffer;
 
 import java.io.IOException;
 
@@ -10,6 +11,7 @@ public abstract class Phase {
     }
 
     GameEngine d_ge;
+    LogEntryBuffer d_logentrybuffer = LogEntryBuffer.getInstance();
 
     abstract public void displayOptions();
 
@@ -31,13 +33,8 @@ public abstract class Phase {
     abstract public void setPlayers();
 
     abstract public void assignCountries();
-
-    abstract public void attack();
-
-    abstract public void reinforce();
-
-    abstract public void fortify();
-
+    abstract public void deploy();
+    abstract public void issueOrder();
     abstract public void endGame();
 
     abstract public void next() throws IOException;

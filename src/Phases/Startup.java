@@ -2,11 +2,15 @@ package Phases;
 
 import Controller.GameEngine;
 import Controller.MapEditor;
+import Models.Player;
 import Resources.Commands;
+
+import static java.lang.System.exit;
 
 public class Startup extends Play {
     public Startup(GameEngine p_ge) {
         super(p_ge);
+        d_logentrybuffer.writeLog("STARTUP PHASE");
     }
 
     @Override
@@ -38,6 +42,7 @@ public class Startup extends Play {
                     l_i++;
                     if (l_i < l_words.length) {
                         d_ge.addPlayer(l_words[l_i]);
+                        d_logentrybuffer.writeLog("gameplayer "+l_words[l_i]+" added successfully");
                     } else {
                         System.out.println("Reached end of command while parsing");
                     }
@@ -46,6 +51,7 @@ public class Startup extends Play {
                     l_i++;
                     if (l_i < l_words.length) {
                         d_ge.removePlayer(l_words[l_i]);
+                        d_logentrybuffer.writeLog("gameplayer "+l_words[l_i]+" removed successfully");
                     } else {
                         System.out.println("Reached end of command while parsing");
 
@@ -59,24 +65,12 @@ public class Startup extends Play {
     @Override
     public void assignCountries() {
         if (d_ge.assignCountries(false)) ;
-        System.out.println("╔════════════════════════════════════════╗");
-        System.out.println("║      Game Starts... Get Ready...       ║");
-        System.out.println("╚════════════════════════════════════════╝");
+
         this.next();
     }
 
     @Override
-    public void attack() {
-        printInvalidCommandMessage();
-    }
-
-    @Override
-    public void reinforce() {
-        printInvalidCommandMessage();
-    }
-
-    @Override
-    public void fortify() {
+    public void deploy() {
         printInvalidCommandMessage();
     }
 
@@ -90,8 +84,26 @@ public class Startup extends Play {
         if (d_ge.getCurrentInput().equalsIgnoreCase("go back")) {
             d_ge.setPhase(new MainMenu(d_ge));
         }
+        if (d_ge.getCurrentInput().toLowerCase().contains("quit")) {
+            System.out.println("Exiting program");
+            exit(0);
+        }
         if (d_ge.getCurrentInput().equalsIgnoreCase("assigncountries")) {
-            d_ge.setPhase(new AssignReinforcements(d_ge));
+            if (d_ge.get_PlayersList().size() >= 2) {
+                System.out.println("╔════════════════════════════════════════╗");
+                System.out.println("║      Game Starts... Get Ready...       ║");
+                System.out.println("╚════════════════════════════════════════╝");
+                d_ge.setPhase(new AssignReinforcements(d_ge));
+                System.out.println("Assigning Reinforcements....");
+                System.out.println("_________________________________________");
+                for (Player player : d_ge.get_PlayersList()) {
+                    player.set_numOfReinforcements(d_ge.getNumOfReinforcements(player));
+                    System.out.println("Assigned `" + player.get_numOfReinforcements() + "` reinforcements to player: " + player.get_playerName());
+                }
+                System.out.println("\n_________________________________________");
+                System.out.println("Taking orders from each player....");
+                System.out.println("_________________________________________");
+            }
         }
     }
 }
