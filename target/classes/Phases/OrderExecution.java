@@ -1,9 +1,14 @@
 package Phases;
 
+import java.io.IOException;
+import static java.lang.System.exit;
+import java.util.ArrayList;
+
 import Controller.GameEngine;
 import Models.Orders.Order;
 import Models.Player;
 import Resources.Cards;
+import logging.LogWriter;
 
 public class OrderExecution extends Play {
     /**
@@ -20,7 +25,43 @@ public class OrderExecution extends Play {
      */
     @Override
     public void displayOptions() {
+        //Deploy Orders
         for (Player player : d_ge.get_PlayersList()) {
+            ArrayList<Order> l_ordersToReadd = new ArrayList<>();
+            while (true) {
+                Order order = player.next_order();
+                if (order == null)
+                    break;
+                if (order.getClass().getSimpleName().equals("DeployOrder")) {
+                    order.execute(d_ge.get_currentMap());
+                } else {
+                    l_ordersToReadd.add(order);
+                }
+            }
+            for (Order l_o : l_ordersToReadd) {
+                player.get_playerOrder().add(l_o);
+            }
+        }
+        //Advance orders
+        for (Player player : d_ge.get_PlayersList()) {
+            ArrayList<Order> l_ordersToReadd = new ArrayList<>();
+            while (true) {
+                Order order = player.next_order();
+                if (order == null)
+                    break;
+                if (order.getClass().getSimpleName().equals("AdvanceOrder")) {
+                    order.execute(d_ge.get_currentMap());
+                } else {
+                    l_ordersToReadd.add(order);
+                }
+            }
+            for (Order l_o : l_ordersToReadd) {
+                player.get_playerOrder().add(l_o);
+            }
+        }
+        //Other orders
+        for (Player player : d_ge.get_PlayersList()) {
+            ArrayList<Order> l_ordersToReadd = new ArrayList<>();
             while (true) {
                 Order order = player.next_order();
                 if (order == null)
@@ -28,9 +69,32 @@ public class OrderExecution extends Play {
                 order.execute(d_ge.get_currentMap());
             }
         }
+
+
+
         System.out.println("\n_");
         System.out.println("All commands executed successfully..... ");
         System.out.println("_");
+        ArrayList<Player> l_playersToRemove = new ArrayList<>();
+        for (Player player : d_ge.get_PlayersList()) {
+            if (player.get_playerCountries().size() == 0) {
+                l_playersToRemove.add(player);
+            }
+        }
+        for (Player player : l_playersToRemove) {
+            System.out.println(player.get_playerName() + " is out of countries and has been removed from the game");
+            d_ge.get_PlayersList().remove(player);
+        }
+        if (d_ge.get_PlayersList().size() == 1) {
+            System.out.println(d_ge.get_PlayersList().get(0).get_playerName() + " is the only player left and has won the game.");
+            System.out.println("Exiting program");
+            try {
+                LogWriter.getInstance().d_info.close();
+                exit(0);
+            } catch (IOException e) {
+                System.out.println("I/O exception closing BufferedWriter");
+            }
+        }
         this.next();
     }
 
