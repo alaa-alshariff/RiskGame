@@ -1,13 +1,16 @@
 package Controller;
 
+import java.util.ArrayList;
+
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import Models.Continent;
 import Models.Country;
 import Models.Player;
 import Models.WarMap;
-
-import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import Phases.MainMenu;
 
 
 /**
@@ -24,15 +27,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * <p>Expected Result:
  * The player should receive 6 reinforcements, consisting of 5 (total owned countries) plus the army bonus of 1.
  *
- * @see MainGameLoop#getNumOfReinforcements(Player)
  */
 
 public class MainGameLoopTest {
+    private GameEngine d_gameEngine;
+
+    @Before
+    public void setUp() {
+        d_gameEngine = GameEngine.getInstance();
+        d_gameEngine.setPhase(new MainMenu(d_gameEngine));
+
+    }
     /**
      * Test for getting the number of reinforcements
      */
-    @org.junit.jupiter.api.Test
-    void testGetNumOfReinforcements() {
+    @Test
+    public void testGetNumOfReinforcements() {
         WarMap test_war_map = new WarMap();
         //CREATE THE CONTINENTS
         test_war_map.addContinent(new Continent(1, "continent 1", 1));
@@ -65,10 +75,9 @@ public class MainGameLoopTest {
 
         ArrayList<Player> test_player_list = new ArrayList<>();
         test_player_list.add(test_player); //NEED TO PUT PLAYER IN LIST TO MAKE MainGameLoop Class
-
-        MainGameLoop test_mainGameLoop = new MainGameLoop(test_war_map, test_player_list); //CREATE MainGameLoop with the created map and player list
-
-        int numOfReinforcements = test_mainGameLoop.getNumOfReinforcements(test_player);
+        d_gameEngine.set_currentMap(test_war_map);
+        d_gameEngine.set_PlayersList(test_player_list);
+        int numOfReinforcements = d_gameEngine.getNumOfReinforcements(test_player_list.get(0));
 
         // Define the expected number of reinforcements based on your test scenario
         int expectedReinforcements = 6; // Adjust this value based on your specific test case

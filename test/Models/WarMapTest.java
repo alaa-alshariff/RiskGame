@@ -1,20 +1,19 @@
 package Models;
 
-import Controller.MapEditor;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-
 import java.io.IOException;
 
+import org.junit.Before;
+import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.TestInstance;
+
+import Controller.MapEditor;
 
 /**
  * Tests for validation of the WarMap
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-
 public class WarMapTest {
     /**
      * WarMap used in the test
@@ -24,10 +23,10 @@ public class WarMapTest {
     /**
      * Makes the WarMap object a new WarMap before every test
      *
-     * @throws Exception
+     * @throws Exception Exception if IO error occurs
      */
-    @BeforeEach
-    void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         l_warmap = new WarMap();
     }
 
@@ -35,7 +34,7 @@ public class WarMapTest {
      * Test for if the continents in the war map are connected
      */
     @Test
-    void testIsContinentConnected() {
+    public void testIsContinentConnected() {
         try {
             MapEditor.readMap("europe.map", l_warmap);
             assertTrue(l_warmap.validateMap());
@@ -52,7 +51,7 @@ public class WarMapTest {
      * Test for if the entire war map is connected
      */
     @Test
-    void testIsConnectedGraph() {
+    public void testIsConnectedGraph() {
         try {
             MapEditor.readMap("europe.map", l_warmap);
             assertTrue(l_warmap.validateMap());
@@ -69,7 +68,7 @@ public class WarMapTest {
      * Test for if there is a continent with no countries in the war map
      */
     @Test
-    void testisEmptyContinent() {
+    public void testisEmptyContinent() {
         try {
             MapEditor.readMap("europe.map", l_warmap);
             assertTrue(l_warmap.validateMap());
@@ -85,7 +84,7 @@ public class WarMapTest {
      * Checking if all countries have at least one neighbor
      */
     @Test
-    void testingisCountryNoNeighbor() {
+    public void testingisCountryNoNeighbor() {
         try {
             MapEditor.readMap("europe.map", l_warmap);
             assertTrue(l_warmap.validateMap());

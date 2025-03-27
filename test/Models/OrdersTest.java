@@ -1,10 +1,11 @@
 package Models;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.TestInstance;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import Models.Orders.DeployOrder;
 
 /**
  * Tests cases for executing orders, it ensures that the Orders class functions correctly according to the specified test cases.
@@ -24,7 +25,7 @@ public class OrdersTest {
      * Sets up the test environment before each test case.
      * It initializes the WarMap and Country objects.
      */
-    @BeforeEach
+    @Before
     public void setUp() {
         warmap = new WarMap();
         country = new Country();
@@ -38,7 +39,7 @@ public class OrdersTest {
      */
     @Test
     public void testExecute() {
-        Orders order = new Orders(5, country.get_countryID(), -1, null);
+        DeployOrder order = new DeployOrder(5, country.get_countryID());
         order.execute(warmap);
 
         assertEquals(5, warmap.get_countries().get(country.get_countryID()).get_numOfArmies());

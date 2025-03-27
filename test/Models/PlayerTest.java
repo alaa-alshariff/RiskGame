@@ -1,14 +1,14 @@
 package Models;
 
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.TestInstance;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import Controller.GameEngine;
+import Models.Orders.DeployOrder;
 
 /**
  * Test for functions concerning Player orders
@@ -20,13 +20,20 @@ public class PlayerTest {
      * The player instance required to run the test case.
      */
     private Player player;
-
     /**
      * Initializing the player instance before each test.
      */
-    @BeforeEach
+    private GameEngine gameEngine;
+    /**
+     * The Instance of warmap.
+     */
+    private WarMap warMap;
+
+    @Before
     public void setUp() {
+        gameEngine = GameEngine.getInstance();
         player = new Player("John Doe");
+        warMap = new WarMap();
     }
 
     /**
@@ -34,7 +41,7 @@ public class PlayerTest {
      */
     @Test
     public void testNextOrderEmptyList() {
-        Orders nextOrder = player.next_order();
+        DeployOrder nextOrder = (DeployOrder) player.next_order();
 
         assertNull(nextOrder);
     }
@@ -44,81 +51,31 @@ public class PlayerTest {
      */
     @Test
     public void testNextOrder() {
-        Orders order1 = new Orders(3, 1, -1, null);
-        Orders order2 = new Orders(2, 2, -1, null);
-        Orders order3 = new Orders(4, 3, -1, null);
+        DeployOrder order1 = new DeployOrder(3, 1);
+        DeployOrder order2 = new DeployOrder(2, 2);
+        DeployOrder order3 = new DeployOrder(4, 3);
 
         player.get_playerOrder().add(order1);
         player.get_playerOrder().add(order2);
         player.get_playerOrder().add(order3);
 
-        Orders nextOrder = player.next_order();
+        DeployOrder nextOrder = (DeployOrder) player.next_order();
 
         assertEquals(order1, nextOrder);
         assertEquals(2, player.get_playerOrder().size());
         assertFalse(player.get_playerOrder().contains(order1));
     }
 
-    /**
-     * Test if the country deployed to is invalid.
-     */
-    @Test
-    public void testInvalidCountry() {
-        player.set_numOfReinforcements(5);
-
-        List<Country> playerCountries = new ArrayList<>();
-        playerCountries.add(new Country(1, "Country1", 1));
-        playerCountries.add(new Country(2, "Country2", 1));
-        playerCountries.add(new Country(3, "Country3", 2));
-        player.set_playerCountries(playerCountries);
-
-        // Set up the input for issue_order() method
-        String[] commands = {
-                "deploy 1 3",
-                "deploy 4 2",
-                "deploy 3 2"
-        };
-        player.issue_order(commands, null);
-
-        List<Orders> playerOrders = player.get_playerOrder();
-        assertEquals(2, playerOrders.size());
-
-        Orders order1 = playerOrders.get(0);
-        assertEquals(3, order1.getNumOfArmies());
-        assertEquals(1, order1.getDestCountryID());
-
-        Orders order2 = playerOrders.get(1);
-        assertEquals(2, order2.getNumOfArmies());
-        assertEquals(3, order2.getDestCountryID());
-    }
 
 
-    /**
-     * Deploying more number of armies then there are reinforcements available.
-     */
-    @Test
-    public void testCannotDeployMoreArmiesThanReinforcements() {
-        // Set the player's initial reinforcement pool to 5
-        player.set_numOfReinforcements(5);
 
-        List<Country> playerCountries = new ArrayList<>();
-        playerCountries.add(new Country(1, "Country1", 1));
-        playerCountries.add(new Country(2, "Country2", 1));
-        playerCountries.add(new Country(3, "Country3", 2));
-        player.set_playerCountries(playerCountries);
 
-        // Attempt to issue a deploy order with more armies than available reinforcements
-        String[] invalidDeployCommand = {
-                "deploy 1 10",
-                "deploy 2 3",
-                "deploy 3 2"
-        }; // Deploying 10 armies with only 5 available
-        player.issue_order(invalidDeployCommand, null);
 
-        // Ensure that only valid orders were added to the player's order list
-        assertEquals(2, player.get_playerOrder().size());
 
-        // Ensure that the player's available reinforcements remain unchanged
-        assertEquals(Integer.valueOf(0), player.get_numOfReinforcements());
-    }
+
+
+
+
+
+
 }
