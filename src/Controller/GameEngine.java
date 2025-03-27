@@ -24,7 +24,6 @@ import java.util.*;
  * <p>
  * Developers can extend this class to customize and add game-specific functionality. By
  * overriding the appropriate methods, you can integrate your game logic seamlessly.
- *
  */
 public class GameEngine {
     /**
@@ -225,7 +224,9 @@ public class GameEngine {
                     case Commands.SHOW_MAP_COMMAND:
                         d_gamePhase.showMap();
                         break;
-                    case "go back":
+                    case "goback":
+                        d_gamePhase.next();
+                        break;
                     case Commands.EXECUTE:
                     case "quit":
                         d_gamePhase.next();

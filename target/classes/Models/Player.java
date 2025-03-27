@@ -15,7 +15,6 @@ import static Controller.GameEngine.SCANNER;
 /**
  * This class describes information about each player and the order that were issued using the logic
  * present in the same class.
- *
  */
 public class Player {
 
@@ -359,6 +358,7 @@ public class Player {
         }
         if (l_sourceCountry == null) {
             System.out.println("Source country not found");
+            return;
         }
         for (Country country : l_sourceCountry.getNeighbouringCountries().values()) {
             if (country.get_countryID() == l_targetCountryID) {
@@ -367,6 +367,7 @@ public class Player {
         }
         if (l_targetCountry == null) {
             System.out.println("Listed target was not a neighbouring country to the source");
+            return;
         }
 
 
