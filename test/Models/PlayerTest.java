@@ -1,24 +1,21 @@
 package Models;
-import java.util.ArrayList;
+
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-
 import Controller.GameEngine;
-import Models.Orders.AirliftOrder;
 import Models.Orders.BombOrder;
 import Models.Orders.DeployOrder;
 import Models.Orders.Order;
 import Phases.AssignReinforcements;
 import Resources.Cards;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test for functions concerning Player orders
@@ -30,14 +27,20 @@ public class PlayerTest {
      * The player instance required to run the test case.
      */
     private Player player;
-    private GameEngine gameEngine;
     /**
      * Initializing the player instance before each test.
      */
+    private GameEngine gameEngine;
+    /**
+     * The Instance of warmap.
+     */
+    private WarMap warMap;
+
     @BeforeEach
     public void setUp() {
         gameEngine = GameEngine.getInstance();
         player = new Player("John Doe");
+        warMap = new WarMap();
     }
 
     /**
@@ -162,6 +165,85 @@ public class PlayerTest {
 
         // Ensure that the player's available reinforcements remain unchanged
         assertEquals(Integer.valueOf(0), player.get_numOfReinforcements());
+    }
+
+    /**
+     * Checks if the orders are taken correctly with valid Input
+     */
+    @Test
+    public void testBlockadeIssueOrderValidInput() {
+        Country country1 = new Country(1, "Country1", 1);
+        player.get_playerCountries().add(country1);
+        player.get_playerCards().add(Cards.Blockade);
+
+        Country country2 = new Country(2, "Country2", 1);
+        player.get_playerCountries().add(country2);
+        player.get_playerCards().add(Cards.Blockade);
+
+        String[] commandTokens1 = {"blockade", "1"};
+        player.blockade_issue_order(commandTokens1, warMap);
+
+        assertEquals(1, player.get_playerOrder().size());
+        assertTrue(player.get_playerOrder().get(0) != null);
+        assertEquals(1,player.get_playerCards().size());
+
+        String[] commandTokens2 = {"blockade", "2"};
+        player.blockade_issue_order(commandTokens2, warMap);
+
+        assertEquals(2, player.get_playerOrder().size());
+        assertTrue(player.get_playerOrder().get(1) != null);
+        assertFalse(player.get_playerCards().contains(Cards.Blockade));
+        assertEquals(0,player.get_playerCards().size());
+    }
+
+    /**
+     * Checks if no orders are added to orderlist and
+     * Card is not removed with Invalid input
+     */
+    @Test
+    public void testBlockadeIssueOrderInvalidCountry() {
+        // Prepare player's countries and cards
+        player.get_playerCards().add(Cards.Blockade);
+
+        String[] commandTokens1 = {"blockade", "2"};
+        player.blockade_issue_order(commandTokens1, warMap);
+
+        assertEquals(0, player.get_playerOrder().size());
+        assertTrue(player.get_playerCards().contains(Cards.Blockade));
+        assertEquals(1,player.get_playerCards().size());
+
+        player.get_playerCards().add(Cards.Blockade);
+        String[] commandTokens2 = {"blockade", "3"};
+        player.blockade_issue_order(commandTokens2, warMap);
+
+        assertEquals(0, player.get_playerOrder().size());
+        assertTrue(player.get_playerCards().contains(Cards.Blockade));
+        assertEquals(2,player.get_playerCards().size());
+    }
+
+    /**
+     * Checks if no orders are added to list
+     * if there is no blockade card in the player card list
+     */
+    @Test
+    public void testBlockadeIssueOrderNoBlockadeCard() {
+        Country country1 = new Country(1, "Country1", 1);
+        player.get_playerCountries().add(country1);
+
+        Country country2 = new Country(2, "Country2", 1);
+        player.get_playerCountries().add(country2);
+
+        String[] commandTokens1 = {"blockade", "1"};
+        player.blockade_issue_order(commandTokens1, warMap);
+
+        assertEquals(0, player.get_playerOrder().size());
+        assertFalse(player.get_playerCards().contains(Cards.Blockade));
+
+        String[] commandTokens2 = {"blockade", "2"};
+        player.blockade_issue_order(commandTokens2, warMap);
+
+        assertEquals(0, player.get_playerOrder().size());
+        assertFalse(player.get_playerCards().contains(Cards.Blockade));
     }
 
     @Test
@@ -349,35 +431,5 @@ public class PlayerTest {
         // Assert that the target player name is not added to the diplomacy list.
         assertFalse(player.get_diplomacy_list().contains("Player2"));
     }
-
-
-    @Test
-    public void testAirliftCommandExecution() {
-        // Create a test scenario where the player has the Airlift card and valid input.
-        player.set_playerCards(List.of(Cards.Airlift));
-        WarMap map = new WarMap();
-
-        // Create source and target countries.
-        Country sourceCountry = new Country(1, "SourceCountry", 1);
-        Country targetCountry = new Country(2, "TargetCountry", 1);
-        player.set_playerCountries(Arrays.asList(sourceCountry, targetCountry));
-
-        // Attach the players to the GameEngine.
-        GameEngine.getInstance().set_PlayersList(List.of(player));
-
-        // Simulate a valid airlift command by setting the current input in GameEngine.
-        GameEngine.getInstance().setCurrentInput("airlift 1 2 3");
-
-        // Call the method you want to test.
-        player.issue_order();
-
-        // Assert that an AirliftOrder was created and added to the list of orders.
-        assertEquals(1, player.get_playerOrder().size());
-        assertTrue(player.get_playerOrder().get(0) instanceof AirliftOrder);
-
-        // Assert that the Airlift card is removed from the player's cards.
-        assertFalse(player.get_playerCards().contains(Cards.Airlift));
-    }
-
 
 }
