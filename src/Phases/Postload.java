@@ -1,12 +1,12 @@
 package Phases;
 
+import java.io.IOException;
+import static java.lang.System.exit;
+
 import Controller.GameEngine;
 import Controller.MapEditor;
 import Models.WarMap;
-
-import java.io.IOException;
-
-import static java.lang.System.exit;
+import logging.LogWriter;
 
 public class Postload extends Edit {
     public Postload(GameEngine p_ge) {
@@ -158,7 +158,12 @@ public class Postload extends Edit {
     @Override
     public void next() {
         if (d_ge.getCurrentInput().toLowerCase().equals("quit")) {
-            exit(0);
+        	try {
+    	        LogWriter.getInstance().info.close();
+    	        exit(0);
+    	    } catch (IOException e) {
+    	        System.out.println("I/O exception closing BufferedWriter");
+    	    }
         }
         d_ge.setPhase(new MainMenu(d_ge));
     }

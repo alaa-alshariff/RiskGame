@@ -1,21 +1,24 @@
 package Models;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+
 import Controller.GameEngine;
+import Models.Orders.AirliftOrder;
 import Models.Orders.BombOrder;
 import Models.Orders.DeployOrder;
 import Models.Orders.Order;
 import Phases.AssignReinforcements;
 import Resources.Cards;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Test for functions concerning Player orders
@@ -249,7 +252,9 @@ public class PlayerTest {
     @Test
     public void testBlockadeCommandExecution() {
         // Create a test scenario where the player has a Blockade card and valid input.
-        player.set_playerCards(Collections.singletonList(Cards.Blockade));
+        List<Cards> cards = new ArrayList<>();
+        cards.add(Cards.Blockade);
+        player.set_playerCards(cards);
         WarMap map = new WarMap();
         map.addCountry(new Country(1, "CountryA", 1));
         map.addCountry(new Country(2, "CountryB", 1));
@@ -268,7 +273,7 @@ public class PlayerTest {
 
         // Assert the expected outcome.
         assertEquals(0, player.get_playerCards().size());
-        assertEquals(0, player.get_playerOrder().size()); // The order should be executed successfully.
+        assertEquals(1, player.get_playerOrder().size()); // The order should be issued successfully.
     }
 
     @Test
@@ -299,14 +304,16 @@ public class PlayerTest {
     @Test
     public void testBombCommandExecution() {
         // Create a test scenario where the player has the Bomb card, and the input is valid.
-        player.set_playerCards(List.of(Cards.Bomb));
+        List<Cards> cards = new ArrayList<>();
+        cards.add(Cards.Bomb);
+        player.set_playerCards(cards);
         WarMap map = new WarMap();
         Country countryA = new Country(1, "CountryA", 1);
         Country countryB = new Country(2, "CountryB", 1);
         map.addCountry(countryA);
         map.addCountry(countryB);
 
-        player.set_playerCountries(Arrays.asList(countryA, countryB));
+        player.set_playerCountries(List.of(countryA));
 
         // Simulate a valid command by setting the current input in GameEngine.
         GameEngine.getInstance().setCurrentInput("bomb 2");
@@ -325,9 +332,11 @@ public class PlayerTest {
     @Test
     public void testBombCommandExecutionWithInvalidCountry() {
         // Create a test scenario where the player has the Bomb card, but the target country is invalid.
-        player.set_playerCards(List.of(Cards.Bomb));
+        List<Cards> cards = new ArrayList<>();
+        cards.add(Cards.Bomb);
+        player.set_playerCards(cards);
         WarMap map = new WarMap();
-
+        GameEngine.getInstance().set_currentMap(map);
         // Simulate an invalid target country by setting the current input in GameEngine.
         GameEngine.getInstance().setCurrentInput("bomb 2");
 
@@ -431,5 +440,37 @@ public class PlayerTest {
         // Assert that the target player name is not added to the diplomacy list.
         assertFalse(player.get_diplomacy_list().contains("Player2"));
     }
+
+
+    @Test
+    public void testAirliftCommandExecution() {
+        // Create a test scenario where the player has the Airlift card and valid input.
+        List<Cards> cards = new ArrayList<>();
+        cards.add(Cards.Airlift);
+        player.set_playerCards(cards);
+        WarMap map = new WarMap();
+
+        // Create source and target countries.
+        Country sourceCountry = new Country(1, "SourceCountry", 1);
+        Country targetCountry = new Country(2, "TargetCountry", 1);
+        player.set_playerCountries(Arrays.asList(sourceCountry, targetCountry));
+
+        // Attach the players to the GameEngine.
+        GameEngine.getInstance().set_PlayersList(List.of(player));
+
+        // Simulate a valid airlift command by setting the current input in GameEngine.
+        GameEngine.getInstance().setCurrentInput("airlift 1 2 3");
+
+        // Call the method you want to test.
+        player.issue_order();
+
+        // Assert that an AirliftOrder was created and added to the list of orders.
+        assertEquals(1, player.get_playerOrder().size());
+        assertTrue(player.get_playerOrder().get(0) instanceof AirliftOrder);
+
+        // Assert that the Airlift card is removed from the player's cards.
+        assertFalse(player.get_playerCards().contains(Cards.Airlift));
+    }
+
 
 }

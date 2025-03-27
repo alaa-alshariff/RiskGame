@@ -1,12 +1,10 @@
 package Phases;
 
-import Controller.GameEngine;
-import Models.Country;
-import Models.Orders.DeployOrder;
-import Models.Orders.Order;
-import Models.Player;
-
+import java.io.IOException;
 import static java.lang.System.exit;
+
+import Controller.GameEngine;
+import logging.LogWriter;
 
 public class AssignReinforcements extends OrderPhase {
     public AssignReinforcements(GameEngine p_ge) {
@@ -27,7 +25,7 @@ public class AssignReinforcements extends OrderPhase {
         d_ge.getCurrentPlayer().issue_order();
 
         if (d_ge.getCurrentPlayer().get_numOfReinforcements() == 0) {
-            System.out.println("_____________________________________________");
+            System.out.println("_");
             next();
         }
     }
@@ -46,7 +44,12 @@ public class AssignReinforcements extends OrderPhase {
     public void next() {
         if (d_ge.getCurrentInput().toLowerCase().contains("quit")) {
             System.out.println("Exiting program");
-            exit(0);
+    		try {
+    	        LogWriter.getInstance().info.close();
+    	        exit(0);
+    		} catch (IOException e) {
+    	        System.out.println("I/O exception closing BufferedWriter");
+    	    }
         }
         if (d_ge.getCurrentPlayer().equals(d_ge.get_PlayersList().get(d_ge.get_PlayersList().size() - 1))) {
             d_ge.nextPlayer();
