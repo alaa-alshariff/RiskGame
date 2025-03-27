@@ -1,10 +1,10 @@
 package Resources;
 
-import Models.Player;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import Models.Player;
 
 /**
  * Enum class containing all possible cards and the logic of assigning random cards.
@@ -14,7 +14,6 @@ public enum Cards {
     Bomb,
     Blockade,
     Airlift,
-    Advance,
     Diplomacy;
 
     /**
@@ -31,19 +30,20 @@ public enum Cards {
             playersAcquiringTerritories.add(p_player);
     }
 
+    public static void clearPlayerAcquiredTerritory() {
+        playersAcquiringTerritories.clear();
+    }
     /**
      * Assign a random card to all players in list.
      */
     public static void assignRandomCardsToPlayers() {
         for (Player player : playersAcquiringTerritories){
-            System.out.println("______________________________________________");
+            System.out.println("");
             Random random = new Random();
             Cards card = values()[random.nextInt(values().length)];
             player.get_playerCards().add(card);
             System.out.println("Player " + player.get_playerName() + " acquired card: " + card);
-            System.out.println("______________________________________________");
+            System.out.println("");
         }
     }
 }
-
-

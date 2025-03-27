@@ -1,8 +1,9 @@
 package Phases;
 
-import Controller.GameEngine;
-
 import static java.lang.System.exit;
+
+import Controller.GameEngine;
+import Resources.Cards;
 
 public class IssueOrders extends OrderPhase {
     public IssueOrders(GameEngine p_ge) {
@@ -14,6 +15,18 @@ public class IssueOrders extends OrderPhase {
     public void displayOptions() {
         System.out.println("Taking commands for Player " + d_ge.getCurrentPlayer().get_playerName());
         System.out.println("Please provide a command to execute or type execute to finish giving commands");
+        if (d_ge.getCurrentPlayer().get_playerCards().size() > 0) {
+            System.out.println("You have the following cards available:");
+            for (Cards l_c : d_ge.getCurrentPlayer().get_playerCards()) {
+                System.out.println(l_c);
+            }
+        }
+        System.out.println("Possible commands are: \n" +
+                "diplomacy targetplayer\n" +
+                "blockade targetID\n" +
+                "bomb targetID\n" +
+                "advance sourceID targetID armies\n" +
+                "airlift sourceID targetID armies\n");
     }
 
     public void deploy() {
