@@ -5,6 +5,7 @@ import java.util.Collection;
 import Models.Country;
 import Models.Player;
 import Models.WarMap;
+import logging.LogEntryBuffer;
 
 /**
  * This class is used to implement the data and logic of how to execute bomb order given by a player.
@@ -66,5 +67,11 @@ public class BombOrder implements Order{
         }
         System.out.println("\n_");
         System.out.println("Country Bombed Successfully");
+        LogEntryBuffer.getInstance().writeLog(this.toString() + " executed successfully.");
     }
+    
+	@Override
+	public String toString() {
+		return "Bomb Order countryID=" + d_destCountryID ;
+	}
 }

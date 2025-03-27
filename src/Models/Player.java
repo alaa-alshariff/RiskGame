@@ -15,6 +15,7 @@ import static Controller.GameEngine.SCANNER;
 /**
  * This class describes information about each player and the order that were issued using the logic
  * present in the same class.
+ *
  */
 public class Player {
 
@@ -229,6 +230,7 @@ public class Player {
                 d_diplomacy_list.add(l_targetPlayerName);
 
                 System.out.println("Diplomacy order executed successfully.");
+                d_logentrybuffer.writeLog(d_playerName + " issued negotiate order on " + l_targetPlayerName);
             }
         } else {
             System.out.println("Player do not have Diplomacy card");
@@ -268,6 +270,7 @@ public class Player {
                 d_playerOrders.add(l_order);
                 d_playerCards.remove(Cards.Blockade);
                 System.out.println("Blockade order executed successfully.");
+                d_logentrybuffer.writeLog(d_playerName + " issued blockade order with countryId " + l_destCountryID);
             }
         } else {
             System.out.println("Player do not have Blockade card");
@@ -312,6 +315,7 @@ public class Player {
         d_playerOrders.add(l_order);
         d_playerCards.remove(Cards.Bomb);
         System.out.println("Bomb order issued successfully.");
+        d_logentrybuffer.writeLog(d_playerName + " issued bomb order on countryId " + l_destCountryID);
     }
 
     /**
@@ -374,6 +378,8 @@ public class Player {
         // Create an AdvanceOrder and add it to the player's list of orders.
         AdvanceOrder l_advanceOrder = new AdvanceOrder(this, l_sourceCountry, l_targetCountry, l_numArmies);
         d_playerOrders.add(l_advanceOrder);
+        d_logentrybuffer.writeLog(d_playerName + " issued advance country order from " + l_sourceCountry + " to " + l_targetCountry
+                + " with " + l_numArmies + " armies");
     }
 
     /**
@@ -438,6 +444,8 @@ public class Player {
         AirliftOrder l_airliftOrder = new AirliftOrder(this, l_sourceCountry, l_targetCountry, l_numArmies);
         d_playerOrders.add(l_airliftOrder);
         d_playerCards.remove(Cards.Airlift);
+        d_logentrybuffer.writeLog(d_playerName + " issued Airlift order with sourcecountryID " + l_sourceCountryID + ", targetcountryID, " +
+                l_targetCountry + " with " + l_numArmies + " armies");
     }
 
     /**
@@ -484,7 +492,7 @@ public class Player {
         d_playerOrders.add(l_deployOrder);
         this.set_numOfReinforcements(GameEngine.getInstance().getCurrentPlayer().get_numOfReinforcements() - l_numOfArmies);
         System.out.println("Deploy order issued successfully.");
-        d_logentrybuffer.writeLog("Deployed country with ID " + l_countryID + " with " + l_numOfArmies + " armies");
+        d_logentrybuffer.writeLog(d_playerName + " issued Deploy order country with ID " + l_countryID + " with " + l_numOfArmies + " armies");
     }
 
 

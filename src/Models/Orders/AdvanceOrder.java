@@ -4,6 +4,7 @@ import Models.Country;
 import Models.Player;
 import Models.WarMap;
 import Resources.Cards;
+import logging.LogEntryBuffer;
 
 /**
  * This class represents an Advance Order in the game.
@@ -83,6 +84,7 @@ public class AdvanceOrder implements Order {
                     d_targetCountry.set_numOfArmies(d_targetCountry.get_numOfArmies() - d_numArmies);
                 }
             }
+            LogEntryBuffer.getInstance().writeLog(this.toString() + " executed successfully.");
         }
     }
 

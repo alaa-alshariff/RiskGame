@@ -4,6 +4,7 @@ import java.util.Collection;
 import Models.Country;
 import Models.Player;
 import Models.WarMap;
+import logging.LogEntryBuffer;
 
 public class BlockadeOrder implements Order{
     /**
@@ -49,6 +50,11 @@ public class BlockadeOrder implements Order{
                 break;
             }
         }
-
+        LogEntryBuffer.getInstance().writeLog(this.toString() + " executed successfully.");
     }
+    
+    @Override
+	public String toString() {
+		return "Blockade Order countryId=" + d_destCountryID;
+	}
 }

@@ -15,6 +15,8 @@ public class OrderExecution extends Play {
      */
     public OrderExecution(GameEngine p_ge) {
         super(p_ge);
+        d_logentrybuffer.writeLog("Order Execution Phase");
+
     }
 
     /**
@@ -24,6 +26,7 @@ public class OrderExecution extends Play {
     public void displayOptions() {
         //Deploy Orders
         for (Player player : d_ge.get_PlayersList()) {
+            d_logentrybuffer.writeLog(player.get_playerName() + " deploy orders executing");
             ArrayList<Order> l_ordersToReadd = new ArrayList<>();
             while (true) {
                 Order order = player.next_order();
@@ -41,6 +44,7 @@ public class OrderExecution extends Play {
         }
         //Advance orders
         for (Player player : d_ge.get_PlayersList()) {
+            d_logentrybuffer.writeLog(player.get_playerName() + " advance order executing");
             ArrayList<Order> l_ordersToReadd = new ArrayList<>();
             while (true) {
                 Order order = player.next_order();
@@ -58,6 +62,7 @@ public class OrderExecution extends Play {
         }
         //Other orders
         for (Player player : d_ge.get_PlayersList()) {
+            d_logentrybuffer.writeLog(player.get_playerName() + " misc order executing");
             ArrayList<Order> l_ordersToReadd = new ArrayList<>();
             while (true) {
                 Order order = player.next_order();
@@ -72,6 +77,8 @@ public class OrderExecution extends Play {
         System.out.println("\n_");
         System.out.println("All commands executed successfully..... ");
         System.out.println("_");
+
+        d_logentrybuffer.writeLog("All orders executed successfully");
         ArrayList<Player> l_playersToRemove = new ArrayList<>();
         for (Player player : d_ge.get_PlayersList()) {
             if (player.get_playerCountries().size() == 0) {
@@ -80,13 +87,16 @@ public class OrderExecution extends Play {
         }
         for (Player player : l_playersToRemove) {
             System.out.println(player.get_playerName() + " is out of countries and has been removed from the game");
+            d_logentrybuffer.writeLog(player.get_playerName() + " has been removed from the game");
             d_ge.get_PlayersList().remove(player);
         }
         if (d_ge.get_PlayersList().size() == 1) {
             System.out.println(d_ge.get_PlayersList().get(0).get_playerName() + " is the only player left and has won the game.");
+            d_logentrybuffer.writeLog(d_ge.get_PlayersList().get(0).get_playerName() + " is the only player left and has won the game");
             d_ge.setPhase(new MainMenu(d_ge));
             return;
         }
+        d_logentrybuffer.writeLog("All orders executed successfully");
         this.next();
     }
 
@@ -144,10 +154,12 @@ public class OrderExecution extends Play {
     @Override
     public void next() {
         Cards.assignRandomCardsToPlayers();
+        d_logentrybuffer.writeLog("ASSIGNREINFORCEMENTS PHASE");
         System.out.println("Assigning Reinforcements....");
         System.out.println("_");
         for (Player player : d_ge.get_PlayersList()) {
             player.set_numOfReinforcements(d_ge.getNumOfReinforcements(player));
+            d_logentrybuffer.writeLog("assigned " + player.get_playerName() + " " + player.get_numOfReinforcements() + " no of reinforcement armies.");
             System.out.println("Assigned " + player.get_numOfReinforcements() + " reinforcements to player: " + player.get_playerName());
         }
         System.out.println("\n_");
@@ -158,6 +170,7 @@ public class OrderExecution extends Play {
         d_ge.get_FinishedPlayers().clear();
         d_ge.setCurrentPlayer(d_ge.get_PlayersList().get(0));
         d_ge.setPhase(new AssignReinforcements(d_ge));
+        d_logentrybuffer.writeLog("ISSUE ORDERS PHASE");
         Cards.clearPlayerAcquiredTerritory();
 
 
