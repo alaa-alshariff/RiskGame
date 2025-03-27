@@ -35,7 +35,7 @@ public class Country {
     /**
      * This is the default constructor method of the Models.Country class
      */
-    public Country(int i, String destCountry) {
+    public Country() {
         this(0, "Default Name", 0, new HashMap<Integer, Country>());
     }
 
@@ -173,6 +173,7 @@ public class Country {
 
     /**
      * Sets a player as the owner of the country
+     *
      * @param d_ownerPlayer The new owner of the country
      */
     public void setD_ownerPlayer(Player d_ownerPlayer) {

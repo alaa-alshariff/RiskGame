@@ -1,17 +1,23 @@
 package Models.Orders;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.TestInstance;
 
+import Controller.GameEngine;
 import Models.Country;
 import Models.Player;
 import Models.WarMap;
+import Resources.Cards;
 
 /**
  * Tests cases for blockade orders, it ensures
@@ -30,7 +36,10 @@ public class BlockadeOrderTest {
      * List of countries in the map
      */
     private Map<Integer, Country> countries;
-
+    /**
+     * Initializing the player instance before each test.
+     */
+    private GameEngine gameEngine;
     /**
      * Sets up the test environment before each test case.
      * It initializes the WarMap, player with playername and hashmap of countries
@@ -40,7 +49,10 @@ public class BlockadeOrderTest {
         warMap = new WarMap();
         player = new Player("Player1");
         countries = new HashMap<>();// Assuming you have a no-argument constructor in your Player class
+        gameEngine = GameEngine.getInstance();
+
     }
+
 
     /**
      * Tests number of armies the execution of orders by blockade
@@ -100,19 +112,19 @@ public class BlockadeOrderTest {
         BlockadeOrder blockadeOrder1 = new BlockadeOrder(1, player);
         blockadeOrder1.execute(warMap);
 
-        assertNull(destCountry1.getD_ownerPlayer());
+        assertTrue(destCountry1.getD_ownerPlayer().get_playerName().equals("Neutral"));
         assertEquals(2, player.get_playerCountries().size());
 
         BlockadeOrder blockadeOrder2 = new BlockadeOrder(2, player);
         blockadeOrder2.execute(warMap);
 
-        assertNull(destCountry2.getD_ownerPlayer());
+        assertTrue(destCountry2.getD_ownerPlayer().get_playerName().equals("Neutral"));
         assertEquals(1, player.get_playerCountries().size());
 
         BlockadeOrder blockadeOrder3 = new BlockadeOrder(3, player);
         blockadeOrder3.execute(warMap);
 
-        assertNull(destCountry3.getD_ownerPlayer());
+        assertTrue(destCountry3.getD_ownerPlayer().get_playerName().equals("Neutral"));
         assertEquals(0, player.get_playerCountries().size());
     }
 
@@ -135,6 +147,110 @@ public class BlockadeOrderTest {
         assertEquals(0, player.get_playerCountries().size());
 
         assertNull(warMap.get_countries().get(2));
+    }
+
+    @Test
+    public void testBlockadeCommandExecution() {
+        // Create a test scenario where the player has a Blockade card and valid input.
+        List<Cards> cards = new ArrayList<>();
+        cards.add(Cards.Blockade);
+        player.set_playerCards(cards);
+        WarMap map = new WarMap();
+        map.addCountry(new Country(1, "CountryA", 1));
+        map.addCountry(new Country(2, "CountryB", 1));
+        map.addCountry(new Country(3, "CountryC", 1));
+
+        List<Country> playerCountries = new ArrayList<>();
+        playerCountries.add(new Country(1, "CountryA", 1));
+        player.set_playerCountries(playerCountries);
+
+
+        // Simulate a valid command by setting the current input in GameEngine.
+        GameEngine.getInstance().setCurrentInput("blockade 1");
+
+        // Call the method you want to test.
+        player.issue_order();
+
+        // Assert the expected outcome.
+        assertEquals(0, player.get_playerCards().size());
+        assertEquals(1, player.get_playerOrder().size()); // The order should be issued successfully.
+    }
+
+    /**
+     * Checks if the orders are taken correctly with valid Input
+     */
+    @Test
+    public void testBlockadeIssueOrderValidInput() {
+        Country country1 = new Country(1, "Country1", 1);
+        player.get_playerCountries().add(country1);
+        player.get_playerCards().add(Cards.Blockade);
+
+        Country country2 = new Country(2, "Country2", 1);
+        player.get_playerCountries().add(country2);
+        player.get_playerCards().add(Cards.Blockade);
+        gameEngine.setCurrentInput("blockade 1");
+        player.issue_order();
+
+        assertEquals(1, player.get_playerOrder().size());
+        assertTrue(player.get_playerOrder().get(0) != null);
+        assertEquals(1, player.get_playerCards().size());
+        gameEngine.setCurrentInput("blockade 2");
+        player.issue_order();
+
+        assertEquals(2, player.get_playerOrder().size());
+        assertTrue(player.get_playerOrder().get(1) != null);
+        assertFalse(player.get_playerCards().contains(Cards.Blockade));
+        assertEquals(0, player.get_playerCards().size());
+    }
+
+    /**
+     * Checks if no orders are added to orderlist and
+     * Card is not removed with Invalid input
+     */
+    @Test
+    public void testBlockadeIssueOrderInvalidCountry() {
+        // Prepare player's countries and cards
+        player.get_playerCards().add(Cards.Blockade);
+
+        gameEngine.setCurrentInput("blockade 2");
+        player.issue_order();
+
+        assertEquals(0, player.get_playerOrder().size());
+        assertTrue(player.get_playerCards().contains(Cards.Blockade));
+        assertEquals(1, player.get_playerCards().size());
+
+        player.get_playerCards().add(Cards.Blockade);
+        gameEngine.setCurrentInput("blockade 3");
+        player.issue_order();
+
+        assertEquals(0, player.get_playerOrder().size());
+        assertTrue(player.get_playerCards().contains(Cards.Blockade));
+        assertEquals(2, player.get_playerCards().size());
+    }
+
+    /**
+     * Checks if no orders are added to list
+     * if there is no blockade card in the player card list
+     */
+    @Test
+    public void testBlockadeIssueOrderNoBlockadeCard() {
+        Country country1 = new Country(1, "Country1", 1);
+        player.get_playerCountries().add(country1);
+
+        Country country2 = new Country(2, "Country2", 1);
+        player.get_playerCountries().add(country2);
+
+        gameEngine.setCurrentInput("blockade 1");
+        player.issue_order();
+
+        assertEquals(0, player.get_playerOrder().size());
+        assertFalse(player.get_playerCards().contains(Cards.Blockade));
+
+        gameEngine.setCurrentInput("blockade 2");
+        player.issue_order();
+
+        assertEquals(0, player.get_playerOrder().size());
+        assertFalse(player.get_playerCards().contains(Cards.Blockade));
     }
 
 }

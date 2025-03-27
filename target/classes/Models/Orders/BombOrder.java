@@ -11,25 +11,27 @@ import logging.LogEntryBuffer;
  * This class is used to implement the data and logic of how to execute bomb order given by a player.
  *
  */
-public class BombOrder implements Order{
+public class BombOrder implements Order {
     /**
      * The player for the order
      */
-    private Player d_player;
+    private final Player d_player;
     /**
      * The destination countryID for this instance of order.
      */
     private int d_destCountryID;
+
     /**
      * This is a fully parametrized constructor for the Models.Orders class.
      *
      * @param p_destcountryID ID of the country on which to deploy the specified number of armies.
-     * @param p_player
+     * @param p_player The player giving the bomb order
      */
     public BombOrder(int p_destcountryID, Player p_player) {
         this.d_destCountryID = p_destcountryID;
         this.d_player = p_player;
-     }
+    }
+
     /**
      * @return the country ID to be used in the order
      */
@@ -43,6 +45,7 @@ public class BombOrder implements Order{
     public void setDestCountryID(int p_newCountry) {
         this.d_destCountryID = p_newCountry;
     }
+
     /**
      * Execution of the logic of bombing to the specified Models.Country.
      *
@@ -67,11 +70,11 @@ public class BombOrder implements Order{
         }
         System.out.println("\n_");
         System.out.println("Country Bombed Successfully");
-        LogEntryBuffer.getInstance().writeLog(this.toString() + " executed successfully.");
+        LogEntryBuffer.getInstance().writeLog(this + " executed successfully.");
     }
-    
-	@Override
-	public String toString() {
-		return "Bomb Order countryID=" + d_destCountryID ;
-	}
+
+    @Override
+    public String toString() {
+        return "Bomb Order countryID=" + d_destCountryID;
+    }
 }

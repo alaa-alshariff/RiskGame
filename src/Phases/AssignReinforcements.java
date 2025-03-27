@@ -1,11 +1,15 @@
 package Phases;
 
-import java.io.IOException;
-import static java.lang.System.exit;
-
 import Controller.GameEngine;
 import logging.LogWriter;
 
+import java.io.IOException;
+
+import static java.lang.System.exit;
+
+/**
+ * Phase for making deplay orders
+ */
 public class AssignReinforcements extends OrderPhase {
     /**
      * Constructor for AssignReinforcements phase
@@ -65,17 +69,19 @@ public class AssignReinforcements extends OrderPhase {
             System.out.println("Exiting program");
             try {
                 LogWriter.getInstance().d_info.close();
-    	        exit(0);
-    		} catch (IOException e) {
-    	        System.out.println("I/O exception closing BufferedWriter");
-    	    }
+                exit(0);
+            } catch (IOException e) {
+                System.out.println("I/O exception closing BufferedWriter");
+            }
         }
         if (d_ge.getCurrentPlayer().equals(d_ge.get_PlayersList().get(d_ge.get_PlayersList().size() - 1))) {
             d_ge.nextPlayer();
             d_ge.setPhase(new IssueOrders(d_ge));
-        } else {
+        } else if (!d_ge.getCurrentInput().toLowerCase().contains("execute")) {
             d_ge.nextPlayer();
 
+        } else {
+            System.out.println("You cannot finish giving deploy commands until all reinforcements are deployed");
         }
     }
 }

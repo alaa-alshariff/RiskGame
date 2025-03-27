@@ -1,4 +1,5 @@
 package Models.Orders;
+
 import java.util.Collection;
 
 import Models.Country;
@@ -6,26 +7,26 @@ import Models.Player;
 import Models.WarMap;
 import logging.LogEntryBuffer;
 
-public class BlockadeOrder implements Order{
+public class BlockadeOrder implements Order {
     /**
      * The destination countryID for this instance of order.
      */
-    private int d_destCountryID;
+    private final int d_destCountryID;
+    /**
+     * The player of the order
+     */
+    private final Player d_player;
+
     /**
      * This is a fully parametrized constructor for the Models.Orders class.
      *
      * @param p_destcountryID ID of the country on which to deploy the specified number of armies.
-     * @param p_player
+     * @param p_player The player giving the blockade order
      */
     public BlockadeOrder(int p_destcountryID, Player p_player) {
         this.d_destCountryID = p_destcountryID;
         this.d_player = p_player;
     }
-
-    /**
-     * The player of the order
-     */
-    private Player d_player;
 
     /**
      * This method is does execution for blockade orders.
@@ -40,7 +41,7 @@ public class BlockadeOrder implements Order{
         for (Country l_country : l_countryInfo) {
             if (l_country.get_countryID() == d_destCountryID) {
                 l_country.set_numOfArmies(l_country.get_numOfArmies() * 3);
-                l_country.setD_ownerPlayer(null);
+                l_country.setD_ownerPlayer(new Player("Neutral"));
                 break;
             }
         }
@@ -50,11 +51,11 @@ public class BlockadeOrder implements Order{
                 break;
             }
         }
-        LogEntryBuffer.getInstance().writeLog(this.toString() + " executed successfully.");
+        LogEntryBuffer.getInstance().writeLog(this + " executed successfully.");
     }
-    
+
     @Override
-	public String toString() {
-		return "Blockade Order countryId=" + d_destCountryID;
-	}
+    public String toString() {
+        return "Blockade Order countryId=" + d_destCountryID;
+    }
 }

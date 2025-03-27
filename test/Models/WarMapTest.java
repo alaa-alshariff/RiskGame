@@ -14,7 +14,6 @@ import Controller.MapEditor;
  * Tests for validation of the WarMap
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-
 public class WarMapTest {
     /**
      * WarMap used in the test
@@ -24,7 +23,7 @@ public class WarMapTest {
     /**
      * Makes the WarMap object a new WarMap before every test
      *
-     * @throws Exception
+     * @throws Exception Exception if IO error occurs
      */
     @Before
     public void setUp() throws Exception {

@@ -6,6 +6,9 @@ import Controller.GameEngine;
 import Controller.MapEditor;
 import Models.WarMap;
 
+/**
+ * Map editing phase for after a map has been loaded
+ */
 public class Preload extends Edit {
     /**
      * The Constructor of the preload phase
@@ -27,7 +30,8 @@ public class Preload extends Edit {
 
     /**
      * The load map function of the preload phase
-     * @throws IOException
+     *
+     * @throws IOException Exception if IO error occurs
      */
     @Override
     public void loadMap() throws IOException {
@@ -96,7 +100,7 @@ public class Preload extends Edit {
      */
     @Override
     public void next() {
-        if (d_ge.getCurrentInput().toLowerCase().equals("quit")) {
+        if (d_ge.getCurrentInput().equalsIgnoreCase("quit")) {
             d_ge.setPhase(new MainMenu(d_ge));
         } else {
             d_ge.setPhase(new Postload(d_ge));

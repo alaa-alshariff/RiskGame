@@ -1,15 +1,19 @@
 package Phases;
 
-import java.io.IOException;
-import static java.lang.System.exit;
-import java.util.ArrayList;
-
 import Controller.GameEngine;
 import Controller.MapEditor;
 import Models.WarMap;
 import Resources.Commands;
 import logging.LogWriter;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
+import static java.lang.System.exit;
+
+/**
+ * Phase for the main menu
+ */
 public class MainMenu extends Phase {
     /**
      * Constructor for the MainMenu phase
@@ -33,7 +37,7 @@ public class MainMenu extends Phase {
         System.out.print("Possible commands are: \n");
         System.out.print("- editmap\n");
         System.out.print("- loadmap [filename]\n");
-        System.out.print("- showmap all\n");
+        System.out.print("- showmapall\n");
         System.out.print("- quit\n");
         d_ge.get_PlayersList().clear();
         d_ge.set_currentMap(new WarMap());
@@ -41,7 +45,8 @@ public class MainMenu extends Phase {
 
     /**
      * Load Map for the Main Menu Phase
-     * @throws IOException
+     *
+     * @throws IOException Exception if IO error occurs
      */
     @Override
     public void loadMap() throws IOException {
@@ -62,7 +67,7 @@ public class MainMenu extends Phase {
                     return;
                 }
                 System.out.print(l_words[1] + " loaded successfully!\n");
-                d_logentrybuffer.writeLog(l_words[1]+" loaded successfully.");
+                d_logentrybuffer.writeLog(l_words[1] + " loaded successfully.");
                 this.next();
             } else {
                 System.out.print("\nUnable to find " + l_words[1] + " in our maps directory. Enter the correct spelling or select some other map!\n");
@@ -164,7 +169,8 @@ public class MainMenu extends Phase {
 
     /**
      * The next function for the main menu phase
-     * @throws IOException
+     *
+     * @throws IOException Exception if IO error occurs
      */
     @Override
     public void next() throws IOException {
@@ -180,10 +186,10 @@ public class MainMenu extends Phase {
             System.out.println("Exiting program");
             try {
                 LogWriter.getInstance().d_info.close();
-    	        exit(0);
-    	    } catch (IOException e) {
-    	        System.out.println("I/O exception closing BufferedWriter");
-    	    }
+                exit(0);
+            } catch (IOException e) {
+                System.out.println("I/O exception closing BufferedWriter");
+            }
         }
     }
 

@@ -7,6 +7,9 @@ import Models.Orders.Order;
 import Models.Player;
 import Resources.Cards;
 
+/**
+ * Phase for executing orders
+ */
 public class OrderExecution extends Play {
     /**
      * The constructor for the Order Execution phase
@@ -73,7 +76,6 @@ public class OrderExecution extends Play {
         }
 
 
-
         System.out.println("\n_");
         System.out.println("All commands executed successfully..... ");
         System.out.println("_");
@@ -96,7 +98,7 @@ public class OrderExecution extends Play {
             d_ge.setPhase(new MainMenu(d_ge));
             return;
         }
-        d_logentrybuffer.writeLog("All orders executed successfully");
+
         this.next();
     }
 

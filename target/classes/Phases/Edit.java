@@ -2,6 +2,9 @@ package Phases;
 
 import Controller.GameEngine;
 
+/**
+ * Abstract class to be inherited by phases in the map editor
+ */
 public abstract class Edit extends Phase {
     /**
      * Constructor for Edit Phase
@@ -37,7 +40,8 @@ public abstract class Edit extends Phase {
     /**
      * Prints invalid state message
      */
-    public void issueOrder() {printInvalidCommandMessage();
+    public void issueOrder() {
+        printInvalidCommandMessage();
     }
 
     /**

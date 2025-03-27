@@ -2,6 +2,9 @@ package Phases;
 
 import Controller.GameEngine;
 
+/**
+ * Phase class to be inherited by all phases involved in playing the game
+ */
 public abstract class Play extends Phase {
     /**
      * Constructor of the Play phase
@@ -64,5 +67,7 @@ public abstract class Play extends Phase {
     /**
      * Prints invalid state message
      */
-    public void issueOrder() {printInvalidCommandMessage();}
+    public void issueOrder() {
+        printInvalidCommandMessage();
+    }
 }

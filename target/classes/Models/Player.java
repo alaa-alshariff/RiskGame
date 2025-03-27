@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static Controller.GameEngine.SCANNER;
-
 /**
  * This class describes information about each player and the order that were issued using the logic
  * present in the same class.
@@ -39,6 +37,7 @@ public class Player {
      * List of Cards the player holds.
      */
     List<Cards> d_playerCards;
+    LogEntryBuffer d_logentrybuffer = LogEntryBuffer.getInstance();
     /**
      * The name of the player taken by the user.
      */
@@ -47,7 +46,7 @@ public class Player {
      * List of players to be negotiated with.
      */
     private List<String> d_diplomacy_list;
-    LogEntryBuffer d_logentrybuffer = LogEntryBuffer.getInstance();
+
     /**
      * This is the constructor method of the Models.Player class
      *
@@ -99,6 +98,13 @@ public class Player {
     }
 
     /**
+     * @param p_playerContinents a list of the player's continents
+     */
+    public void set_playerContinents(List<Continent> p_playerContinents) {
+        this.d_playerContinents = p_playerContinents;
+    }
+
+    /**
      * @return a list of the players to be negotiated with.
      */
     public List<String> get_diplomacy_list() {
@@ -113,13 +119,6 @@ public class Player {
     }
 
     /**
-     * @param p_playerCards a list of the player's cards
-     */
-    public void set_playerCards(List<Cards> p_playerCards) {
-        this.d_playerCards = p_playerCards;
-    }
-
-    /**
      * @return a list of the player's cards
      */
     public List<Cards> get_playerCards() {
@@ -127,10 +126,10 @@ public class Player {
     }
 
     /**
-     * @param p_playerContinents a list of the player's continents
+     * @param p_playerCards a list of the player's cards
      */
-    public void set_playerContinents(List<Continent> p_playerContinents) {
-        this.d_playerContinents = p_playerContinents;
+    public void set_playerCards(List<Cards> p_playerCards) {
+        this.d_playerCards = p_playerCards;
     }
 
     /**
@@ -198,9 +197,10 @@ public class Player {
     /**
      * This method is called for diplomacy orders, checks if the target player name exists.
      * If true, add the player name to diplomacy list, which will be checked before other order execution.
+     *
      * @param p_commandTokens The order command input
-     * @param p_map The WarMap
-     * @param p_list The PlayerList
+     * @param p_map           The WarMap
+     * @param p_list          The PlayerList
      */
     private void diplomacy_issue_order(String[] p_commandTokens, WarMap p_map, List<Player> p_list) {
         boolean l_hasDiplomacyCard = false;
@@ -225,8 +225,8 @@ public class Player {
                 }
             if (!l_targetPlayerNameExists) {
                 System.out.println("The given Player name doesn't exists.");
-            }
-            else {
+
+            } else {
                 d_diplomacy_list.add(l_targetPlayerName);
 
                 System.out.println("Diplomacy order executed successfully.");
@@ -241,8 +241,9 @@ public class Player {
     /**
      * This method is called for blockade orders, check if the destination country exists
      * If true create a new order and executses in blockadeOrder and finally removes the blockade card from player cards.
+     *
      * @param p_commandTokens The order command input
-     * @param p_map The WarMap
+     * @param p_map           The WarMap
      */
     void blockade_issue_order(String[] p_commandTokens, WarMap p_map) {
         boolean l_hasBlockadeCard = false;
@@ -264,8 +265,7 @@ public class Player {
                 }
             if (!l_destCountryIDExists) {
                 System.out.println("The given CountryID is not under your control.");
-            }
-            else {
+            } else {
                 BlockadeOrder l_order = new BlockadeOrder(l_destCountryID, this);
                 d_playerOrders.add(l_order);
                 d_playerCards.remove(Cards.Blockade);
@@ -282,10 +282,10 @@ public class Player {
      * The method which creates a bomb order command.
      *
      * @param p_commandTokens input command.
-     * @param p_map current map.
+     * @param p_map           current map.
      */
     private void bomb_issue_order(String[] p_commandTokens, WarMap p_map) {
-        boolean l_hasBombCard = d_playerCards.remove(Cards.Bomb);
+        boolean l_hasBombCard = d_playerCards.contains(Cards.Bomb);
         if (!l_hasBombCard) {
             System.out.println("Player does not have Bomb card");
             return;
@@ -451,6 +451,7 @@ public class Player {
     /**
      * This method is called for deploy orders, check if deploy order is possible
      * If possible it adds the order to the players order list.
+     *
      * @param p_commandTokens The order command input
      */
     private void deploy_issue_order(String[] p_commandTokens) {
@@ -498,7 +499,7 @@ public class Player {
 
     /**
      * This method is called by the GameEngine during executing order phase and
-     * returns the first order in the player’s list of orders, then removes it from the list.
+     * @return the first order in the player’s list of orders, then removes it from the list.
      */
     public Order next_order() {
         if (d_playerOrders.isEmpty()) {
