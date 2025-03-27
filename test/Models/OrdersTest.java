@@ -1,8 +1,8 @@
 package Models;
 
+import org.junit.Before;
+import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import Models.Orders.DeployOrder;
@@ -25,7 +25,7 @@ public class OrdersTest {
      * Sets up the test environment before each test case.
      * It initializes the WarMap and Country objects.
      */
-    @BeforeEach
+    @Before
     public void setUp() {
         warmap = new WarMap();
         country = new Country(1, "DestCountry");

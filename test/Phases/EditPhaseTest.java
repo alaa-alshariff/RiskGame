@@ -1,18 +1,18 @@
 package Phases;
 
-import Controller.GameEngine;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 
+import org.junit.Before;
+import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import Controller.GameEngine;
 
 public class EditPhaseTest {
 
     private GameEngine gameEngine;
 
-    @BeforeEach
+    @Before
     public void setUp() {
         gameEngine = GameEngine.getInstance();
         gameEngine.setPhase(new MainMenu(gameEngine));

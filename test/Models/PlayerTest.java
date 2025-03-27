@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.Before;
+import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import Controller.GameEngine;
@@ -39,7 +39,7 @@ public class PlayerTest {
      */
     private WarMap warMap;
 
-    @BeforeEach
+    @Before
     public void setUp() {
         gameEngine = GameEngine.getInstance();
         player = new Player("John Doe");

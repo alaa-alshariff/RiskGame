@@ -1,16 +1,16 @@
 package Controller;
 
 
+import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import Models.Country;
 import Models.Player;
 import Models.WarMap;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Unit tests for the GameEngine class.
@@ -24,7 +24,7 @@ public class GameEngineTest {
     /**
      * Sets up a new GameEngine instance before each test.
      */
-    @BeforeEach
+    @Before
     public void setUp() {
         gameEngine = GameEngine.getInstance();
         gameEngine.get_PlayersList().clear();
