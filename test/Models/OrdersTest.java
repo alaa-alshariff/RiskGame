@@ -1,11 +1,11 @@
 package Models;
 
-import Models.Orders.DeployOrder;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import Models.Orders.DeployOrder;
 
 /**
  * Tests cases for executing orders, it ensures that the Orders class functions correctly according to the specified test cases.

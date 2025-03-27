@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 /**
  * This class describes information about each country, including the contained armies and neighbouring countries.
+ *
  */
 public class Country {
     /**
