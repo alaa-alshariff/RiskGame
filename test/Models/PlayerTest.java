@@ -7,11 +7,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import Controller.GameEngine;
+import Models.Orders.AirliftOrder;
+import Models.Orders.BombOrder;
 import Models.Orders.DeployOrder;
 import Models.Orders.Order;
 import Phases.AssignReinforcements;
@@ -212,6 +215,48 @@ public class PlayerTest {
 
 
     @Test
+    public void testBombCommandExecution() {
+        // Create a test scenario where the player has the Bomb card, and the input is valid.
+        player.set_playerCards(List.of(Cards.Bomb));
+        WarMap map = new WarMap();
+        Country countryA = new Country(1, "CountryA", 1);
+        Country countryB = new Country(2, "CountryB", 1);
+        map.addCountry(countryA);
+        map.addCountry(countryB);
+
+        player.set_playerCountries(Arrays.asList(countryA, countryB));
+
+        // Simulate a valid command by setting the current input in GameEngine.
+        GameEngine.getInstance().setCurrentInput("bomb 2");
+
+        // Call the method you want to test.
+        player.issue_order();
+
+        // Assert that a BombOrder was created and added to the list of orders.
+        assertEquals(1, player.get_playerOrder().size());
+        assertTrue(player.get_playerOrder().get(0) instanceof BombOrder);
+
+        // Ensure that the Bomb card is removed from the player's cards.
+        assertFalse(player.get_playerCards().contains(Cards.Bomb));
+    }
+
+    @Test
+    public void testBombCommandExecutionWithInvalidCountry() {
+        // Create a test scenario where the player has the Bomb card, but the target country is invalid.
+        player.set_playerCards(List.of(Cards.Bomb));
+        WarMap map = new WarMap();
+
+        // Simulate an invalid target country by setting the current input in GameEngine.
+        GameEngine.getInstance().setCurrentInput("bomb 2");
+
+        // Call the method you want to test.
+        player.issue_order();
+
+        // Assert that no BombOrder was created and added to the list of orders.
+        assertEquals(0, player.get_playerOrder().size());
+    }
+
+    @Test
     public void testBombCommandExecutionWithoutBombCard() {
         // Create a test scenario where the player does not have the Bomb card.
         WarMap map = new WarMap();
@@ -229,5 +274,110 @@ public class PlayerTest {
         // Assert that no BombOrder was created and added to the list of orders.
         assertEquals(0, player.get_playerOrder().size());
     }
+
+    @Test
+    public void testDiplomacyCommandExecution() {
+        // Create a test scenario where the player has the Diplomacy card, and the input is valid.
+        player.set_playerCards(List.of(Cards.Diplomacy));
+        WarMap map = new WarMap();
+        map.addCountry(new Country(1, "CountryA", 1));
+        map.addCountry(new Country(2, "CountryB", 1));
+        player.set_playerCountries(Arrays.asList(new Country(1, "CountryA", 1)
+                , new Country(2, "CountryB", 1)));
+
+        // Create another player in the game.
+        Player otherPlayer = new Player("Player2");
+
+        // Attach the players to the GameEngine.
+        GameEngine.getInstance().set_PlayersList(List.of(otherPlayer));
+
+        // Simulate a valid diplomacy command by setting the current input in GameEngine.
+        GameEngine.getInstance().setCurrentInput("diplomacy Player2");
+
+        // Call the method you want to test.
+        player.issue_order();
+
+        // Assert that the target player name is added to the diplomacy list.
+        assertTrue(player.get_diplomacy_list().contains("Player2"));
+
+    }
+
+    @Test
+    public void testDiplomacyCommandExecutionWithoutDiplomacyCard() {
+        // Create a test scenario where the player does not have the Diplomacy card.
+        WarMap map = new WarMap();
+        map.addCountry(new Country(1, "CountryA"));
+        player.set_playerCountries(List.of(new Country(1, "CountryA", 1)));
+
+        // Create another player in the game.
+        Player otherPlayer = new Player("Player2");
+
+        // Attach the players to the GameEngine.
+        GameEngine.getInstance().set_PlayersList(List.of(otherPlayer));
+
+        // Simulate a valid diplomacy command by setting the current input in GameEngine.
+        GameEngine.getInstance().setCurrentInput("diplomacy Player2");
+
+        // Call the method you want to test.
+        player.issue_order();
+
+        // Assert that no DiplomacyOrder was created and added to the list of orders.
+        assertEquals(0, player.get_playerOrder().size());
+
+        // Assert that the target player name is not added to the diplomacy list.
+        assertFalse(player.get_diplomacy_list().contains("Player2"));
+    }
+
+    @Test
+    public void testDiplomacyCommandExecutionWithInvalidTargetPlayer() {
+        // Create a test scenario where the player has the Diplomacy card, but the target player does not exist.
+        Player player = new Player("Player1");
+        player.set_playerCards(List.of(Cards.Diplomacy));
+        WarMap map = new WarMap();
+        map.addCountry(new Country(1, "CountryA"));
+        player.set_playerCountries(List.of(new Country(1, "CountryA", 1)));
+
+        // Simulate an invalid target player by setting the current input in GameEngine.
+        GameEngine.getInstance().setCurrentInput("diplomacy Player2");
+
+        // Call the method you want to test.
+        player.issue_order();
+
+        // Assert that no DiplomacyOrder was created and added to the list of orders.
+        assertEquals(0, player.get_playerOrder().size());
+
+        // Assert that the target player name is not added to the diplomacy list.
+        assertFalse(player.get_diplomacy_list().contains("Player2"));
+    }
+
+
+    @Test
+    public void testAirliftCommandExecution() {
+        // Create a test scenario where the player has the Airlift card and valid input.
+        player.set_playerCards(List.of(Cards.Airlift));
+        WarMap map = new WarMap();
+
+        // Create source and target countries.
+        Country sourceCountry = new Country(1, "SourceCountry", 1);
+        Country targetCountry = new Country(2, "TargetCountry", 1);
+        player.set_playerCountries(Arrays.asList(sourceCountry, targetCountry));
+
+        // Attach the players to the GameEngine.
+        GameEngine.getInstance().set_PlayersList(List.of(player));
+
+        // Simulate a valid airlift command by setting the current input in GameEngine.
+        GameEngine.getInstance().setCurrentInput("airlift 1 2 3");
+
+        // Call the method you want to test.
+        player.issue_order();
+
+        // Assert that an AirliftOrder was created and added to the list of orders.
+        assertEquals(1, player.get_playerOrder().size());
+        assertTrue(player.get_playerOrder().get(0) instanceof AirliftOrder);
+
+        // Assert that the Airlift card is removed from the player's cards.
+        assertFalse(player.get_playerCards().contains(Cards.Airlift));
+    }
+
 
 }
