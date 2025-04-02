@@ -1,6 +1,11 @@
 package Models.BehaviourStrategies;
 
-public class RandomStrategy implements BehaviourStrategy {
+import Models.Player;
+
+public class RandomStrategy extends BehaviourStrategyBase {
+    public RandomStrategy(Player p_player){
+        super(p_player);
+    }
     @Override
     public void issue_order() {
 
