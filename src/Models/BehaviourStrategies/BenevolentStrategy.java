@@ -4,6 +4,7 @@ import Controller.GameEngine;
 import Models.Country;
 import Models.Player;
 import Models.WarMap;
+import Phases.AssignReinforcements;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,12 +16,12 @@ public class BenevolentStrategy extends BehaviourStrategyBase {
     }
     @Override
     public void issue_order() {
-        if (d_player.get_numOfReinforcements() > 0){
+        if (GameEngine.getInstance().getPhase() instanceof AssignReinforcements)
             createDeployOrderCommand(d_player.get_numOfReinforcements());
-        }
-        else {
+        else{
             createAdvanceOrderCommand();
         }
+
         //deploy order command - find weakest country and create deploy command
         //advance order command - move armies to weakest country
     }
@@ -47,8 +48,6 @@ public class BenevolentStrategy extends BehaviourStrategyBase {
     }
 
     public void  createAdvanceOrderCommand(){
-        GameEngine l_ge = GameEngine.getInstance();
-        WarMap l_map = l_ge.get_currentMap();
         int l_armiesToMove;
         int l_randomSourceCountryID;
         Country l_weakestTargetCountry = null;
@@ -85,7 +84,7 @@ public class BenevolentStrategy extends BehaviourStrategyBase {
 
         String l_command = String.format("advance %d %d %d", l_randomSourceCountryID, l_weakestTargetCountryID, l_armiesToMove);
         String[] commandTokens = l_command.split(" ");
-        advance_issue_order(commandTokens, l_map);
+        advance_issue_order(commandTokens);
 
 
     }
