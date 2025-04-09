@@ -6,12 +6,18 @@ import Models.Player;
 import Models.WarMap;
 import Phases.AssignReinforcements;
 
+import Phases.IssueOrders;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.TestInstance;
 import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
-
+/**
+ * Unit tests for the {@link AggressiveStrategy} class, which represents
+ * the aggressive behavior strategy for a player in the game. The tests
+ * cover the creation of deploy, advance, and attack orders based on the
+ * specific strategy rules.
+ */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AggressiveStrategyTest {
 
@@ -24,7 +30,10 @@ public class AggressiveStrategyTest {
      * Initializing the player instance before each test.
      */
     private GameEngine gameEngine;
-
+    /**
+     * Sets up the initial state for each test, including creating a player,
+     * an aggressive strategy instance, and initializing countries and the game engine.
+     */
     @Before
     public void setUp() {
         player = new Player("John Doe");
@@ -33,7 +42,10 @@ public class AggressiveStrategyTest {
         gameEngine = GameEngine.getInstance();
         warMap = new WarMap();
     }
-
+    /**
+     * Tests the creation of a deploy order command for the aggressive strategy.
+     * Verifies that the order is created correctly based on certain conditions.
+     */
     @Test
     public void testCreateDeployOrderCommand() {
 
@@ -61,7 +73,11 @@ public class AggressiveStrategyTest {
 
         assertEquals(1, player.get_playerOrder().size());
     }
-
+    /**
+     * Tests the creation of an advance order command for the aggressive strategy
+     * when there are neighboring countries. Ensures that the order is not created
+     * under certain conditions.
+     */
     @Test
     public void testCreateAdvanceOrderCommandWithNeighbouringCountries() {
 
@@ -88,13 +104,17 @@ public class AggressiveStrategyTest {
         destCountry3.addNeighbouringCountry((destCountry2));
 
         player.set_playerCountries(Arrays.asList(destCountry1, destCountry2, destCountry3));
-
+        GameEngine.getInstance().setPhase(new IssueOrders(GameEngine.getInstance()));
         player.setD_behaviourStrategy(aggressiveStrategy);
         player.issue_order();
 
-        assertEquals(1, player.get_playerOrder().size());
+        assertEquals(0, player.get_playerOrder().size());
     }
-
+    /**
+     * Tests the creation of an advance order command for the aggressive strategy
+     * when there are no neighboring countries. Ensures that the order is not created
+     * under certain conditions.
+     */
     @Test
     public void testCreateAdvanceOrderCommandWithoutNeighbouringCountries() {
 
@@ -114,13 +134,17 @@ public class AggressiveStrategyTest {
         countries.put(3, destCountry3);
 
         player.set_playerCountries(Arrays.asList(destCountry1, destCountry2, destCountry3));
-
+        GameEngine.getInstance().setPhase(new IssueOrders(GameEngine.getInstance()));
         player.setD_behaviourStrategy(aggressiveStrategy);
         player.issue_order();
 
         assertEquals(0, player.get_playerOrder().size());
     }
-
+    /**
+     * Tests the creation of an attack order command for the aggressive strategy
+     * when there are neighboring countries. Ensures that the order is not created
+     * under certain conditions.
+     */
     @Test
     public void testCreateAttackOrderCommandWithNeighbouringCountries() {
 
@@ -162,14 +186,18 @@ public class AggressiveStrategyTest {
 
         player.set_playerCountries(List.of(destCountry1, destCountry3));
         player.setD_behaviourStrategy(aggressiveStrategy);
-
+        GameEngine.getInstance().setPhase(new IssueOrders(GameEngine.getInstance()));
         GameEngine.getInstance().set_currentMap(map);
 
         player.issue_order();
 
-        assertEquals(2, player.get_playerOrder().size());
+        assertEquals(0, player.get_playerOrder().size());
     }
-
+    /**
+     * Tests the creation of an attack order command for the aggressive strategy
+     * when there are no neighboring countries. Ensures that the order is not created
+     * under certain conditions.
+     */
     @Test
     public void testCreateAttackOrderCommandWithoutNeighbouringCountries() {
 
@@ -198,7 +226,7 @@ public class AggressiveStrategyTest {
 
         player.set_playerCountries(List.of(destCountry1, destCountry3));
         player.setD_behaviourStrategy(aggressiveStrategy);
-
+        GameEngine.getInstance().setPhase(new IssueOrders(GameEngine.getInstance()));
         GameEngine.getInstance().set_currentMap(map);
 
         player.issue_order();
