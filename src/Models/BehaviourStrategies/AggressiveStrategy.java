@@ -6,14 +6,27 @@ import Models.Player;
 import Phases.AssignReinforcements;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This class describes information about aggressive strategy and the order that were issued based on logic.
+ * Aggressive strategy represents logic that that focuses on centralization of forces and then attack
+ *
+ */
 public class AggressiveStrategy extends BehaviourStrategyBase {
+
+    /**
+     * Constructor for the AggressiveStrategy class.
+     *
+     * @param p_player  The player associated with this strategy.
+     */
     public AggressiveStrategy(Player p_player){
         super(p_player);
     }
 
     private Country d_strongestCountry;
+
     /**
      * Deploy on strongest.
      * Attack from strongest.
@@ -57,6 +70,7 @@ public class AggressiveStrategy extends BehaviourStrategyBase {
             String l_command = String.format("advance %d %d %d", l_ownCountry.get_countryID(), l_strongestCountry.get_countryID(), l_ownCountry.get_numOfArmies());
             String[] commandTokens = l_command.split(" ");
             advance_issue_order(commandTokens);
+            System.out.println(Arrays.toString(commandTokens));
         }
     }
 
@@ -80,6 +94,7 @@ public class AggressiveStrategy extends BehaviourStrategyBase {
         String l_command = String.format("advance %d %d %d", l_strongestCountry.get_countryID(), l_enemyCountry.get_countryID(), l_strongestCountry.get_numOfArmies() - 1);
         String[] commandTokens = l_command.split(" ");
         advance_issue_order(commandTokens);
+        System.out.println(Arrays.toString(commandTokens));
     }
 
     /**
@@ -88,7 +103,7 @@ public class AggressiveStrategy extends BehaviourStrategyBase {
      */
     public Country createDeployOrderCommand(){
         Country l_strongestCountry = null;
-        int l_maxValue = 0;
+        int l_maxValue = -1;
 
         for (Country l_country : d_player.get_playerCountries()) {
             if (l_country.get_numOfArmies() > l_maxValue) {
@@ -105,6 +120,7 @@ public class AggressiveStrategy extends BehaviourStrategyBase {
         String l_command = String.format("deploy %d %d", l_strongestCountry.get_countryID(), d_player.get_numOfReinforcements());
         String[] commandTokens = l_command.split(" ");
         deploy_issue_order(commandTokens);
+        System.out.println(Arrays.toString(commandTokens));
         return l_strongestCountry;
     }
 }

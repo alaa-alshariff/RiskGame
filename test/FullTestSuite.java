@@ -1,6 +1,3 @@
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-
 import Controller.GameEngineTest;
 import Controller.MainGameLoopTest;
 import Models.Orders.AdvanceOrderTest;
@@ -9,11 +6,18 @@ import Models.Orders.BlockadeOrderTest;
 import Models.Orders.BombOrderTest;
 import Models.Orders.DeployOrderTest;
 import Models.Orders.DiplomacyOrderTest;
+import Models.BehaviourStrategies.BenevolentStrategyTest;
+import Models.BehaviourStrategies.HumanStrategyTest;
+import Models.BehaviourStrategies.RandomStrategyTest;
+import Models.BehaviourStrategies.AggressiveStrategyTest;
+import Models.BehaviourStrategies.CheaterStrategyTest;
 import Models.OrdersTest;
 import Models.PlayerTest;
 import Models.WarMapTest;
 import Phases.EditPhaseTest;
 import Phases.PlayPhaseTest;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
 
 @RunWith(Suite.class)
@@ -29,7 +33,13 @@ import Phases.PlayPhaseTest;
         PlayerTest.class,
         WarMapTest.class,
         EditPhaseTest.class,
-        PlayPhaseTest.class
+        PlayPhaseTest.class,
+        BenevolentStrategyTest.class,
+        HumanStrategyTest.class,
+        RandomStrategyTest.class,
+        AggressiveStrategyTest.class,
+        CheaterStrategyTest.class
+
 })
 public class FullTestSuite {
 }

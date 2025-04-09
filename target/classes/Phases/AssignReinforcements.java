@@ -39,7 +39,7 @@ public class AssignReinforcements extends OrderPhase {
         d_ge.getCurrentPlayer().issue_order();
 
         if (d_ge.getCurrentPlayer().get_numOfReinforcements() == 0) {
-            System.out.println("_");
+            System.out.println("_____________________________________________");
             next();
         }
     }
@@ -58,6 +58,19 @@ public class AssignReinforcements extends OrderPhase {
     @Override
     public void endGame() {
         printInvalidCommandMessage();
+    }
+
+    /**
+     * Saves the current game
+     */
+    @Override
+    public void saveGame() {
+        String[] commandTokens = d_ge.getCurrentInput().split(" ");
+        if (commandTokens.length > 1) {
+            d_ge.saveGame(commandTokens[1]);
+        } else {
+            System.out.println("Cannot save game as you did not specify a savefile");
+        }
     }
 
     /**

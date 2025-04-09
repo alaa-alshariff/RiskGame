@@ -1,12 +1,14 @@
 package Phases;
 
-import java.io.IOException;
-import static java.lang.System.exit;
-
+import Adapter.MapEditorAdapter;
 import Controller.GameEngine;
 import Controller.MapEditor;
 import Models.WarMap;
 import logging.LogWriter;
+
+import java.io.IOException;
+
+import static java.lang.System.exit;
 
 /**
  * Map editing phase for after a map has been loading
@@ -168,8 +170,11 @@ public class Postload extends Edit {
         String[] l_input_string_array = d_ge.getCurrentInput().split(" ");
         if (l_input_string_array.length > 1) {
             if (d_ge.get_currentMap().validateMap()) {
+                if (l_input_string_array[1].matches("(?i).+\\.map"))
+                    MapEditor.saveMap(l_input_string_array[1], d_ge.get_currentMap());
+                if (l_input_string_array[1].matches("(?i).+\\.conquest"))
+                    MapEditorAdapter.saveMap(l_input_string_array[1], d_ge.get_currentMap());
 
-                d_ge.get_currentMap().saveMap(l_input_string_array[1]);
                 System.out.println("Map saved");
                 d_logentrybuffer.writeLog(l_input_string_array[1] + " Map saved successfully.");
                 d_ge.set_currentMap(new WarMap());

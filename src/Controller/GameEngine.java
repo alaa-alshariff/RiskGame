@@ -1,15 +1,23 @@
 package Controller;
 
+import Adapter.MapEditorAdapter;
 import Models.BehaviourStrategies.*;
+import Models.Continent;
 import Models.Country;
 import Models.Player;
 import Models.WarMap;
+import Phases.AssignReinforcements;
 import Phases.MainMenu;
 import Phases.Phase;
+import Phases.Startup;
+import Resources.Cards;
 import Resources.Commands;
 import logging.LogEntryBuffer;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
@@ -199,79 +207,143 @@ public class GameEngine {
      * Contains the main logic for the WarZone game and passes control to other aspects of the program when certain commands are entered.
      */
     public void start_game() {
-        SCANNER = new Scanner(System.in);
-        try {
 
+        SCANNER = new Scanner(System.in);
+
+        try {
             while (true) {
                 d_gamePhase.displayOptions();
 
-                d_currentInput = SCANNER.nextLine();
-                String[] l_words = d_currentInput.split("\\s+");
-                switch (l_words[0].toLowerCase()) {
-                    case Commands.LOAD_MAP_COMMAND:
-                        d_gamePhase.loadMap();
-                        break;
-                    case "gameplayer":
-                        d_gamePhase.setPlayers();
-                        break;
-                    case Commands.ASSIGN_COUNTRIES_COMMAND:
-                        d_gamePhase.assignCountries();
-                        if (!d_playersList.isEmpty()) {
-                            d_currentPlayer = d_playersList.get(0);
-                        }
-                        break;
-                    case Commands.SHOW_MAP_COMMAND:
-                        d_gamePhase.showMap();
-                        break;
-                    case "goback":
-                        d_gamePhase.next();
-                        break;
-                    case Commands.EXECUTE:
-                    case "quit":
-                        d_gamePhase.next();
-                        break;
-                    case Commands.EDIT_MAP_COMMAND:
-                        if (l_words.length > 1)
-                            d_gamePhase.loadMap();
-                        else
-                            d_gamePhase.next();
-                        break;
-                    case Commands.SHOW_ALL_MAPS_COMMAND:
-                        d_gamePhase.showAllMaps();
-                        break;
-                    case Commands.DEPLOY_COMMAND:
+
+                if ((d_gamePhase.getClass().getSimpleName().equals("AssignReinforcements") || d_gamePhase.getClass().getSimpleName().equals("IssueOrders")) && !d_currentPlayer.getD_behaviourStrategy().getClass().getSimpleName().equals("HumanStrategy")) {
+                    if (d_gamePhase.getClass().getSimpleName().equals("AssignReinforcements")) {
+                        setCurrentInput("deploy");
                         d_gamePhase.deploy();
-                        break;
-                    case Commands.ADVANCE_ORDER:
-                    case Commands.BOMB_ORDER:
-                    case Commands.BLOCKADE_ORDER:
-                    case Commands.AIRLIFT_ORDER:
-                    case Commands.DIPLOMACY_ORDER:
+                    }
+                    if (d_gamePhase.getClass().getSimpleName().equals("IssueOrders")) {
                         d_gamePhase.issueOrder();
-                        break;
-                    case "editcontinent":
-                        d_gamePhase.editContinent();
-                        break;
-                    case "editcountry":
-                        d_gamePhase.editCountry();
-                        break;
-                    case "editneighbor":
-                        d_gamePhase.editNeighbours();
-                        break;
-                    case "validatemap":
-                        d_gamePhase.validateMap();
-                        break;
-                    case "savemap":
-                        d_gamePhase.saveMap();
-                        break;
-                    default:
-                        System.out.print("Sorry, I couldn't understand the command you entered.\nTry again with the correct syntax!\n");
+                        setCurrentInput("execute");
+                        d_gamePhase.next();
+                    }
+
+                } else {
+
+                    d_currentInput = SCANNER.nextLine();
+                    String[] l_words = d_currentInput.split("\\s+");
+                    switch (l_words[0].toLowerCase()) {
+                        case "loadgame":
+                            d_gamePhase.loadGame();
+                            break;
+                        case "savegame":
+                            d_gamePhase.saveGame();
+                            break;
+                        case "tournament":
+
+                            d_gamePhase.runTournament();
+
+                            break;
+                        case Commands.LOAD_MAP_COMMAND:
+                            d_gamePhase.loadMap();
+                            break;
+                        case "gameplayer":
+                            d_gamePhase.setPlayers();
+                            break;
+                        case Commands.ASSIGN_COUNTRIES_COMMAND:
+                            d_gamePhase.assignCountries();
+                            if (!d_playersList.isEmpty()) {
+                                d_currentPlayer = d_playersList.get(0);
+                            }
+                            break;
+                        case Commands.SHOW_MAP_COMMAND:
+                            d_gamePhase.showMap();
+                            break;
+                        case "goback":
+                            d_gamePhase.next();
+                            break;
+                        case Commands.EXECUTE:
+                        case "quit":
+                            d_gamePhase.next();
+                            break;
+                        case Commands.EDIT_MAP_COMMAND:
+                            if (l_words.length > 1)
+                                d_gamePhase.loadMap();
+                            else
+                                d_gamePhase.next();
+                            break;
+                        case Commands.SHOW_ALL_MAPS_COMMAND:
+                            d_gamePhase.showAllMaps();
+                            break;
+                        case Commands.DEPLOY_COMMAND:
+                            d_gamePhase.deploy();
+                            break;
+                        case Commands.ADVANCE_ORDER:
+                        case Commands.BOMB_ORDER:
+                        case Commands.BLOCKADE_ORDER:
+                        case Commands.AIRLIFT_ORDER:
+                        case Commands.DIPLOMACY_ORDER:
+                            d_gamePhase.issueOrder();
+                            break;
+                        case "editcontinent":
+                            d_gamePhase.editContinent();
+                            break;
+                        case "editcountry":
+                            d_gamePhase.editCountry();
+                            break;
+                        case "editneighbor":
+                            d_gamePhase.editNeighbours();
+                            break;
+                        case "validatemap":
+                            d_gamePhase.validateMap();
+                            break;
+                        case "savemap":
+                            d_gamePhase.saveMap();
+                            break;
+                        default:
+                            System.out.print("Sorry, I couldn't understand the command you entered.\nTry again with the correct syntax!\n");
+                    }
+
                 }
-
             }
-
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public String start_tournament_game(int p_turns) throws IOException {
+        this.setPhase(new Startup(this));
+        this.setCurrentInput("assigncountries");
+        int l_turnCounter = 1;
+        d_gamePhase.assignCountries();
+
+        if (!d_playersList.isEmpty()) {
+            d_currentPlayer = d_playersList.get(0);
+        }
+        this.setPhase(new AssignReinforcements(this));
+        while (true) {
+
+
+            if (d_gamePhase.getClass().getSimpleName().equals("AssignReinforcements")) {
+                setCurrentInput("deploy");
+                d_gamePhase.deploy();
+            }
+            if (d_gamePhase.getClass().getSimpleName().equals("IssueOrders")) {
+                d_gamePhase.issueOrder();
+                setCurrentInput("execute");
+                d_gamePhase.next();
+            }
+            if (d_gamePhase.getClass().getSimpleName().equalsIgnoreCase("OrderExecution")) {
+                d_gamePhase.displayOptions();
+                l_turnCounter++;
+                System.out.println("Current Turn is " + l_turnCounter);
+            }
+
+            if (this.get_PlayersList().size() == 1) return this.get_PlayersList().get(0).get_playerName();
+
+
+            if (l_turnCounter >= p_turns) {
+                this.setPhase(new MainMenu(this));
+                return "Draw";
+            }
         }
     }
 
@@ -336,6 +408,41 @@ public class GameEngine {
         Player l_newPlayer = new Player(p_InputPlayerName);
         l_newPlayer.set_playerName(p_InputPlayerName);
         setPlayerStrategy(l_newPlayer);
+        d_playersList.add(l_newPlayer);
+        System.out.println("Player " + p_InputPlayerName + " added successfully.");
+    }
+
+    /**
+     * Function to add a player with given input strategy
+     *
+     * @param p_InputPlayerName name of player
+     * @param p_InputStrategy   the input strategy
+     */
+    public void addPlayer(String p_InputPlayerName, String p_InputStrategy) {
+        for (Player player : d_playersList) {
+            String l_ExistingPlayerName = player.get_playerName();
+
+            if (l_ExistingPlayerName.equals((p_InputPlayerName))) {
+                System.out.println("Player " + p_InputPlayerName + " already exists.");
+                return;
+            }
+        }
+        Player l_newPlayer = new Player(p_InputPlayerName);
+        l_newPlayer.set_playerName(p_InputPlayerName);
+        if (p_InputStrategy.equalsIgnoreCase("human"))
+            l_newPlayer.setD_behaviourStrategy(new HumanStrategy(l_newPlayer));
+        if (p_InputStrategy.equalsIgnoreCase("cheater"))
+            l_newPlayer.setD_behaviourStrategy(new CheaterStrategy(l_newPlayer));
+        if (p_InputStrategy.equalsIgnoreCase("benevolent"))
+            l_newPlayer.setD_behaviourStrategy(new BenevolentStrategy(l_newPlayer));
+        if (p_InputStrategy.equalsIgnoreCase("random"))
+            l_newPlayer.setD_behaviourStrategy(new RandomStrategy(l_newPlayer));
+        if (p_InputStrategy.equalsIgnoreCase("aggressive"))
+            l_newPlayer.setD_behaviourStrategy(new AggressiveStrategy(l_newPlayer));
+        if (l_newPlayer.getD_behaviourStrategy() == null) {
+            System.out.println("Invalid behaviour specified player not added");
+            return;
+        }
         d_playersList.add(l_newPlayer);
         System.out.println("Player " + p_InputPlayerName + " added successfully.");
     }
@@ -462,4 +569,164 @@ public class GameEngine {
         return l_baseReinforcements;
     }
 
+    /**
+     * Saves a game to a specified game file
+     *
+     * @param p_filename The save file
+     */
+    public void saveGame(String p_filename) {
+        try {
+            FileWriter l_saveFile = new FileWriter(System.getProperty("user.dir") + "\\Src\\Resources\\Saves\\" + p_filename);
+            l_saveFile.write(d_currentMap.get_mapName() + "\n");
+            l_saveFile.write(d_playersList.size() + "\n");
+            for (Player p : d_playersList) {
+                l_saveFile.write(p.get_playerName() + " " + p.getD_behaviourStrategy().getClass().getSimpleName() + " " + p.get_playerCountries().size() + " " + (p.get_playerCards().size()) + "\n");
+                for (Country l_c : p.get_playerCountries()) {
+                    l_saveFile.write(l_c.get_countryID() + " " + l_c.get_numOfArmies() + "\n");
+                }
+                for (Cards l_c : p.get_playerCards()) {
+                    l_saveFile.write(l_c.toString() + "\n");
+                }
+            }
+            l_saveFile.close();
+        } catch (IOException l_e) {
+            l_e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * Loads a game from a save file
+     * @param p_filename The save file
+     */
+    public void loadGame(String p_filename) {
+        try {
+            BufferedReader l_bufferReader = new BufferedReader(new FileReader(System.getProperty("user.dir") + "\\Src\\Resources\\Saves\\" + p_filename));
+            String l_line = l_bufferReader.readLine();
+            WarMap l_gameMap = new WarMap();
+            if (l_line.matches("(?i).+\\.map")) MapEditor.readMap(l_line, l_gameMap);
+            if (l_line.matches("(?i).+\\.conquest")) MapEditorAdapter.readMap(l_line, l_gameMap);
+            set_currentMap(l_gameMap);
+            l_line = l_bufferReader.readLine();
+            int l_playerCount = Integer.valueOf(l_line);
+            ArrayList<Player> l_inputPlayerList = new ArrayList<>();
+            for (int l_i = 0; l_i < l_playerCount; l_i++) {
+                l_line = l_bufferReader.readLine();
+                String[] l_inputArray = l_line.split(" ");
+                Player l_inputPlayer = new Player(l_inputArray[0]);
+                switch (l_inputArray[1]) {
+                    case "HumanStrategy":
+                        l_inputPlayer.setD_behaviourStrategy(new HumanStrategy(l_inputPlayer));
+                        break;
+                    case "AggressiveStrategy":
+                        l_inputPlayer.setD_behaviourStrategy(new AggressiveStrategy(l_inputPlayer));
+                        break;
+                    case "BenevolentStrategy":
+                        l_inputPlayer.setD_behaviourStrategy(new BenevolentStrategy(l_inputPlayer));
+                        break;
+                    case "CheaterStrategy":
+                        l_inputPlayer.setD_behaviourStrategy(new CheaterStrategy(l_inputPlayer));
+                        break;
+                    case "RandomStrategy":
+                        l_inputPlayer.setD_behaviourStrategy(new RandomStrategy(l_inputPlayer));
+                        break;
+                }
+                int l_numberOfCountries = Integer.valueOf(l_inputArray[2]);
+                ArrayList<Country> l_inputPlayerCountries = new ArrayList<>();
+                int l_numberOfCards = Integer.valueOf(l_inputArray[3]);
+                for (int l_j = 0; l_j < l_numberOfCountries; l_j++) {
+                    l_line = l_bufferReader.readLine();
+                    l_inputArray = l_line.split(" ");
+                    l_inputPlayerCountries.add(d_currentMap.get_countries().get(Integer.valueOf(l_inputArray[0])));
+
+                    l_inputPlayerCountries.get(l_j).set_numOfArmies(Integer.parseInt(l_inputArray[1]));
+                    l_inputPlayerCountries.get(l_j).setD_ownerPlayer(l_inputPlayer);
+                }
+                l_inputPlayer.set_playerCountries(l_inputPlayerCountries);
+                for (int l_z = 0; l_z < l_numberOfCards; l_z++) {
+                    l_inputPlayer.get_playerCards().add(Cards.valueOf(l_bufferReader.readLine()));
+                }
+                l_inputPlayer.set_diplomacy_list(new ArrayList<String>());
+                d_playersList.add(l_inputPlayer);
+
+            }
+            for (Player l_player : d_playersList) {
+                l_player.set_numOfReinforcements(this.getNumOfReinforcements(l_player));
+                d_logentrybuffer.writeLog("assigned " + l_player.get_playerName() + " " + l_player.get_numOfReinforcements() + " no of reinforcement armies.");
+                System.out.println("Assigned `" + l_player.get_numOfReinforcements() + "` reinforcements to player: " + l_player.get_playerName());
+            }
+            setCurrentPlayer(d_playersList.get(0));
+            setPhase(new AssignReinforcements(this));
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void runTournament(ArrayList<String> p_maps, ArrayList<String> p_strategies, int p_games, int p_maxturns) throws IOException {
+        if (p_maps.size() < 1 || p_maps.size() > 5) {
+            System.out.println("Invalid amount of maps");
+            return;
+        }
+        if (p_strategies.size() < 2 || p_strategies.size() > 4) {
+            System.out.println("Invalid amount of players");
+            return;
+        }
+        if (p_games < 1 || p_games > 5) {
+            System.out.println("Invalid number of games per map");
+            return;
+        }
+        if (p_maxturns < 10 || p_maxturns > 50) {
+            System.out.println("Invalid number of turns per game");
+            return;
+        }
+        Player l_inputPlayer;
+        ArrayList<String> l_results = new ArrayList<>();
+        for (int l_z = 0; l_z < p_maps.size(); l_z++) {
+            WarMap l_inputMap = new WarMap();
+            if (p_maps.get(l_z).matches("(?i).+\\.map")) MapEditor.readMap(p_maps.get(l_z), l_inputMap);
+            if (p_maps.get(l_z).matches("(?i).+\\.conquest")) MapEditorAdapter.readMap(p_maps.get(l_z), l_inputMap);
+            this.set_currentMap(l_inputMap);
+            System.out.println("Starting games for map " + l_inputMap.get_mapName());
+            for (int l_i = 0; l_i < p_games; l_i++) {
+                this.get_PlayersList().clear();
+                ArrayList<Player> l_players = new ArrayList<Player>();
+                for (int l_j = 0; l_j < p_strategies.size(); l_j++) {
+                    l_inputPlayer = new Player(p_strategies.get(l_j));
+                    if (p_strategies.get(l_j).equalsIgnoreCase("Benevolent")) {
+                        l_inputPlayer.setD_behaviourStrategy(new BenevolentStrategy(l_inputPlayer));
+                    }
+                    if (p_strategies.get(l_j).equalsIgnoreCase("Cheater")) {
+                        l_inputPlayer.setD_behaviourStrategy(new CheaterStrategy(l_inputPlayer));
+                    }
+                    if (p_strategies.get(l_j).equalsIgnoreCase("Aggressive")) {
+                        l_inputPlayer.setD_behaviourStrategy(new AggressiveStrategy(l_inputPlayer));
+                    }
+                    if (p_strategies.get(l_j).equalsIgnoreCase("Random")) {
+                        l_inputPlayer.setD_behaviourStrategy(new RandomStrategy(l_inputPlayer));
+
+                    }
+                    l_players.add(l_inputPlayer);
+                }
+                this.set_PlayersList(l_players);
+
+                l_results.add(start_tournament_game(p_maxturns));
+
+            }
+        }
+        System.out.println("Printing results");
+        System.out.println();
+
+        for (int l_i = 0; l_i < p_maps.size(); l_i++) {
+            System.out.print(p_maps.get(l_i) + ": ");
+            for (int l_j = 0; l_j < p_games; l_j++) {
+                System.out.print(l_results.get(l_i * p_games + l_j) + "    ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+        System.out.println("Done printing results");
+    }
 }
+

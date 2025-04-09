@@ -1,11 +1,11 @@
 package Phases;
 
-import java.util.ArrayList;
-
 import Controller.GameEngine;
 import Models.Orders.Order;
 import Models.Player;
 import Resources.Cards;
+
+import java.util.ArrayList;
 
 /**
  * Phase for executing orders
@@ -76,9 +76,9 @@ public class OrderExecution extends Play {
         }
 
 
-        System.out.println("\n_");
+        System.out.println("\n_________________________________________");
         System.out.println("All commands executed successfully..... ");
-        System.out.println("_");
+        System.out.println("_________________________________________");
 
         d_logentrybuffer.writeLog("All orders executed successfully");
         ArrayList<Player> l_playersToRemove = new ArrayList<>();
@@ -151,6 +151,14 @@ public class OrderExecution extends Play {
     }
 
     /**
+     * Prints invalid state message
+     */
+    @Override
+    public void saveGame() {
+        printInvalidCommandMessage();
+    }
+
+    /**
      * The next function for the order execution phase
      */
     @Override
@@ -158,15 +166,15 @@ public class OrderExecution extends Play {
         Cards.assignRandomCardsToPlayers();
         d_logentrybuffer.writeLog("ASSIGNREINFORCEMENTS PHASE");
         System.out.println("Assigning Reinforcements....");
-        System.out.println("_");
+        System.out.println("_________________________________________");
         for (Player player : d_ge.get_PlayersList()) {
             player.set_numOfReinforcements(d_ge.getNumOfReinforcements(player));
             d_logentrybuffer.writeLog("assigned " + player.get_playerName() + " " + player.get_numOfReinforcements() + " no of reinforcement armies.");
-            System.out.println("Assigned " + player.get_numOfReinforcements() + " reinforcements to player: " + player.get_playerName());
+            System.out.println("Assigned `" + player.get_numOfReinforcements() + "` reinforcements to player: " + player.get_playerName());
         }
-        System.out.println("\n_");
+        System.out.println("\n_________________________________________");
         System.out.println("Taking orders from each player....");
-        System.out.println("_");
+        System.out.println("_________________________________________");
         System.out.println("Please issue commands for Player " + d_ge.getCurrentPlayer().get_playerName());
         System.out.println("Remaining reinforcements: " + d_ge.getCurrentPlayer().get_numOfReinforcements());
         d_ge.get_FinishedPlayers().clear();

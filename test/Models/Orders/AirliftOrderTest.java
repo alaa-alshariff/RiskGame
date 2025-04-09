@@ -1,20 +1,21 @@
 package Models.Orders;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import Controller.GameEngine;
+import Models.BehaviourStrategies.HumanStrategy;
 import Models.Country;
 import Models.Player;
 import Models.WarMap;
 import Resources.Cards;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test for functions concerning Airlift orders
@@ -37,11 +38,16 @@ public class AirliftOrderTest {
     public void setUp() {
         gameEngine = GameEngine.getInstance();
         player = new Player("John Doe");
+        player.setD_behaviourStrategy(new HumanStrategy(player));
         warMap = new WarMap();
     }
 
     @Test
     public void testAirliftCommandExecution() {
+
+        player.setD_behaviourStrategy(new HumanStrategy(player));
+
+
         // Create a test scenario where the player has the Airlift card and valid input.
         List<Cards> cards = new ArrayList<>();
         cards.add(Cards.Airlift);
@@ -72,6 +78,10 @@ public class AirliftOrderTest {
 
     @Test
     public void testAirliftCommandExecutionWithInvalidSourceCountry() {
+
+        player.setD_behaviourStrategy(new HumanStrategy(player));
+
+
         // Create a test scenario where the player has two countries, but the source country is invalid.
         WarMap map = new WarMap();
         Country sourceCountry = new Country(1, "SourceCountry", 1);

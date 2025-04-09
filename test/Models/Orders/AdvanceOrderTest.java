@@ -1,15 +1,16 @@
 package Models.Orders;
 
-import java.util.Arrays;
-
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import Controller.GameEngine;
+import Models.BehaviourStrategies.HumanStrategy;
 import Models.Country;
 import Models.Player;
 import Models.WarMap;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test for functions concerning advance orders
@@ -32,11 +33,15 @@ public class AdvanceOrderTest {
     public void setUp() {
         gameEngine = GameEngine.getInstance();
         player = new Player("John Doe");
+        player.setD_behaviourStrategy(new HumanStrategy(player));
         warMap = new WarMap();
     }
 
     @Test
     public void testAdvanceCommandExecution() {
+
+        player.setD_behaviourStrategy(new HumanStrategy(player));
+
         // Create a test scenario where the player has valid input and neighboring countries.
         WarMap map = new WarMap();
         Country countryA = new Country(1, "CountryA", 1);
@@ -61,6 +66,9 @@ public class AdvanceOrderTest {
 
     @Test
     public void testAdvanceCommandExecutionWithInvalidSourceCountry() {
+
+        player.setD_behaviourStrategy(new HumanStrategy(player));
+
         // Create a test scenario where the player has two countries, but the source country is invalid.
         WarMap map = new WarMap();
         Country sourceCountry = new Country(1, "SourceCountry", 1);

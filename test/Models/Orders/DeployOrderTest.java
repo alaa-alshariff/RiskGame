@@ -1,18 +1,20 @@
 package Models.Orders;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import Controller.GameEngine;
+import Models.BehaviourStrategies.HumanStrategy;
 import Models.Continent;
 import Models.Country;
 import Models.Player;
 import Models.WarMap;
 import Phases.AssignReinforcements;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Test for functions concerning Deploy orders
@@ -35,6 +37,7 @@ public class DeployOrderTest {
     public void setUp() {
         gameEngine = GameEngine.getInstance();
         player = new Player("John Doe");
+        player.setD_behaviourStrategy(new HumanStrategy(player));
         warMap = new WarMap();
     }
 

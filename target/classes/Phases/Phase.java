@@ -1,9 +1,9 @@
 package Phases;
 
-import java.io.IOException;
-
 import Controller.GameEngine;
 import logging.LogEntryBuffer;
+
+import java.io.IOException;
 
 /**
  * Base phase class to be inherited by all other phases
@@ -53,6 +53,14 @@ public abstract class Phase {
     abstract public void issueOrder();
 
     abstract public void endGame();
+
+    abstract public void saveGame();
+
+    abstract public void loadGame();
+
+    abstract public void runTournament() throws IOException;
+
+
 
     abstract public void next() throws IOException;
 
