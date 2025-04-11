@@ -82,6 +82,10 @@
             <goals>
               <goal>jar</goal>
             </goals>
+            <phase>package</phase>
+              <configuration>
+                <classifier>sources</classifier>
+              </configuration>
           </execution>
         </executions>
         </plugin>
