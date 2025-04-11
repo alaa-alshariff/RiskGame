@@ -1,13 +1,13 @@
 package Phases;
 
-import java.io.IOException;
-
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import Controller.GameEngine;
 import Models.Country;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test for functions concerning Play phase
@@ -44,8 +44,8 @@ public class PlayPhaseTest {
         d_gameEngine.setCurrentInput("loadmap europe.map");
         d_gameEngine.getPhase().next();
         assertEquals("Startup", d_gameEngine.getPhase().getClass().getSimpleName());
-        d_gameEngine.setCurrentInput("gameplayer -add player1 -add player2");
-        d_gameEngine.getPhase().setPlayers();
+        d_gameEngine.addPlayer("player1", "human");
+        d_gameEngine.addPlayer("player2", "human");
         d_gameEngine.setCurrentInput("assigncountries");
         d_gameEngine.getPhase().assignCountries();
         assertEquals("AssignReinforcements", d_gameEngine.getPhase().getClass().getSimpleName());
@@ -77,8 +77,8 @@ public class PlayPhaseTest {
         d_gameEngine.setCurrentInput("assigncountries");
         d_gameEngine.getPhase().assignCountries();
         assertEquals("Startup", d_gameEngine.getPhase().getClass().getSimpleName()); //Stays start up as not enough players added
-        d_gameEngine.setCurrentInput("gameplayer -add player1 -add player2");
-        d_gameEngine.getPhase().setPlayers();
+        d_gameEngine.addPlayer("player1", "human");
+        d_gameEngine.addPlayer("player2", "human");
         d_gameEngine.setCurrentInput("assigncountries");
         d_gameEngine.getPhase().assignCountries();
         assertEquals("AssignReinforcements", d_gameEngine.getPhase().getClass().getSimpleName()); //Goes to assignreinforcements after adding two players
@@ -90,9 +90,32 @@ public class PlayPhaseTest {
     @Test
     public void testGameEnds() {
         d_gameEngine.setPhase(new OrderExecution(d_gameEngine));
-        d_gameEngine.addPlayer("Ryan");
+        d_gameEngine.addPlayer("Ryan", "Human");
         d_gameEngine.get_PlayersList().get(0).get_playerCountries().add(new Country()); //Give the player a country so he does not get removed from the game
         d_gameEngine.getPhase().displayOptions(); //runs execute phase functions - Since there is only one player he will be the winner and game will go to main menu
         assertEquals("MainMenu", d_gameEngine.getPhase().getClass().getSimpleName());
+    }
+
+    /**
+     * Test to ensure that you can save a game in progress, and than load the same game
+     * @throws IOException when a map cannot be read
+     */
+    @Test
+    public void testSaveGameAndLoadGame() throws IOException {
+        d_gameEngine.setCurrentInput("loadmap");
+        d_gameEngine.getPhase().loadMap();
+        d_gameEngine.setCurrentInput("loadmap simple.map");
+        d_gameEngine.getPhase().loadMap();
+        d_gameEngine.setCurrentInput("assigncountries");
+        d_gameEngine.getPhase().assignCountries();
+        d_gameEngine.addPlayer("player1", "human");
+        d_gameEngine.addPlayer("player2", "human");
+        d_gameEngine.setCurrentInput("assigncountries");
+        d_gameEngine.getPhase().assignCountries();
+        d_gameEngine.saveGame("testsave");
+        d_gameEngine.setPhase(new MainMenu(d_gameEngine));
+        d_gameEngine.loadGame("testsave");
+        assertEquals(2, d_gameEngine.get_PlayersList().size());
+        assertEquals(4, d_gameEngine.get_currentMap().get_countries().size());
     }
 }

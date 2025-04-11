@@ -1,5 +1,7 @@
 package Phases;
 
+import Adapter.MapEditorAdapter;
+import Adapter.MapEditorConquest;
 import Controller.GameEngine;
 import Controller.MapEditor;
 import Models.WarMap;
@@ -38,6 +40,8 @@ public class MainMenu extends Phase {
         System.out.print("- editmap\n");
         System.out.print("- loadmap [filename]\n");
         System.out.print("- showmapall\n");
+        System.out.print("- loadgame [filename]\n");
+        System.out.print("- tournament -M listofmapfiles -P listofplayerstrategies -G numberofgames -D maxnumberofturns\n");
         System.out.print("- quit\n");
         d_ge.get_PlayersList().clear();
         d_ge.set_currentMap(new WarMap());
@@ -54,13 +58,29 @@ public class MainMenu extends Phase {
         if (l_words.length == 2 && l_words[0].equalsIgnoreCase(Commands.LOAD_MAP_COMMAND) && l_words[1].matches("(?i).+\\.map")) {
             ArrayList<String> l_listOfMaps = d_ge.getAllMapsList();
             d_ge.set_currentMap(null);
-            d_ge.set_currentMap(new WarMap());
+
             if (l_listOfMaps.contains(l_words[1])) {
-                boolean l_isAbleToReadMap = MapEditor.readMap(l_words[1], d_ge.get_currentMap());
-                if (!l_isAbleToReadMap) {
-                    System.out.print("\n Unable to read " + l_words[1] + "!\n");
+                d_ge.set_currentMap(new MapEditor().readMap(l_words[1]));
+                boolean l_isValidMap = d_ge.get_currentMap().validateMap();
+                if (!l_isValidMap) {
+                    System.out.print("\n" + l_words[1] + " is not a valid map! Try fixing it manually or select some other map!\n");
                     return;
                 }
+                System.out.print(l_words[1] + " loaded successfully!\n");
+                d_logentrybuffer.writeLog(l_words[1] + " loaded successfully.");
+                this.next();
+            } else {
+                System.out.print("\nUnable to find " + l_words[1] + " in our maps directory. Enter the correct spelling or select some other map!\n");
+
+            }
+        } else if (l_words.length == 2 && l_words[0].equalsIgnoreCase(Commands.LOAD_MAP_COMMAND) && l_words[1].matches("(?i).+\\.conquest")) {
+            ArrayList<String> l_listOfMaps = d_ge.getAllMapsList();
+            d_ge.set_currentMap(null);
+
+            if (l_listOfMaps.contains(l_words[1])) {
+                MapEditor l_mapEditor = new MapEditorAdapter(new MapEditorConquest());
+                d_ge.set_currentMap(l_mapEditor.readMap(l_words[1]));
+
                 boolean l_isValidMap = d_ge.get_currentMap().validateMap();
                 if (!l_isValidMap) {
                     System.out.print("\n" + l_words[1] + " is not a valid map! Try fixing it manually or select some other map!\n");
@@ -198,5 +218,99 @@ public class MainMenu extends Phase {
      */
     public void validateMap() {
         printInvalidCommandMessage();
+    }
+
+    /**
+     * Loads a game
+     */
+    public void loadGame() {
+        String[] l_input = d_ge.getCurrentInput().split(" ");
+        if (l_input.length > 1) {
+            d_ge.loadGame(l_input[1]);
+        } else {
+            System.out.println("No save file specified");
+        }
+    }
+
+    /**
+     * Prints invalid state message
+     */
+    public void saveGame() {
+        printInvalidCommandMessage();
+    }
+
+    /**
+     * Runs a tournament
+     */
+    public void runTournament() throws IOException {
+        String[] l_input = d_ge.getCurrentInput().split(" ");
+        ArrayList<String> l_maps = new ArrayList<>();
+        ArrayList<String> l_strategies = new ArrayList<>();
+        int l_games = 0;
+        int l_turns = 0;
+        String l_currentState = "Start";
+        for (String l_s : l_input) {
+            if (l_currentState.equals("Start")) {
+                if (l_s.equalsIgnoreCase("tournament")) {
+
+                }
+                if (l_s.equalsIgnoreCase("-M")) {
+                    l_currentState = "Maps";
+                    continue;
+                }
+            }
+            if (l_currentState.equalsIgnoreCase("Maps")) {
+                if (l_s.equalsIgnoreCase("-P")) {
+                    l_currentState = "Players";
+                    continue;
+                } else {
+                    l_maps.add(l_s);
+                }
+            }
+            if (l_currentState.equalsIgnoreCase("Players")) {
+                if (l_s.equalsIgnoreCase("-G")) {
+                    l_currentState = "Games";
+                    continue;
+                } else if (l_s.equalsIgnoreCase("benevolent")) {
+                    l_strategies.add("Benevolent");
+                } else if (l_s.equalsIgnoreCase("cheater")) {
+                    l_strategies.add("Cheater");
+                } else if (l_s.equalsIgnoreCase("random")) {
+                    l_strategies.add("Random");
+                } else if (l_s.equalsIgnoreCase("aggressive")) {
+                    l_strategies.add("Aggressive");
+                } else {
+
+                    System.out.println("You have entered an invalid player type");
+                    return;
+                }
+            }
+            if (l_currentState.equalsIgnoreCase("Games")) {
+                if (l_s.equalsIgnoreCase("-D")) {
+                    l_currentState = "Turns";
+                    continue;
+                } else {
+                    try {
+                        l_games = Integer.valueOf(l_s);
+                    } catch (NumberFormatException e) {
+                        System.out.println("String entered for number of games");
+                        return;
+                    }
+                }
+            }
+            if (l_currentState.equalsIgnoreCase("Turns")) {
+                try {
+                    l_turns = Integer.valueOf(l_s);
+                } catch (NumberFormatException e) {
+                    System.out.println("String entered for number of turns");
+                    return;
+                }
+            }
+        }
+        try {
+            d_ge.runTournament(l_maps, l_strategies, l_games, l_turns);
+        } catch (Exception e) {
+            System.out.println("Error running tournament");
+        }
     }
 }

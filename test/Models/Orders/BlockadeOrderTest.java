@@ -1,23 +1,24 @@
 package Models.Orders;
 
+import Controller.GameEngine;
+import Models.BehaviourStrategies.HumanStrategy;
+import Models.Country;
+import Models.Player;
+import Models.WarMap;
+import Resources.Cards;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.jupiter.api.TestInstance;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Before;
-import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.TestInstance;
-
-import Controller.GameEngine;
-import Models.Country;
-import Models.Player;
-import Models.WarMap;
-import Resources.Cards;
 
 /**
  * Tests cases for blockade orders, it ensures
@@ -48,6 +49,7 @@ public class BlockadeOrderTest {
     public void setUp() {
         warMap = new WarMap();
         player = new Player("Player1");
+        player.setD_behaviourStrategy(new HumanStrategy(player));
         countries = new HashMap<>();// Assuming you have a no-argument constructor in your Player class
         gameEngine = GameEngine.getInstance();
 

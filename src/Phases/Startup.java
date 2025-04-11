@@ -1,12 +1,13 @@
 package Phases;
 
-import java.io.IOException;
-import static java.lang.System.exit;
-
 import Controller.GameEngine;
 import Models.Player;
 import Resources.Commands;
 import logging.LogWriter;
+
+import java.io.IOException;
+
+import static java.lang.System.exit;
 
 /**
  * Phase for starting up gameplay
@@ -110,6 +111,11 @@ public class Startup extends Play {
         printInvalidCommandMessage();
     }
 
+    @Override
+    public void saveGame() {
+        printInvalidCommandMessage();
+    }
+
     /**
      * The next function of the stateup phase
      */
@@ -135,15 +141,15 @@ public class Startup extends Play {
                 d_ge.setPhase(new AssignReinforcements(d_ge));
                 d_logentrybuffer.writeLog("ASSIGNREINFORCEMENTS PHASE");
                 System.out.println("Assigning Reinforcements....");
-                System.out.println("_");
+                System.out.println("_________________________________________");
                 for (Player player : d_ge.get_PlayersList()) {
                     player.set_numOfReinforcements(d_ge.getNumOfReinforcements(player));
-                    System.out.println("Assigned " + player.get_numOfReinforcements() + " reinforcements to player: " + player.get_playerName());
+                    System.out.println("Assigned `" + player.get_numOfReinforcements() + "` reinforcements to player: " + player.get_playerName());
                     d_logentrybuffer.writeLog("assigned " + player.get_playerName() + " " + player.get_numOfReinforcements() + " no of reinforcement armies.");
                 }
-                System.out.println("\n_");
+                System.out.println("\n_________________________________________");
                 System.out.println("Taking orders from each player....");
-                System.out.println("_");
+                System.out.println("_________________________________________");
                 d_logentrybuffer.writeLog("ISSUEORDERS PHASE");
             }
         }

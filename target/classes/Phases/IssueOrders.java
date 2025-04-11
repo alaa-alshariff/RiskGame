@@ -55,6 +55,7 @@ public class IssueOrders extends OrderPhase {
      */
     @Override
     public void issueOrder() {
+        if (d_ge.getCurrentPlayer().get_playerCountries().size() == 0) return;
         d_ge.getCurrentPlayer().issue_order();
     }
 
@@ -64,6 +65,20 @@ public class IssueOrders extends OrderPhase {
     @Override
     public void endGame() {
         printInvalidCommandMessage();
+    }
+
+    /**
+     * Saves the current game
+     */
+    @Override
+    public void saveGame() {
+        String[] commandTokens = d_ge.getCurrentInput().split(" ");
+        if (commandTokens.length > 1) {
+            d_ge.saveGame(commandTokens[1]);
+        } else {
+            System.out.println("Cannot save game as you did not specify a savefile");
+        }
+
     }
 
     @Override
