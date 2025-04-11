@@ -24,19 +24,27 @@ jobs:
 
     - name: Run tests
       run: mvn test
-
-    - name: Archive test results
-      if: always()
+    
+    - name: Generate HTML test report
+      run: mvn surefire-report:report-only
+    
+    - name: Upload JUnit test report
       uses: actions/upload-artifact@v4
       with:
-        name: junit-test-results
-        path: target/surefire-reports
-
+        name: junit-report
+        path: target/surefire-reports/
+    
+    - name: Upload HTML test report
+      uses: actions/upload-artifact@v4
+      with:
+        name: html-test-report
+        path: target/site/surefire-report.html
+    
     - name: Generate JavaDoc
-      run: mvn javadoc:javadoc
+      run: mvn clean compile javadoc:javadoc
 
-    - name: Upload JavaDoc
+    - name: Upload Javadoc
       uses: actions/upload-artifact@v4
       with:
         name: javadoc
-        path: target/site/apidocs
+        path: target/reports/apidocs/
