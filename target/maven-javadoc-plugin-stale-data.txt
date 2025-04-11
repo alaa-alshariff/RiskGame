@@ -1,5 +1,3 @@
--J-Duser.language=
--J-Duser.country=
 @options
 @packages
 @argfile
@@ -16,7 +14,7 @@
 -charset
 'UTF-8'
 -d
-'/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/reports/apidocs'
+'/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/site/apidocs'
 -docencoding
 'UTF-8'
 -doctitle
@@ -39,23 +37,23 @@ logging
 '/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/src/Main.java'
 /Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/src/Main.java = 1744335109474
 /Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/src = 1744336967000
-/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/generated-sources/annotations = 1744338755494
-/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/reports/apidocs/constant-values.html = 1744338757101
-/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/reports/apidocs/tag-search-index.js = 1744338757157
-/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/reports/apidocs/overview-tree.html = 1744338757142
-/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/reports/apidocs/module-search-index.js = 1744338757156
-/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/reports/apidocs/index.html = 1744338757143
-/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/reports/apidocs/package-search-index.js = 1744338757156
-/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/reports/apidocs/package-use.html = 1744338757137
-/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/reports/apidocs/index-all.html = 1744338757167
-/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/reports/apidocs/allpackages-index.html = 1744338757156
-/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/reports/apidocs/member-search-index.js = 1744338757157
-/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/reports/apidocs/overview-summary.html = 1744338757168
-/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/reports/apidocs/help-doc.html = 1744338757170
-/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/reports/apidocs/package-summary.html = 1744338757084
-/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/reports/apidocs/Main.html = 1744338757015
-/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/reports/apidocs/package-tree.html = 1744338757086
-/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/reports/apidocs/element-list = 1744338757082
-/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/reports/apidocs/search.html = 1744338757167
-/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/reports/apidocs/allclasses-index.html = 1744338757155
-/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/reports/apidocs/type-search-index.js = 1744338757156
+/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/generated-sources/annotations = 1744415859896
+/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/site/apidocs/constant-values.html = 1744415863324
+/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/site/apidocs/tag-search-index.js = 1744415863369
+/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/site/apidocs/overview-tree.html = 1744415863358
+/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/site/apidocs/module-search-index.js = 1744415863368
+/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/site/apidocs/index.html = 1744415863359
+/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/site/apidocs/package-search-index.js = 1744415863368
+/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/site/apidocs/package-use.html = 1744415863353
+/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/site/apidocs/index-all.html = 1744415863379
+/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/site/apidocs/allpackages-index.html = 1744415863367
+/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/site/apidocs/member-search-index.js = 1744415863369
+/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/site/apidocs/overview-summary.html = 1744415863380
+/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/site/apidocs/help-doc.html = 1744415863382
+/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/site/apidocs/package-summary.html = 1744415863310
+/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/site/apidocs/Main.html = 1744415863257
+/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/site/apidocs/package-tree.html = 1744415863312
+/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/site/apidocs/element-list = 1744415863309
+/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/site/apidocs/search.html = 1744415863380
+/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/site/apidocs/allclasses-index.html = 1744415863367
+/Users/maryamfarokhpour/Desktop/MACS/SOEN 6441 - APP/project/RiskGame/target/site/apidocs/type-search-index.js = 1744415863368
