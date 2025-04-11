@@ -34,8 +34,6 @@ import java.util.*;
  * <p>
  * Developers can extend this class to customize and add game-specific functionality. By
  * overriding the appropriate methods, you can integrate your game logic seamlessly.
- * @version 1.0
- * @since 2023-09-26
  */
 public class GameEngine {
     /**
