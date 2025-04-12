@@ -52,8 +52,14 @@ jobs:
         name: javadoc
         path: target/site/apidocs/
     
-    - name: Upload JAR file
+    - name: Upload Main JAR file
       uses: actions/upload-artifact@v4
       with:
         name: jar-file
+        path: target/RiskGame-0.0.1-SNAPSHOT.jar
+    
+    - name: Upload Sources JAR file
+      uses: actions/upload-artifact@v4
+      with:
+        name: sources-jar-file
         path: target/RiskGame-0.0.1-SNAPSHOT-sources.jar
